@@ -157,7 +157,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 📅 - Data: ${formattedDate} às ${formattedTime}
 💵 - Preço: ${formattedPrice}`
 
-      const phoneNumber = "5594991873811" // Substitua pelo número real do WhatsApp
+      const phoneNumber = "5593999034526" // Substitua pelo número real do WhatsApp
       const encodedMessage = encodeURIComponent(message)
       const link = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
       setWhatsAppLink(link)
@@ -217,7 +217,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 >
                   Reservar
                 </Button>
-                <SheetContent className="px-0">
+                <SheetContent className="flex max-h-dvh w-[84%] flex-col p-0">
                   <SheetHeader>
                     <SheetTitle>Fazer Reserva</SheetTitle>
                   </SheetHeader>
@@ -275,7 +275,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                       />
                     </div>
                   )}
-                  <SheetFooter className="mt-0 px-5">
+                  <SheetFooter className="px-5">
                     <Button
                       onClick={handCreateBooking}
                       disabled={!selectedDay || !selectedTime}

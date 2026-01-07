@@ -5,6 +5,10 @@ const nextConfig = {
       {
         hostname: "utfs.io",
       },
+      {
+        hostname: "cultura.uol.com.br",
+        protocol: "https",
+      },
     ],
   },
 }
