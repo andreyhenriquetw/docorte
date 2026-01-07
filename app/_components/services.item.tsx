@@ -25,6 +25,8 @@ import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
 
+import { FaWhatsapp } from "react-icons/fa"
+
 interface ServiceItemProps {
   service: BarbershopService
   barbershop: Pick<Barbershop, "name">
@@ -302,12 +304,15 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
       {whatsAppLink && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="w-[90%] max-w-md rounded-2xl border border-border bg-background p-6 text-center shadow-xl">
-            <h2 className="mb-3 text-lg font-semibold text-foreground">
+            <h2 className="mb-3 flex items-center justify-center gap-2 text-lg font-semibold text-foreground">
               Finalizar no WhatsApp
+              <FaWhatsapp className="h-5 w-5 text-green-500" />
             </h2>
+
             <p className="mb-4 text-sm text-muted-foreground">
               Clique abaixo para confirmar seu agendamento pelo WhatsApp.
             </p>
+
             <a
               href={whatsAppLink}
               target="_blank"
