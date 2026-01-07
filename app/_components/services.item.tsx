@@ -218,11 +218,11 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                   Reservar
                 </Button>
                 <SheetContent className="flex max-h-dvh w-[84%] flex-col p-0">
-                  <SheetHeader>
+                  <SheetHeader className="p-2">
                     <SheetTitle>Fazer Reserva</SheetTitle>
                   </SheetHeader>
 
-                  <div className="border-b border-solid py-0">
+                  <div className="-mt-3 border-b border-solid">
                     <Calendar
                       mode="single"
                       locale={ptBR}
@@ -244,7 +244,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                   </div>
 
                   {selectedDay && (
-                    <div className="flex gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
+                    <div className="flex gap-2 overflow-x-auto border-b pb-3 pl-5">
                       {timeList.length > 0 ? (
                         timeList.map((time) => (
                           <Button
@@ -267,7 +267,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                   )}
 
                   {selectedDate && (
-                    <div className="p-3">
+                    <div className="-mt-2 p-3">
                       <BookingSummary
                         barbershop={barbershop}
                         service={service}
@@ -275,7 +275,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                       />
                     </div>
                   )}
-                  <SheetFooter className="px-5">
+                  <SheetFooter className="-mt-2 px-4">
                     <Button
                       onClick={handCreateBooking}
                       disabled={!selectedDay || !selectedTime}

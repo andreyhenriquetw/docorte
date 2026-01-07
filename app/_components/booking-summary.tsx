@@ -9,11 +9,7 @@ interface BookingSummaryProps {
   selectedDate: Date
 }
 
-const BookingSummary = ({
-  service,
-  barbershop,
-  selectedDate,
-}: BookingSummaryProps) => {
+const BookingSummary = ({ service, selectedDate }: BookingSummaryProps) => {
   return (
     <Card>
       <CardContent className="space-y-3 p-3">
@@ -39,11 +35,6 @@ const BookingSummary = ({
         <div className="flex items-center justify-between">
           <h2 className="text-sm text-gray-400">Horário</h2>
           <p className="text-sm">{format(selectedDate, "HH:mm")}</p>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm text-gray-400">Barbearia</h2>
-          <p className="text-sm">{barbershop.name}</p>
         </div>
       </CardContent>
     </Card>
