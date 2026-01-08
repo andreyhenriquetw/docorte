@@ -75,14 +75,9 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
   if (!config) return []
 
   const times: string[] = []
-  for (let hour = config.open; hour <= config.close; hour++) {
-    // 00 está sempre dentro do horário
-    times.push(`${String(hour).padStart(2, "0")}:00`)
 
-    // só adiciona 30 se não for exatamente a hora final
-    if (hour < config.close) {
-      times.push(`${String(hour).padStart(2, "0")}:55`)
-    }
+  for (let hour = config.open; hour < config.close; hour++) {
+    times.push(`${String(hour).padStart(2, "0")}:00`)
   }
 
   return times.filter((time) => {
