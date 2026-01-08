@@ -14,7 +14,7 @@ import {
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
 import { useEffect, useMemo, useState } from "react"
-import { isPast, isToday, set, format } from "date-fns"
+import { isPast, set, format } from "date-fns"
 import { createBooking } from "../_actions/create-booking"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
@@ -54,6 +54,22 @@ interface GetTimeListProps {
   selectedDay: Date
 }
 
+const getIrelandNow = () => {
+  return new Date(
+    new Date().toLocaleString("en-US", {
+      timeZone: "Europe/Dublin",
+    }),
+  )
+}
+
+const toIrelandDate = (date: Date) => {
+  return new Date(
+    date.toLocaleString("en-US", {
+      timeZone: "Europe/Dublin",
+    }),
+  )
+}
+
 const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
   const config = getOpeningHours(selectedDay)
   if (!config) return []
@@ -65,7 +81,7 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
 
     // só adiciona 30 se não for exatamente a hora final
     if (hour < config.close) {
-      times.push(`${String(hour).padStart(2, "0")}:30`)
+      times.push(`${String(hour).padStart(2, "0")}:55`)
     }
   }
 
@@ -74,14 +90,30 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
     const hour = Number(hourStr)
     const minutes = Number(minStr)
 
-    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
-    if (timeIsOnThePast && isToday(selectedDay)) return false
+    const irelandNow = getIrelandNow()
+    const selectedDayInIreland = toIrelandDate(selectedDay)
 
-    const hasBookingOnCurrentTime = bookings.some(
-      (booking) =>
-        booking.date.getHours() === hour &&
-        booking.date.getMinutes() === minutes,
-    )
+    const timeInIreland = set(selectedDayInIreland, {
+      hours: hour,
+      minutes,
+      seconds: 0,
+      milliseconds: 0,
+    })
+
+    const isSameDayInIreland =
+      format(irelandNow, "yyyy-MM-dd") ===
+      format(selectedDayInIreland, "yyyy-MM-dd")
+
+    if (isSameDayInIreland && isPast(timeInIreland)) return false
+
+    const hasBookingOnCurrentTime = bookings.some((booking) => {
+      const bookingIrelandDate = toIrelandDate(booking.date)
+
+      return (
+        bookingIrelandDate.getHours() === hour &&
+        bookingIrelandDate.getMinutes() === minutes
+      )
+    })
 
     return !hasBookingOnCurrentTime
   })
@@ -238,7 +270,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                       locale={ptBR}
                       selected={selectedDay}
                       onSelect={handleDateSelect}
-                      fromDate={new Date()}
+                      fromDate={getIrelandNow()}
                       disabled={(date) => {
                         const config = getOpeningHours(date)
                         return config === null
