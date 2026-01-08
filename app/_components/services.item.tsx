@@ -32,29 +32,22 @@ interface ServiceItemProps {
   barbershop: Pick<Barbershop, "name">
 }
 
-const TIME_LIST = [
-  "08:00",
-  "08:30",
-  "09:00",
-  "09:30",
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "12:00",
-  "12:30",
-  "13:00",
-  "13:30",
-  "14:00",
-  "14:30",
-  "15:00",
-  "15:30",
-  "16:00",
-  "16:30",
-  "17:00",
-  "17:30",
-  "18:00",
-]
+// Função de configuração de horários por dia da semana
+const getOpeningHours = (date: Date) => {
+  const day = date.getDay() // 0 = Domingo, 1 = Segunda ...
+
+  // Segunda a Quinta (1 a 4) → 16h às 21h
+  if (day >= 1 && day <= 4) {
+    return { open: 16, close: 21 }
+  }
+
+  // Sexta, Sábado e Domingo (5,6,0) → 08h às 22h
+  if (day === 5 || day === 6 || day === 0) {
+    return { open: 8, close: 22 }
+  }
+
+  return null
+}
 
 interface GetTimeListProps {
   bookings: Booking[]
@@ -62,11 +55,26 @@ interface GetTimeListProps {
 }
 
 const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
-  return TIME_LIST.filter((time) => {
-    const hour = Number(time.split(":")[0])
-    const minutes = Number(time.split(":")[1])
-    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
+  const config = getOpeningHours(selectedDay)
+  if (!config) return []
 
+  const times: string[] = []
+  for (let hour = config.open; hour <= config.close; hour++) {
+    // 00 está sempre dentro do horário
+    times.push(`${String(hour).padStart(2, "0")}:00`)
+
+    // só adiciona 30 se não for exatamente a hora final
+    if (hour < config.close) {
+      times.push(`${String(hour).padStart(2, "0")}:30`)
+    }
+  }
+
+  return times.filter((time) => {
+    const [hourStr, minStr] = time.split(":")
+    const hour = Number(hourStr)
+    const minutes = Number(minStr)
+
+    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
     if (timeIsOnThePast && isToday(selectedDay)) return false
 
     const hasBookingOnCurrentTime = bookings.some(
@@ -159,7 +167,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 📅 - Data: ${formattedDate} às ${formattedTime}
 💵 - Preço: ${formattedPrice}`
 
-      const phoneNumber = "5593999034526" // Substitua pelo número real do WhatsApp
+      const phoneNumber = "5593999034526"
       const encodedMessage = encodeURIComponent(message)
       const link = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
       setWhatsAppLink(link)
@@ -231,6 +239,10 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                       selected={selectedDay}
                       onSelect={handleDateSelect}
                       fromDate={new Date()}
+                      disabled={(date) => {
+                        const config = getOpeningHours(date)
+                        return config === null
+                      }}
                       styles={{
                         head_cell: {
                           width: "100%",
@@ -247,24 +259,36 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 
                   {selectedDay && (
                     <div className="flex gap-2 overflow-x-auto border-b pb-3 pl-5">
-                      {timeList.length > 0 ? (
-                        timeList.map((time) => (
-                          <Button
-                            key={time}
-                            variant={
-                              selectedTime === time ? "default" : "outline"
-                            }
-                            className="rounded-full"
-                            onClick={() => handleTimeSelect(time)}
-                          >
-                            {time}
-                          </Button>
-                        ))
-                      ) : (
-                        <p className="text-xs">
-                          Não há horários disponíveis para este dia.
-                        </p>
-                      )}
+                      {(() => {
+                        const config = getOpeningHours(selectedDay)
+                        if (!config)
+                          return (
+                            <p className="text-xs">
+                              Estamos fechados neste dia.
+                            </p>
+                          )
+
+                        if (timeList.length > 0) {
+                          return timeList.map((time) => (
+                            <Button
+                              key={time}
+                              variant={
+                                selectedTime === time ? "default" : "outline"
+                              }
+                              className="rounded-full"
+                              onClick={() => handleTimeSelect(time)}
+                            >
+                              {time}
+                            </Button>
+                          ))
+                        }
+
+                        return (
+                          <p className="text-xs">
+                            Não há horários disponíveis.
+                          </p>
+                        )
+                      })()}
                     </div>
                   )}
 
