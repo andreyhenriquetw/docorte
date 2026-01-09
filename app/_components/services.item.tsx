@@ -25,8 +25,6 @@ import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
 
-import { FaWhatsapp } from "react-icons/fa"
-
 interface ServiceItemProps {
   service: BarbershopService
   barbershop: Pick<Barbershop, "name">
@@ -129,7 +127,6 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
   )
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
-  const [whatsAppLink, setWhatsAppLink] = useState<string | null>(null)
 
   useEffect(() => {
     const fetch = async () => {
@@ -204,15 +201,21 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
       const phoneNumber = "353874772097"
       const encodedMessage = encodeURIComponent(message)
       const link = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
-      setWhatsAppLink(link)
+
+      // abre o WhatsApp direto
+      window.open(link, "_blank")
 
       handleBookingSheetOpenChange()
+
       toast.success("Reserva criada com sucesso!", {
         action: {
           label: "Ver agendamentos",
           onClick: () => router.push("/bookings"),
         },
       })
+
+      // volta para a página inicial
+      router.push("/")
     } catch (error) {
       console.error(error)
       toast.error("Erro ao criar reserva!")
@@ -339,8 +342,9 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                     <Button
                       onClick={handCreateBooking}
                       disabled={!selectedDay || !selectedTime}
+                      className="bg-green-500 text-white hover:bg-green-600"
                     >
-                      Confirmar
+                      Confirmar no WhatsApp
                     </Button>
                   </SheetFooter>
                 </SheetContent>
@@ -358,34 +362,6 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
           <SignInDialog />
         </DialogContent>
       </Dialog>
-
-      {whatsAppLink && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-[90%] max-w-md rounded-2xl border border-border bg-background p-6 text-center shadow-xl">
-            <h2 className="mb-3 flex items-center justify-center gap-2 text-lg font-semibold text-foreground">
-              Finalizar no WhatsApp
-              <FaWhatsapp className="h-5 w-5 text-green-500" />
-            </h2>
-
-            <p className="mb-4 text-sm text-muted-foreground">
-              Clique abaixo para confirmar seu agendamento pelo WhatsApp.
-            </p>
-
-            <a
-              href={whatsAppLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                setWhatsAppLink(null)
-                router.push("/")
-              }}
-              className="block w-full rounded-full bg-green-500 px-6 py-3 text-center text-sm font-semibold text-white transition-all hover:bg-green-600"
-            >
-              Confirmar no WhatsApp
-            </a>
-          </div>
-        </div>
-      )}
     </>
   )
 }
