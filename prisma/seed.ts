@@ -61,8 +61,7 @@ async function seedDatabase() {
         name: "Corte + Barba",
         description: "Combo para visual renovado, bem definido.",
         price: 20.0,
-        imageUrl:
-          "https://hotclube.s3.sa-east-1.amazonaws.com/Captura+de+tela+2026-01-08+205614.png",
+        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/cortebarba.jpeg",
       },
       {
         name: "Corte + Barba + Sobrancelha",
@@ -70,6 +69,18 @@ async function seedDatabase() {
         price: 23.0,
         imageUrl:
           "https://hotclube.s3.sa-east-1.amazonaws.com/Captura+de+tela+2026-01-08+205429.png",
+      },
+      {
+        name: "Luzes + Corte",
+        description: "Realce o visual com luzes e corte moderno.",
+        price: 50.0,
+        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/luzescorte.jpeg",
+      },
+      {
+        name: "Nevou + Corte",
+        description: "Efeito nevado com corte para um visual marcante.",
+        price: 65.0,
+        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/nevoucorte.jpeg",
       },
     ]
 

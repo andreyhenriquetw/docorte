@@ -36,13 +36,18 @@ interface ServiceItemProps {
 const getOpeningHours = (date: Date) => {
   const day = date.getDay() // 0 = Domingo, 1 = Segunda ...
 
-  // Segunda a Quinta (1 a 4) → 16h às 21h
+  // Segunda a Quinta → 16h às 21h
   if (day >= 1 && day <= 4) {
     return { open: 16, close: 21 }
   }
 
-  // Sexta, Sábado e Domingo (5,6,0) → 08h às 22h
-  if (day === 5 || day === 6 || day === 0) {
+  // Sexta-feira → 14h às 21h
+  if (day === 5) {
+    return { open: 14, close: 21 }
+  }
+
+  // Sábado e Domingo → 08h às 22h
+  if (day === 6 || day === 0) {
     return { open: 8, close: 22 }
   }
 
