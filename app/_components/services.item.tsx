@@ -196,7 +196,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 📅 - Data: ${formattedDate} às ${formattedTime}
 💵 - Preço: ${formattedPrice}`
 
-      const phoneNumber = "5593999034526"
+      const phoneNumber = "353874772097"
       const encodedMessage = encodeURIComponent(message)
       const link = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
       setWhatsAppLink(link)
@@ -370,7 +370,10 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
               href={whatsAppLink}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => setWhatsAppLink(null)}
+              onClick={() => {
+                setWhatsAppLink(null)
+                router.push("/")
+              }}
               className="block w-full rounded-full bg-green-500 px-6 py-3 text-center text-sm font-semibold text-white transition-all hover:bg-green-600"
             >
               Confirmar no WhatsApp
