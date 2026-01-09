@@ -68,7 +68,18 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
       {/* TITULO */}
       <div className="border-b border-solid p-5">
-        <h1 className="mb-3 text-xl font-bold">{barbershop.name}</h1>
+        <div className="-mt-1 mb-3 flex items-center gap-2">
+          <div className="relative size-[35px] shrink-0 overflow-hidden rounded-full">
+            <Image
+              src="/docorte.png"
+              alt={barbershop.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          <h1 className="text-xl font-semibold">{barbershop.name}</h1>
+        </div>
         <div className="mb-2 flex items-center gap-2">
           <MapPinIcon className="text-primary" size={18} />
           <p className="text-sm">{barbershop?.address}</p>
@@ -78,12 +89,6 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
           <StarIcon className="fill-primary text-primary" size={18} />
           <p className="text-sm">5,0 (99 avaliações)</p>
         </div>
-      </div>
-
-      {/* DESCRIÇÃO */}
-      <div className="space-y-2 border-b border-solid p-5">
-        <h2 className="text-xs font-bold uppercase text-gray-400">Sobre nós</h2>
-        <p className="text-justify text-sm">{barbershop?.description}</p>
       </div>
 
       {/* SERVIÇOS */}

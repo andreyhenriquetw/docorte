@@ -14,44 +14,62 @@ async function seedDatabase() {
       {
         name: "Corte de Cabelo",
         description: "Estilo personalizado com as últimas tendências.",
-        price: 60.0,
+        price: 15.0,
         imageUrl:
-          "https://utfs.io/f/0ddfbd26-a424-43a0-aaf3-c3f1dc6be6d1-1kgxo7.png",
+          "https://hotclube.s3.sa-east-1.amazonaws.com/cortedecabelo.jpeg",
       },
       {
         name: "Barba",
         description: "Modelagem completa para destacar sua masculinidade.",
-        price: 40.0,
-        imageUrl:
-          "https://utfs.io/f/e6bdffb6-24a9-455b-aba3-903c2c2b5bde-1jo6tu.png",
-      },
-      {
-        name: "Pézinho",
-        description: "Acabamento perfeito para um visual renovado.",
-        price: 35.0,
-        imageUrl:
-          "https://utfs.io/f/8a457cda-f768-411d-a737-cdb23ca6b9b5-b3pegf.png",
+        price: 5.0,
+        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/barba.jpeg",
       },
       {
         name: "Sobrancelha",
         description: "Expressão acentuada com modelagem precisa.",
-        price: 20.0,
+        price: 3.0,
         imageUrl:
-          "https://utfs.io/f/2118f76e-89e4-43e6-87c9-8f157500c333-b0ps0b.png",
+          "https://hotclube.s3.sa-east-1.amazonaws.com/sombrancelhaa.jpeg",
       },
       {
-        name: "Massagem",
-        description: "Relaxe com uma massagem revigorante.",
+        name: "Luzes",
+        description: "Pontos de luz que destacam um visual mais vivo.",
+        price: 35.0,
+        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/luzess.jpeg",
+      },
+      {
+        name: "Nevou/Platinado",
+        description: "Visual claro e moderno com acabamento marcante.",
         price: 50.0,
         imageUrl:
-          "https://utfs.io/f/c4919193-a675-4c47-9f21-ebd86d1c8e6a-4oen2a.png",
+          "https://hotclube.s3.sa-east-1.amazonaws.com/nevouplatina.jpeg",
       },
       {
-        name: "Hidratação",
-        description: "Hidratação profunda para cabelo e barba.",
-        price: 25.0,
+        name: "Alisamento",
+        description: "Fios alinhados e lisos com resultado natural.",
+        price: 30.0,
+        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/alisamento.jpeg",
+      },
+      {
+        name: "Pigmentação",
+        description: "Cor que entrega um visuale legante.",
+        price: 10.0,
         imageUrl:
-          "https://utfs.io/f/8a457cda-f768-411d-a737-cdb23ca6b9b5-b3pegf.png",
+          "https://hotclube.s3.sa-east-1.amazonaws.com/pigmentacao.jpeg",
+      },
+      {
+        name: "Corte + Barba",
+        description: "Combo para visual renovado, bem definido.",
+        price: 20.0,
+        imageUrl:
+          "https://hotclube.s3.sa-east-1.amazonaws.com/Captura+de+tela+2026-01-08+205614.png",
+      },
+      {
+        name: "Corte + Barba + Sobrancelha",
+        description: "Combo completo para um visual impecável.",
+        price: 23.0,
+        imageUrl:
+          "https://hotclube.s3.sa-east-1.amazonaws.com/Captura+de+tela+2026-01-08+205429.png",
       },
     ]
 
@@ -61,7 +79,7 @@ async function seedDatabase() {
         name: creativeNames[0],
         address: addresses[0],
         imageUrl: images[0],
-        phones: ["(93) 99999-9999"],
+        phones: ["(087) 477 2097"],
         description:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ac augue ullamcorper, pharetra orci mollis, auctor tellus. Phasellus pharetra erat ac libero efficitur tempus. Donec pretium convallis iaculis. Etiam eu felis sollicitudin, cursus mi vitae, iaculis magna. Nam non erat neque. In hac habitasse platea dictumst. Pellentesque molestie accumsan tellus id laoreet.",
       },

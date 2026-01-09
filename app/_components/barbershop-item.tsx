@@ -3,7 +3,7 @@ import { Card, CardContent } from "./ui/card"
 import Image from "next/image"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
-import { StarIcon } from "lucide-react"
+import { MapPinIcon, StarIcon } from "lucide-react"
 import Link from "next/link"
 
 interface BarberShopItemProps {
@@ -35,8 +35,28 @@ const BarbershopItem = ({ barbershop }: BarberShopItemProps) => {
 
         {/* TEXTO */}
         <div className="px-1 py-3">
-          <h3 className="truncate font-semibold">{barbershop.name}</h3>
-          <p className="truncate text-sm text-gray-400">{barbershop.address}</p>
+          <div className="-mt-1 mb-3 flex items-center gap-2">
+            <div className="flex items-center gap-2">
+              <div className="relative size-[30px] shrink-0 overflow-hidden rounded-full">
+                <Image
+                  src="/docorte.png"
+                  alt="Logo da Barbearia"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <p className="font-semibold leading-none tracking-tight">
+                {barbershop.name}
+              </p>
+            </div>
+          </div>
+          <div className="-mt-1 flex items-center gap-2">
+            <MapPinIcon size={16} />
+            <p className="truncate text-sm text-gray-400">
+              {barbershop?.address}
+            </p>
+          </div>
           <Button variant="secondary" className="mt-3 w-full" asChild>
             <Link href={`/barbershops/${barbershop.id}`}>AGENDAR AQUI</Link>
           </Button>

@@ -180,10 +180,12 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 
       const formattedDate = format(selectedDate, "dd/MM/yyyy", { locale: ptBR })
       const formattedTime = format(selectedDate, "HH:mm")
-      const formattedPrice = Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(Number(service.price))
+      const formattedPrice =
+        "€ " +
+        Intl.NumberFormat("en-IE", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(Number(service.price))
 
       const clientName = data?.user?.name ?? "Cliente"
 
@@ -224,7 +226,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     <>
       <Card>
         <CardContent className="flex items-center gap-3 p-3">
-          <div className="relative max-h-[110px] min-h-[110px] min-w-[110px] max-w-[110px]">
+          <div className="relative max-h-[113px] min-h-[113px] min-w-[113px] max-w-[113px]">
             <Image
               alt={service.name}
               src={service.imageUrl}
@@ -232,15 +234,15 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
               className="rounded-lg object-cover"
             />
           </div>
-          <div className="space-y-2">
+          <div className="flex flex-1 flex-col justify-between space-y-2">
             <h3 className="text-sm font-semibold">{service.name}</h3>
             <p className="text-sm text-gray-400">{service.description}</p>
-            <div className="flex items-center justify-between">
+            <div className="mt-auto flex items-center justify-between">
               <p className="text-sm font-bold text-primary">
-                {Intl.NumberFormat("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                }).format(Number(service.price))}
+                {"€ " +
+                  Intl.NumberFormat("en-IE", {
+                    minimumFractionDigits: 2,
+                  }).format(Number(service.price))}
               </p>
 
               <Sheet
