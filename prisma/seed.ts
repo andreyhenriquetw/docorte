@@ -7,8 +7,8 @@ async function seedDatabase() {
     const images = [
       "https://cultura.uol.com.br/webstories/2023/05/como-garantir-uma-barba-bem-feita/assets/5.jpeg",
     ]
-    const creativeNames = ["KN Do Corte"]
-    const addresses = ["Rua da Barbearia, 54, Drumnavanagh"]
+    const creativeNames = ["KN DO CORTE"]
+    const addresses = ["54 Drumnavanagh, Cavan, H12 X443, Irlanda"]
 
     const services = [
       {
@@ -90,7 +90,7 @@ async function seedDatabase() {
         name: creativeNames[0],
         address: addresses[0],
         imageUrl: images[0],
-        phones: ["(087) 477 2097"],
+        phones: ["+352 874 772 097"],
         description:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ac augue ullamcorper, pharetra orci mollis, auctor tellus. Phasellus pharetra erat ac libero efficitur tempus. Donec pretium convallis iaculis. Etiam eu felis sollicitudin, cursus mi vitae, iaculis magna. Nam non erat neque. In hac habitasse platea dictumst. Pellentesque molestie accumsan tellus id laoreet.",
       },
