@@ -11,7 +11,7 @@ const Header = () => {
     <Card>
       <CardContent className="flex flex-row items-center justify-between p-5">
         <Link href="/">
-          <Image alt="Docorte" src="/docorte.png" height={18} width={60} />
+          <Image alt="Docorte" src="/logkn.png" height={18} width={55} />
         </Link>
 
         <Sheet>
