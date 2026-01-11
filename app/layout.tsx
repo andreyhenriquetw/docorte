@@ -8,9 +8,18 @@ import AuthProvider from "./_providers/auth"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "AGENDE SEU HORÁRIO.", // Altere aqui para o nome da sua barbearia
+  title: "AGENDE SEU HORÁRIO.",
   description: "Clique aqui para agendar, é rápido e fácil!",
-  icons: "/logwhatsakn.png",
+
+  openGraph: {
+    images: [
+      {
+        url: "https://kndocorte.shop/logwhatsakn.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 }
 
 export default function RootLayout({
