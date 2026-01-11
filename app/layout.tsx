@@ -8,30 +8,10 @@ import AuthProvider from "./_providers/auth"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "KN Do Corte",
+  title: "KN Do Corte", // Altere aqui para o nome da sua barbearia
   description:
     "Agendamentos rápidos na Barbearia KN Do Corte – estilo em primeiro lugar!",
   icons: "/logkn.png",
-  openGraph: {
-    title: "KN Do Corte",
-    description: "Agende seu corte com estilo!",
-    url: "https://kndocorte.shop", // coloque seu domínio aqui
-    siteName: "KN Do Corte",
-    type: "website",
-    images: [
-      {
-        url: "/logkn.png", // imagem que aparecerá no WhatsApp
-        width: 1200,
-        height: 630,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "KN Do Corte",
-    description: "Agende seu corte com estilo!",
-    images: ["/logkn.png"],
-  },
 }
 
 export default function RootLayout({
