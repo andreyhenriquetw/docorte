@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/logwhatsakn.png", // imagem que aparecerá no WhatsApp
+        url: "/logoknlink.jpg", // imagem que aparecerá no WhatsApp
         width: 1200,
         height: 630,
       },
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "KN DO CORTE",
     description: "Clique aqui para agendar, é rapido e fácil!",
-    images: ["/logwhatsakn.png"],
+    images: ["/logoknlink.jpg"],
   },
 }
 
