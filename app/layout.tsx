@@ -8,9 +8,9 @@ import AuthProvider from "./_providers/auth"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "KN do Corte", // Altere aqui para o nome da sua barbearia
-  description: "Agendamentos rápidos – Seu estilo em primeiro lugar!",
-  icons: "/logkncorte.png",
+  title: "Agende seu Horário.", // Altere aqui para o nome da sua barbearia
+  description: "Clique aqui para agendar!",
+  icons: "/logwhatsakn.png",
 }
 
 export default function RootLayout({
