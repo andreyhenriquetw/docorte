@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "Clique aqui para agendar, é rapido e fácil!",
   icons: "/logkn.png",
   openGraph: {
-    title: "KN DO CORTE",
+    title: "AGENDE SEU HORÁRIO!",
     description: "Clique aqui para agendar, é rapido e fácil!",
     url: "https://kndocorte.shop", // coloque seu domínio aqui
     siteName: "KN DO CORTE",
