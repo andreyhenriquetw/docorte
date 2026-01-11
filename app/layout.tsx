@@ -8,8 +8,8 @@ import AuthProvider from "./_providers/auth"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Agende seu Horário.", // Altere aqui para o nome da sua barbearia
-  description: "Clique aqui para agendar!",
+  title: "AGENDE SEU HORÁRIO.", // Altere aqui para o nome da sua barbearia
+  description: "Clique aqui para agendar, é rápido e fácil!",
   icons: "/logwhatsakn.png",
 }
 
