@@ -8,6 +8,10 @@ import AuthProvider from "./_providers/auth"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
+  title: "KN DO CORTE.",
+  description: "Clique aqui para agendar, é rápido e fácil!",
+  icons: "/logkn.png",
+
   openGraph: {
     title: "AGENDE SEU HORÁRIO.",
     description: "Clique aqui para agendar, é rápido e fácil!",
@@ -16,7 +20,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/logwhatsakn.png",
+        url: "https://kndocorte.shop/logwhatsakn.png",
         width: 1200,
         height: 630,
       },
