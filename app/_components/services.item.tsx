@@ -57,22 +57,6 @@ interface GetTimeListProps {
   selectedDay: Date
 }
 
-const getIrelandNow = () => {
-  return new Date(
-    new Date().toLocaleString("en-US", {
-      timeZone: "Europe/Dublin",
-    }),
-  )
-}
-
-const toIrelandDate = (date: Date) => {
-  return new Date(
-    date.toLocaleString("en-US", {
-      timeZone: "Europe/Dublin",
-    }),
-  )
-}
-
 const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
   const config = getOpeningHours(selectedDay)
   if (!config) return []
@@ -88,28 +72,25 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
     const hour = Number(hourStr)
     const minutes = Number(minStr)
 
-    const irelandNow = getIrelandNow()
-    const selectedDayInIreland = toIrelandDate(selectedDay)
+    const now = new Date()
 
-    const timeInIreland = set(selectedDayInIreland, {
+    const timeSlot = set(selectedDay, {
       hours: hour,
       minutes,
       seconds: 0,
       milliseconds: 0,
     })
 
-    const isSameDayInIreland =
-      format(irelandNow, "yyyy-MM-dd") ===
-      format(selectedDayInIreland, "yyyy-MM-dd")
+    const isSameDay =
+      format(now, "yyyy-MM-dd") === format(selectedDay, "yyyy-MM-dd")
 
-    if (isSameDayInIreland && isPast(timeInIreland)) return false
+    if (isSameDay && isPast(timeSlot)) return false
 
+    // ❌ não mostrar horários já reservados
     const hasBookingOnCurrentTime = bookings.some((booking) => {
-      const bookingIrelandDate = toIrelandDate(booking.date)
-
       return (
-        bookingIrelandDate.getHours() === hour &&
-        bookingIrelandDate.getMinutes() === minutes
+        booking.date.getHours() === hour &&
+        booking.date.getMinutes() === minutes
       )
     })
 
@@ -275,7 +256,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                       locale={ptBR}
                       selected={selectedDay}
                       onSelect={handleDateSelect}
-                      fromDate={getIrelandNow()}
+                      fromDate={new Date()}
                       disabled={(date) => {
                         const config = getOpeningHours(date)
                         return config === null
