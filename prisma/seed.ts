@@ -16,71 +16,77 @@ async function seedDatabase() {
         description: "Estilo personalizado com as últimas tendências.",
         price: 15.0,
         imageUrl:
-          "https://hotclube.s3.sa-east-1.amazonaws.com/cortedecabelo.jpeg",
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWLnzZk0p9UQfGIRqvtH0Z4B3xeXr618hwn2dD",
       },
       {
         name: "Barba",
         description: "Modelagem completa para destacar sua masculinidade.",
         price: 5.0,
-        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/barba.jpeg",
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCW1LHdDRBj0VlykRN7LYMv2S9wqWXKbAap3hFg",
       },
       {
         name: "Sobrancelha",
         description: "Expressão acentuada com modelagem precisa.",
         price: 3.0,
         imageUrl:
-          "https://hotclube.s3.sa-east-1.amazonaws.com/sombrancelhaa.jpeg",
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWI1WyCI98omUnsYOVxbyz6NA7vLH12FSMDdrW",
       },
       {
         name: "Luzes",
         description: "Pontos de luz que destacam um visual mais vivo.",
         price: 35.0,
-        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/luzess.jpeg",
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWlNpZip9LpetGEKCOf9HThFskV7irPzDI8R6M",
       },
       {
         name: "Nevou/Platinado",
         description: "Visual claro e moderno com acabamento marcante.",
         price: 50.0,
         imageUrl:
-          "https://hotclube.s3.sa-east-1.amazonaws.com/nevouplatina.jpeg",
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWQ6ErCSaxi96fvUBAyEclqVWKoaX4spZ7bNFt",
       },
       {
         name: "Alisamento",
         description: "Fios alinhados e lisos com resultado natural.",
         price: 30.0,
-        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/alisamento.jpeg",
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWa8uh7tD97wIB042Xx8ZbAGVLMDPUOve6aHEt",
       },
       {
         name: "Pigmentação",
         description: "Cor que entrega um visuale legante.",
         price: 10.0,
         imageUrl:
-          "https://hotclube.s3.sa-east-1.amazonaws.com/pigmentacao.jpeg",
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCW5DGNvEAi1HmlaNWvpAqfuyJLIeTPKd03R4tG",
       },
       {
         name: "Corte + Barba",
         description: "Combo para visual renovado, bem definido.",
         price: 20.0,
-        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/cortebarba.jpeg",
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWvADDaSiCzS5Ldp6gfYOMwD3cGXmI97juiKNy",
       },
       {
         name: "Corte + Barba + Sobrancelha",
         description: "Combo completo para um visual impecável.",
         price: 23.0,
         imageUrl:
-          "https://hotclube.s3.sa-east-1.amazonaws.com/Captura+de+tela+2026-01-08+205429.png",
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWrqmwXI1ulNCWtEmGLOXUwr3MDPQYIv1a8hT0",
       },
       {
         name: "Luzes + Corte",
         description: "Realce o visual com luzes e corte moderno.",
         price: 50.0,
-        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/luzescorte.jpeg",
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCW1oyVVktBj0VlykRN7LYMv2S9wqWXKbAap3hF",
       },
       {
         name: "Nevou + Corte",
         description: "Efeito nevado com corte para um visual marcante.",
         price: 65.0,
-        imageUrl: "https://hotclube.s3.sa-east-1.amazonaws.com/nevoucorte.jpeg",
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWkMcOWcVBNEhwAajZgqOu3vci0UCpRHebDfPd",
       },
     ]
 

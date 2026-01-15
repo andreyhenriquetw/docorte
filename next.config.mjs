@@ -9,8 +9,9 @@ const nextConfig = {
         hostname: "cultura.uol.com.br",
         protocol: "https",
       },
+
       {
-        hostname: "hotclube.s3.sa-east-1.amazonaws.com",
+        hostname: "xd90tgazad.ufs.sh",
         protocol: "https",
       },
     ],
