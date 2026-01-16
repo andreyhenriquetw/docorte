@@ -58,7 +58,7 @@ const BarbershopItem = ({ barbershop }: BarberShopItemProps) => {
             </p>
           </div>
           <Button variant="secondary" className="mt-3 w-full" asChild>
-            <Link href={`/barbershops/${barbershop.id}`}>AGENDAR AQUI</Link>
+            <Link href={`/barbershops/${barbershop.id}`}>AGENDAR AGORA</Link>
           </Button>
         </div>
       </CardContent>
