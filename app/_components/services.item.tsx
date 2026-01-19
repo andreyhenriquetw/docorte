@@ -183,8 +183,16 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
       const encodedMessage = encodeURIComponent(message)
       const link = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
 
-      // abre o WhatsApp direto
-      window.open(link, "_blank")
+      // Deep link para abrir o app do WhatsApp primeiro
+      const deepLink = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`
+
+      // Tenta abrir o app primeiro (funciona no Safari/iPhone)
+      window.location.href = deepLink
+
+      // Se o app não abrir, cai pro link web depois
+      setTimeout(() => {
+        window.location.href = link
+      }, 800)
 
       handleBookingSheetOpenChange()
 
