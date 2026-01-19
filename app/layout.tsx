@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import { cookies } from "next/headers"
 import { Toaster } from "sonner"
 import Footer from "./_components/footer"
 import AuthProvider from "./_providers/auth"
@@ -14,12 +15,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AGENDE SEU HORÁRIO!",
     description: "Clique aqui para agendar, é rapido e fácil!",
-    url: "https://kndocorte.shop", // coloque seu domínio aqui
+    url: "https://kndocorte.shop",
     siteName: "KN DO CORTE",
     type: "website",
     images: [
       {
-        url: "/logoknlink.jpg", // imagem que aparecerá no WhatsApp
+        url: "/logoknlink.jpg",
         width: 1200,
         height: 630,
       },
@@ -35,12 +36,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
+  // 🔹 pega o idioma salvo pelo middleware
+  const locale = cookies().get("locale")?.value || "pt"
+
   return (
-    <html lang="pt-BR" className="dark">
-      <head></head>
+    <html lang={locale} className="dark">
       <body className={inter.className}>
         <AuthProvider>
           <div className="flex h-full flex-col">
