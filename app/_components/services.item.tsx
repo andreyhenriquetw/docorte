@@ -182,30 +182,11 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
       const phoneNumber = "353874772097"
       const encodedMessage = encodeURIComponent(message)
 
-      const link = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
+      // deep link direto pro app
       const deepLink = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`
 
-      let appOpened = false
-
-      const handleVisibilityChange = () => {
-        if (document.hidden) {
-          appOpened = true
-        }
-      }
-
-      document.addEventListener("visibilitychange", handleVisibilityChange)
-
-      // tenta abrir o app
+      // abre uma única vez
       window.location.href = deepLink
-
-      setTimeout(() => {
-        document.removeEventListener("visibilitychange", handleVisibilityChange)
-
-        // só cai pro web se o app NÃO abriu
-        if (!appOpened) {
-          window.location.href = link
-        }
-      }, 1000)
 
       handleBookingSheetOpenChange()
 
