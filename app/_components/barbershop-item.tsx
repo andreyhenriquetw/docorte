@@ -1,16 +1,21 @@
+"use client"
+
 import { Barbershop } from "@prisma/client"
 import { Card, CardContent } from "./ui/card"
 import Image from "next/image"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
-import { MapPinIcon, StarIcon } from "lucide-react"
+import { MapPinIcon, StarIcon, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
 
 interface BarberShopItemProps {
   barbershop: Barbershop
 }
 
 const BarbershopItem = ({ barbershop }: BarberShopItemProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+
   return (
     <Card className="w-full rounded-2xl sm:min-w-[300px]">
       <CardContent className="p-0 px-1 pb-2 pt-1">
@@ -57,11 +62,42 @@ const BarbershopItem = ({ barbershop }: BarberShopItemProps) => {
               {barbershop?.address}
             </p>
           </div>
-          <Button variant="secondary" className="mt-3 w-full" asChild>
-            <Link href={`/barbershops/${barbershop.id}`}>
-              <span>SCHEDULE NOW</span>
-              <span className="text-sm opacity-70">AGENDAR AGORA</span>
-            </Link>
+
+          <Button
+            variant="secondary"
+            className="relative mt-3 h-full w-full overflow-hidden p-[1.2px]"
+            disabled={isLoading}
+            onClick={() => setIsLoading(true)}
+            asChild={!isLoading}
+          >
+            {isLoading ? (
+              <div className="z-10 flex h-full w-full items-center justify-center gap-2 bg-secondary py-2">
+                <Loader2 className="h-4 w-4 animate-spin text-[#EAB308]" />
+                <span className="text-sm font-semibold uppercase"></span>
+              </div>
+            ) : (
+              <Link
+                href={`/barbershops/${barbershop.id}`}
+                className="relative flex h-full w-full items-center justify-center"
+              >
+                <div
+                  className="absolute inset-[-1000%] animate-[spin_6s_linear_infinite]"
+                  style={{
+                    background:
+                      "conic-gradient(from 90deg at 50% 50%, transparent 0%, #EAB308 20%, transparent 40%)",
+                  }}
+                />
+
+                <div className="z-10 flex h-full w-full items-center justify-center gap-2 rounded-[calc(var(--radius)-1px)] bg-secondary px-4 py-2">
+                  <span className="font-semibold uppercase tracking-tight">
+                    RESERVE NOW
+                  </span>
+                  <span className="text-sm uppercase opacity-70">
+                    AGENDAR AGORA
+                  </span>
+                </div>
+              </Link>
+            )}
           </Button>
         </div>
       </CardContent>

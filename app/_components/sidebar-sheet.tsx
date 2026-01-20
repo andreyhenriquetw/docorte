@@ -38,7 +38,7 @@ const SidebarSheet = () => {
             <h2 className="font-bold">Olá, faça seu login!</h2>
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="icon">
+                <Button size="icon" variant="outline">
                   <LogInIcon />
                 </Button>
               </DialogTrigger>

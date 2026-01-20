@@ -47,3 +47,46 @@
     @apply h-full bg-background text-foreground;
   }
 }
+@keyframes border-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-border-spin {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.animate-border-spin::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  left: -50%;
+  top: -50%;
+  width: 200%;
+  height: 200%;
+  background-color: transparent;
+  background-image: conic-gradient(
+    transparent,
+    #3b82f6,
+    transparent 30%
+  ); /* Altere #3b82f6 pela sua cor */
+  animation: border-rotate 4s linear infinite;
+}
+
+.animate-border-spin::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 2px; /* Espessura da borda */
+  top: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  background: inherit; /* Mantém a cor original do botão */
+  border-radius: inherit;
+}
