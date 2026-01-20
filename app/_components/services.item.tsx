@@ -333,7 +333,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                       disabled={!selectedDay || !selectedTime}
                       className="bg-green-500 text-white hover:bg-green-600"
                     >
-                      Confirm on WhatsApp
+                      CONFIRM ON WHATSAPP
                     </Button>
                   </SheetFooter>
                 </SheetContent>

@@ -83,8 +83,9 @@ const BookingItem = ({ booking }: BookingItemProps) => {
 
               <div className="flex items-center gap-2">
                 <Avatar className="h-6 w-6">
-                  <AvatarImage src={booking.service.barbershop.imageUrl} />
+                  <AvatarImage src="/ofckn.png" alt="Barbearia" />
                 </Avatar>
+
                 <p className="text-sm">{booking.service.barbershop.name}</p>
               </div>
             </div>
@@ -119,8 +120,9 @@ const BookingItem = ({ booking }: BookingItemProps) => {
           <Card className="z-50 mx-5 mb-3 w-full rounded-xl">
             <CardContent className="flex items-center gap-3 px-5 py-3">
               <Avatar>
-                <AvatarImage src={barbershop.imageUrl} />
+                <AvatarImage src="/ofckn.png" alt="Barbearia" />
               </Avatar>
+
               <div>
                 <h3 className="font-bold">{barbershop.name}</h3>
                 <p className="text-xs">{barbershop.address}</p>
