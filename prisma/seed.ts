@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 async function seedDatabase() {
   try {
     const images = [
-      "https://cultura.uol.com.br/webstories/2023/05/como-garantir-uma-barba-bem-feita/assets/5.jpeg",
+      "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWVIIfDpkTa08rXoOI3ve6ZLymfqzDCgd7RuBh",
     ]
     const creativeNames = ["KN DO CORTE"]
     const addresses = ["54 Drumnavanagh, Cavan, H12 X443, Irlanda"]
