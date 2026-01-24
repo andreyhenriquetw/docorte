@@ -92,7 +92,7 @@ const Home = async () => {
           ))}
         </div>
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-          Galeria
+          Gallery
         </h2>
 
         <Gallery />
