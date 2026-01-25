@@ -8,11 +8,11 @@ const media = [
   "/333.mp4",
   "/111.mp4",
   "/hg.mp4",
-  "/image1.jpeg",
-  "/image2.jpeg",
-  "/image3.jpeg",
   "/image4.jpeg",
-  "/image5.jpeg",
+  "/image3.jpeg",
+  "/image2.jpeg",
+  "/image1.jpeg",
+  "/asdsad.png",
   "/gfjh.mp4",
 ]
 
@@ -73,7 +73,7 @@ export default function Gallery() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <Image src={src} alt="" fill className="object-cover" />
+                <Image src={src} alt="gallery" fill className="object-cover" />
               )}
             </div>
           </motion.div>
