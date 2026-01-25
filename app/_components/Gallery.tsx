@@ -2,17 +2,17 @@
 
 import Image from "next/image"
 import { motion, useScroll, useTransform } from "framer-motion"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 
 const media = [
   "/333.mp4",
   "/111.mp4",
   "/hg.mp4",
-  "/image4.jpeg",
-  "/image3.jpeg",
-  "/image2.jpeg",
   "/image1.jpeg",
-  "/asdsad.png",
+  "/image2.jpeg",
+  "/image3.jpeg",
+  "/image4.jpeg",
+  "/image5.jpeg",
   "/gfjh.mp4",
 ]
 
@@ -23,29 +23,6 @@ export default function Gallery() {
     target: containerRef,
     offset: ["start 99%", "end 50%"],
   })
-
-  useEffect(() => {
-    const videos = document.querySelectorAll<HTMLVideoElement>("video")
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const video = entry.target as HTMLVideoElement
-
-          if (entry.isIntersecting) {
-            video.play().catch(() => {})
-          } else {
-            video.pause()
-          }
-        })
-      },
-      { threshold: 0.3 },
-    )
-
-    videos.forEach((video) => observer.observe(video))
-
-    return () => observer.disconnect()
-  }, [])
 
   return (
     <div ref={containerRef} className="grid grid-cols-3 gap-3">
@@ -75,34 +52,28 @@ export default function Gallery() {
             style={{ opacity, y: translateY }}
             className="relative h-40 w-full overflow-hidden rounded-lg p-[1.5px]"
           >
-            {/* BORDA AMARELA GIRATÓRIA */}
+            {/* LINHA AMARELA PURA GIRATÓRIA */}
             <div
               className="absolute inset-[-1000%] animate-[spin_5s_linear_infinite]"
               style={{
                 background:
-                  "conic-gradient(from_90deg_at_50%_50%,transparent_0%,#EAB308_20%,transparent_40%)",
+                  "conic-gradient(from 90deg at 50% 50%, transparent 0%, #EAB308 20%, transparent 40%)",
               }}
             />
 
-            {/* CONTEÚDO */}
+            {/* CONTEÚDO (MÁSCARA) */}
             <div className="relative z-10 h-full w-full overflow-hidden rounded-[calc(0.5rem-1.5px)] bg-black">
               {isVideo ? (
                 <video
                   src={src}
-                  muted
+                  autoPlay
                   loop
+                  muted
                   playsInline
-                  preload="metadata"
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <Image
-                  src={src}
-                  alt=""
-                  fill
-                  sizes="(max-width: 768px) 33vw, 20vw"
-                  className="object-cover"
-                />
+                <Image src={src} alt="" fill className="object-cover" />
               )}
             </div>
           </motion.div>
