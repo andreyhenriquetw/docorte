@@ -2,23 +2,18 @@
 
 import { db } from "../_lib/prisma"
 
-export const getConcludedBookings = async () => {
+export const getAllBookings = async () => {
   return db.booking.findMany({
-    where: {
-      date: {
-        lt: new Date(),
-      },
-    },
     include: {
+      user: true,
       service: {
         include: {
           barbershop: true,
         },
       },
-      user: true,
     },
     orderBy: {
-      date: "asc",
+      date: "desc",
     },
   })
 }

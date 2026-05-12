@@ -28,8 +28,8 @@ const Dashboard = async () => {
           </p>
         </div>
         <Overview />
-        <DailySummary />
         <Appointments />
+        <DailySummary />
         <Financials />
         <Clients />
         <Reports />

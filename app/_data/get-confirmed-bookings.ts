@@ -6,13 +6,16 @@ import { db } from "../_lib/prisma"
 
 export const getConfirmedBookings = async () => {
   const session = await getServerSession(authOptions)
-  if (!session?.user) {
+
+  if (!session?.user?.email) {
     return []
   }
+
   return db.booking.findMany({
     where: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      userId: (session.user as any).id,
+      user: {
+        email: session.user.email,
+      },
       date: {
         gte: new Date(),
       },
