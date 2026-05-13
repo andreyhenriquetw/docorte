@@ -1,28 +1,24 @@
 import React from "react"
 import { getDashboardBookings } from "./_data/get-dashboard-bookings"
-import { format, isToday } from "date-fns"
-import { ptBR } from "date-fns/locale"
+import { isToday } from "date-fns"
 import { CalendarDays, Clock3, DollarSign, Users } from "lucide-react"
+import { formatInTimeZone } from "date-fns-tz"
 
 const Overview = async () => {
   const allBookings = await getDashboardBookings()
 
-  // faturamento do dia
   const dailyRevenue = allBookings
     .filter((booking) => isToday(booking.date))
     .reduce((total, booking) => total + Number(booking.service.price), 0)
 
-  // faturamento total
   const totalRevenue = allBookings.reduce(
     (total, booking) => total + Number(booking.service.price),
     0,
   )
 
-  // clientes únicos
   const uniqueClients = new Set(allBookings.map((booking) => booking.userId))
     .size
 
-  // próximo agendamento
   const nextBooking = allBookings[0]
 
   const cards = [
@@ -34,20 +30,20 @@ const Overview = async () => {
     },
     {
       title: "Agendamentos",
-      value: allBookings.length.toString(),
+      value: allBookings.length,
       icon: CalendarDays,
       subtitle: "Total",
     },
     {
       title: "Clientes",
-      value: uniqueClients.toString(),
+      value: uniqueClients,
       icon: Users,
       subtitle: "Únicos",
     },
     {
       title: "Próximo horário",
       value: nextBooking
-        ? format(nextBooking.date, "HH:mm", { locale: ptBR })
+        ? formatInTimeZone(nextBooking.date, "America/Sao_Paulo", "HH:mm")
         : "--:--",
       icon: Clock3,
       subtitle: nextBooking?.user?.name ?? "Sem agenda",
@@ -62,7 +58,7 @@ const Overview = async () => {
         return (
           <div
             key={card.title}
-            className="rounded-3xl border border-zinc-800 bg-gradient-to-b from-zinc-900 to-zinc-950 p-6 shadow-lg transition hover:border-emerald-500/20 hover:bg-zinc-900"
+            className="rounded-3xl border border-zinc-800 bg-zinc-900/70 p-6 shadow-lg transition hover:border-emerald-500/40 hover:bg-zinc-900"
           >
             <div className="mb-5 flex items-center justify-between">
               <div className="rounded-2xl bg-zinc-800 p-3">
