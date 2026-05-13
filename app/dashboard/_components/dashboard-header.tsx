@@ -1,9 +1,10 @@
 "use client"
 
-import { Bell, Search } from "lucide-react"
+import { Search } from "lucide-react"
 import { Avatar, AvatarImage } from "@/app/_components/ui/avatar"
 import { Input } from "@/app/_components/ui/input"
 import { useSession } from "next-auth/react"
+import NotificationBell from "./notification-bell"
 
 const DashboardHeader = () => {
   const { data } = useSession()
@@ -29,9 +30,7 @@ const DashboardHeader = () => {
           />
         </div>
 
-        <button className="rounded-xl border border-zinc-800 bg-zinc-900 p-3 transition hover:bg-zinc-800">
-          <Bell size={18} />
-        </button>
+        <NotificationBell />
 
         <div className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2">
           <Avatar>
