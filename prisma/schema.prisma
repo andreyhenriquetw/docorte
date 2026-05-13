@@ -86,6 +86,9 @@ model Booking {
   userId    String
   serviceId String
   date      DateTime
+
+  status    BookingStatus @default(CONFIRMED)
+
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
 
@@ -93,6 +96,12 @@ model Booking {
   user      User              @relation(fields: [userId], references: [id])
 
   @@unique([serviceId, date])
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
 }
 
 model Notification {
