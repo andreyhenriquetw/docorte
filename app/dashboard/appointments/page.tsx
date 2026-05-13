@@ -2,6 +2,7 @@ import { db } from "@/app/_lib/prisma"
 import BookingDetailsDialog from "./_components/booking-details-dialog"
 
 import { CalendarDays, Clock3, User2, BellRing } from "lucide-react"
+import { toZonedTime } from "date-fns-tz"
 
 const AppointmentsPage = async () => {
   const bookings = await db.booking.findMany({
@@ -15,22 +16,28 @@ const AppointmentsPage = async () => {
     },
   })
 
-  const now = new Date()
+  const now = toZonedTime(new Date(), "America/Sao_Paulo")
 
-  const today = new Date()
+  const today = toZonedTime(new Date(), "America/Sao_Paulo")
 
-  const tomorrow = new Date()
+  const tomorrow = new Date(today)
   tomorrow.setDate(today.getDate() + 1)
 
   const isSameDay = (date1: Date, date2: Date) => {
+    const zonedDate1 = toZonedTime(date1, "America/Sao_Paulo")
+    const zonedDate2 = toZonedTime(date2, "America/Sao_Paulo")
+
     return (
-      date1.getDate() === date2.getDate() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getFullYear() === date2.getFullYear()
+      zonedDate1.getDate() === zonedDate2.getDate() &&
+      zonedDate1.getMonth() === zonedDate2.getMonth() &&
+      zonedDate1.getFullYear() === zonedDate2.getFullYear()
     )
   }
 
-  const upcomingBookings = bookings.filter((booking) => booking.date >= now)
+  const upcomingBookings = bookings.filter((booking) => {
+    const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
+    return bookingDate >= now
+  })
 
   const todayBookings = upcomingBookings.filter((booking) =>
     isSameDay(booking.date, today),
@@ -133,7 +140,10 @@ const AppointmentsPage = async () => {
 
               <h2 className="mt-2 text-3xl font-bold text-white">
                 {nextBooking
-                  ? nextBooking.date.toLocaleTimeString("pt-BR", {
+                  ? toZonedTime(
+                      nextBooking.date,
+                      "America/Sao_Paulo",
+                    ).toLocaleTimeString("pt-BR", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
@@ -168,7 +178,7 @@ const AppointmentsPage = async () => {
 
         <div className="space-y-4 p-6">
           {upcomingBookings.map((booking) => {
-            const bookingDate = new Date(booking.date)
+            const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
 
             const isToday = isSameDay(bookingDate, today)
 
@@ -289,20 +299,6 @@ const AppointmentsPage = async () => {
               </div>
             )
           })}
-
-          {upcomingBookings.length === 0 && (
-            <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-800 py-20">
-              <CalendarDays size={60} className="mb-5 text-zinc-700" />
-
-              <h3 className="text-xl font-semibold text-zinc-300">
-                Nenhum agendamento futuro
-              </h3>
-
-              <p className="mt-2 text-sm text-zinc-500">
-                Novos agendamentos aparecerão aqui.
-              </p>
-            </div>
-          )}
         </div>
       </div>
     </div>

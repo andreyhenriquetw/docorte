@@ -1,7 +1,8 @@
 import React from "react"
 import { getDashboardBookings } from "./_data/get-dashboard-bookings"
-import { format, isToday, isTomorrow } from "date-fns"
+import { isToday, isTomorrow } from "date-fns"
 import { ptBR } from "date-fns/locale"
+import { formatInTimeZone } from "date-fns-tz"
 import { cancelBooking } from "../_actions/cancel-booking"
 
 const getUserColor = (email?: string) => {
@@ -30,17 +31,19 @@ const getUserColor = (email?: string) => {
 }
 
 const getStatus = (date: Date) => {
-  if (isToday(date))
+  if (isToday(date)) {
     return {
       label: "Hoje",
       color: "bg-emerald-500/20 text-emerald-400",
     }
+  }
 
-  if (isTomorrow(date))
+  if (isTomorrow(date)) {
     return {
       label: "Amanhã",
       color: "bg-blue-500/20 text-blue-400",
     }
+  }
 
   return {
     label: "Agendado",
@@ -113,9 +116,14 @@ const Appointments = async () => {
                 <p className="text-sm text-zinc-500">Data</p>
 
                 <p className="font-medium text-white">
-                  {format(booking.date, "dd/MM/yyyy 'às' HH:mm", {
-                    locale: ptBR,
-                  })}
+                  {formatInTimeZone(
+                    booking.date,
+                    "America/Sao_Paulo",
+                    "dd/MM/yyyy 'às' HH:mm",
+                    {
+                      locale: ptBR,
+                    },
+                  )}
                 </p>
               </div>
 
@@ -158,4 +166,5 @@ const Appointments = async () => {
     </div>
   )
 }
+
 export default Appointments

@@ -24,6 +24,7 @@ import { Dialog, DialogContent } from "./ui/dialog"
 import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
+import { toZonedTime } from "date-fns-tz"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -72,7 +73,7 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
     const hour = Number(hourStr)
     const minutes = Number(minStr)
 
-    const now = new Date()
+    const now = toZonedTime(new Date(), "America/Sao_Paulo")
 
     const timeSlot = set(selectedDay, {
       hours: hour,
@@ -88,9 +89,9 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
 
     // ❌ não mostrar horários já reservados
     const hasBookingOnCurrentTime = bookings.some((booking) => {
+      const bookingTime = toZonedTime(booking.date, "America/Sao_Paulo")
       return (
-        booking.date.getHours() === hour &&
-        booking.date.getMinutes() === minutes
+        bookingTime.getHours() === hour && bookingTime.getMinutes() === minutes
       )
     })
 
