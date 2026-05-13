@@ -24,11 +24,9 @@ export default function BookingNotification() {
           const audio = new Audio("/notification.mp3")
 
           audio.volume = 0.55
-
           audio.play().catch(() => {})
         } catch {}
 
-        // sino
         addNotification({
           id: Date.now(),
           title: "Novo agendamento 🔥",
@@ -39,7 +37,6 @@ export default function BookingNotification() {
           }),
         })
 
-        // toast
         toast.success("Novo agendamento 🔥", {
           description: `${data.clientName || "Cliente"} agendou ${data.service || "um serviço"}`,
           duration: 5000,
@@ -53,19 +50,19 @@ export default function BookingNotification() {
     channel.bind(
       "booking-cancelled",
       (data: { clientName?: string; service?: string }) => {
+        // som opcional
         try {
           const audio = new Audio("/notification.mp3")
 
-          audio.volume = 0.45
-
+          audio.volume = 0.55
           audio.play().catch(() => {})
         } catch {}
 
-        // sino
+        // adiciona no sino 🔔
         addNotification({
           id: Date.now(),
           title: "Agendamento cancelado ❌",
-          description: `${data.clientName || "Cliente"} cancelou ${data.service || "um serviço"}`,
+          description: `${data.clientName || "Cliente"} cancelou ${data.service || "o serviço"}`,
           createdAt: new Date().toLocaleTimeString("pt-BR", {
             hour: "2-digit",
             minute: "2-digit",
@@ -73,12 +70,12 @@ export default function BookingNotification() {
         })
 
         // toast
-        toast.error("Agendamento cancelado", {
-          description: `${data.clientName || "Cliente"} cancelou ${data.service || "um serviço"}`,
-          duration: 5000,
+        toast.error("Agendamento cancelado ❌", {
+          description: `${data.clientName || "Cliente"} cancelou ${data.service || "o serviço"}`,
+          duration: 10000,
         })
 
-        // atualiza sozinho
+        // atualiza dashboard automaticamente
         router.refresh()
       },
     )
