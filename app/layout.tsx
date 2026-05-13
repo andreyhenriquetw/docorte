@@ -2,11 +2,13 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { cookies } from "next/headers"
-import { Toaster } from "sonner"
 import Footer from "./_components/footer"
 import AuthProvider from "./_providers/auth"
+import { Toaster } from "sonner"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({
+  subsets: ["latin"],
+})
 
 export const metadata: Metadata = {
   title: "KN DO CORTE",
@@ -39,19 +41,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // 🔹 pega o idioma salvo pelo middleware
   const locale = cookies().get("locale")?.value || "pt"
 
   return (
     <html lang={locale} className="dark">
       <body className={inter.className}>
         <AuthProvider>
-          <div className="flex h-full flex-col">
+          <div className="flex min-h-screen flex-col">
             <div className="flex-1">{children}</div>
+
             <Footer />
           </div>
         </AuthProvider>
-        <Toaster />
+
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   )

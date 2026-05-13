@@ -1,24 +1,24 @@
 import React from "react"
 import { getDashboardBookings } from "./_data/get-dashboard-bookings"
-import { format } from "date-fns"
+import { format, isToday, isTomorrow } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { cancelBooking } from "../_actions/cancel-booking"
 
 const getUserColor = (email?: string) => {
   const colors = [
-    "text-red-500",
-    "text-blue-500",
-    "text-green-500",
-    "text-purple-500",
-    "text-pink-500",
-    "text-yellow-500",
-    "text-cyan-500",
-    "text-orange-500",
-    "text-lime-500",
-    "text-indigo-500",
+    "bg-red-500",
+    "bg-blue-500",
+    "bg-green-500",
+    "bg-purple-500",
+    "bg-pink-500",
+    "bg-yellow-500",
+    "bg-cyan-500",
+    "bg-orange-500",
+    "bg-lime-500",
+    "bg-indigo-500",
   ]
 
-  if (!email) return "text-gray-500"
+  if (!email) return "bg-zinc-500"
 
   let hash = 0
 
@@ -29,67 +29,133 @@ const getUserColor = (email?: string) => {
   return colors[Math.abs(hash) % colors.length]
 }
 
+const getStatus = (date: Date) => {
+  if (isToday(date))
+    return {
+      label: "Hoje",
+      color: "bg-emerald-500/20 text-emerald-400",
+    }
+
+  if (isTomorrow(date))
+    return {
+      label: "Amanhã",
+      color: "bg-blue-500/20 text-blue-400",
+    }
+
+  return {
+    label: "Agendado",
+    color: "bg-yellow-500/20 text-yellow-400",
+  }
+}
+
 const Appointments = async () => {
-  const confirmedBookings = await getDashboardBookings()
+  const bookings = await getDashboardBookings()
 
   return (
-    <div className="rounded-lg bg-card p-4 shadow-md">
-      <h2 className="mb-4 text-xl font-semibold">Próximos Agendamentos</h2>
+    <div
+      id="appointments"
+      className="rounded-[32px] border border-zinc-800 bg-zinc-900/70 p-6 shadow-xl"
+    >
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-white">
+            Próximos Agendamentos
+          </h2>
 
-      {confirmedBookings.length === 0 && (
-        <p className="text-sm text-muted-foreground">
-          Você não possui agendamentos confirmados.
-        </p>
+          <p className="text-sm text-zinc-500">Agenda dos clientes</p>
+        </div>
+
+        <span className="rounded-xl bg-zinc-800 px-4 py-2 text-sm text-zinc-400">
+          {bookings.length} agendamentos
+        </span>
+      </div>
+
+      {bookings.length === 0 && (
+        <div className="rounded-2xl border border-dashed border-zinc-700 p-10 text-center text-zinc-500">
+          Nenhum agendamento encontrado.
+        </div>
       )}
 
-      <ul className="space-y-3">
-        {confirmedBookings.map((booking) => (
-          <li key={booking.id} className="rounded-lg border p-3">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-sm font-medium">{booking.service.name}</p>
+      <div className="space-y-4">
+        {bookings.map((booking) => {
+          const status = getStatus(booking.date)
 
-                <p
-                  className={`mt-2 text-xs font-semibold ${getUserColor(
+          return (
+            <div
+              key={booking.id}
+              className="flex flex-col gap-5 rounded-3xl border border-zinc-800 bg-zinc-950/50 p-5 transition hover:border-zinc-700 lg:flex-row lg:items-center lg:justify-between"
+            >
+              {/* esquerda */}
+              <div className="flex items-center gap-4">
+                <div
+                  className={`flex h-14 w-14 items-center justify-center rounded-2xl text-lg font-bold text-white ${getUserColor(
                     booking.user?.email,
                   )}`}
                 >
-                  Cliente: {booking.user?.name || "Sem nome"}
-                </p>
+                  {booking.user?.name?.charAt(0) || "?"}
+                </div>
 
-                <p className="text-xs text-muted-foreground">
-                  {booking.user?.email}
+                <div>
+                  <h3 className="font-semibold text-white">
+                    {booking.user?.name || "Sem nome"}
+                  </h3>
+
+                  <p className="text-sm text-zinc-500">{booking.user?.email}</p>
+
+                  <p className="mt-1 text-sm text-zinc-300">
+                    {booking.service.name}
+                  </p>
+                </div>
+              </div>
+
+              {/* centro */}
+              <div>
+                <p className="text-sm text-zinc-500">Data</p>
+
+                <p className="font-medium text-white">
+                  {format(booking.date, "dd/MM/yyyy 'às' HH:mm", {
+                    locale: ptBR,
+                  })}
                 </p>
               </div>
 
-              <p className="text-sm font-semibold">
-                R$ {Number(booking.service.price).toFixed(2)}
-              </p>
-            </div>
+              {/* status */}
+              <div>
+                <span
+                  className={`rounded-full px-4 py-2 text-sm font-medium ${status.color}`}
+                >
+                  {status.label}
+                </span>
+              </div>
 
-            <p className="mt-2 text-xs text-muted-foreground">
-              {format(booking.date, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
-            </p>
+              {/* preço */}
+              <div>
+                <p className="text-sm text-zinc-500">Valor</p>
 
-            <form
-              action={async () => {
-                "use server"
-                await cancelBooking(booking.id)
-              }}
-              className="mt-3"
-            >
-              <button
-                type="submit"
-                className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700"
+                <p className="font-bold text-emerald-400">
+                  R$ {Number(booking.service.price).toFixed(2)}
+                </p>
+              </div>
+
+              {/* botão */}
+              <form
+                action={async () => {
+                  "use server"
+                  await cancelBooking(booking.id)
+                }}
               >
-                Cancelar agendamento
-              </button>
-            </form>
-          </li>
-        ))}
-      </ul>
+                <button
+                  type="submit"
+                  className="rounded-2xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
+                >
+                  Cancelar
+                </button>
+              </form>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
-
 export default Appointments

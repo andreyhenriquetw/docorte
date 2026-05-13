@@ -1,27 +1,194 @@
 import React from "react"
-import { getConcludedBookings } from "../_data/get-concluided-bookings"
+import { getDashboardBookings } from "./_data/get-dashboard-bookings"
+import { BarChart3, Crown, Scissors, Users } from "lucide-react"
 
 const Reports = async () => {
-  const concludedBookings = await getConcludedBookings()
-  const serviceCount = concludedBookings.reduce<Record<string, number>>(
-    (acc, booking) => {
-      acc[booking.service.name] = (acc[booking.service.name] ?? 0) + 1
-      return acc
-    },
-    {},
-  )
-  const topService = Object.entries(serviceCount).sort(
-    (first, second) => second[1] - first[1],
-  )[0]
+  const bookings = await getDashboardBookings()
+
+  // serviços
+  const serviceStats = bookings.reduce<
+    Record<
+      string,
+      {
+        count: number
+        revenue: number
+      }
+    >
+  >((acc, booking) => {
+    const serviceName = booking.service.name
+
+    if (!acc[serviceName]) {
+      acc[serviceName] = {
+        count: 0,
+        revenue: 0,
+      }
+    }
+
+    acc[serviceName].count += 1
+    acc[serviceName].revenue += Number(booking.service.price)
+
+    return acc
+  }, {})
+
+  const sortedServices = Object.entries(serviceStats)
+    .map(([name, data]) => ({
+      name,
+      ...data,
+    }))
+    .sort((a, b) => b.count - a.count)
+
+  const topService = sortedServices[0]
+
+  // clientes
+  const clientStats = bookings.reduce<
+    Record<
+      string,
+      {
+        name: string
+        email: string
+        count: number
+      }
+    >
+  >((acc, booking) => {
+    const userId = booking.user.id
+
+    if (!acc[userId]) {
+      acc[userId] = {
+        name: booking.user.name ?? "Sem nome",
+        email: booking.user.email,
+        count: 0,
+      }
+    }
+
+    acc[userId].count += 1
+
+    return acc
+  }, {})
+
+  const topClients = Object.values(clientStats)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
 
   return (
-    <div className="rounded-lg bg-card p-4 shadow-md">
-      <h2 className="mb-4 text-xl font-semibold">Relatórios</h2>
-      <div className="rounded-lg border p-3">
-        <p className="text-sm text-muted-foreground">Serviço mais finalizado</p>
-        <p className="text-lg font-bold">
-          {topService ? `${topService[0]} (${topService[1]})` : "Sem dados"}
-        </p>
+    <div className="rounded-[32px] border border-zinc-800 bg-gradient-to-b from-zinc-900 to-zinc-950 p-6 shadow-xl">
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-white">Relatórios</h2>
+
+          <p className="text-sm text-zinc-400">Estatísticas dos agendamentos</p>
+        </div>
+
+        <BarChart3 className="text-zinc-500" size={22} />
+      </div>
+
+      <div className="grid gap-5 lg:grid-cols-2">
+        {/* CORTE MAIS AGENDADO */}
+        <div className="rounded-3xl border border-zinc-800 bg-zinc-950/50 p-5">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="rounded-2xl bg-yellow-500/10 p-3">
+              <Crown className="text-yellow-500" size={20} />
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-white">Corte Mais Agendado</h3>
+
+              <p className="text-sm text-zinc-500">Serviço campeão</p>
+            </div>
+          </div>
+
+          {topService ? (
+            <>
+              <h2 className="text-2xl font-bold text-white">
+                {topService.name}
+              </h2>
+
+              <p className="mt-2 text-zinc-400">
+                {topService.count} agendamentos
+              </p>
+            </>
+          ) : (
+            <p className="text-zinc-500">Sem dados</p>
+          )}
+        </div>
+
+        {/* CLIENTES TOP */}
+        <div className="rounded-3xl border border-zinc-800 bg-zinc-950/50 p-5">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="rounded-2xl bg-blue-500/10 p-3">
+              <Users className="text-blue-500" size={20} />
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-white">Top Clientes</h3>
+
+              <p className="text-sm text-zinc-500">Quem mais agenda</p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {topClients.map((client, index) => (
+              <div
+                key={client.email}
+                className="flex items-center justify-between rounded-2xl bg-zinc-900 p-3"
+              >
+                <div>
+                  <p className="font-medium text-white">
+                    #{index + 1} {client.name}
+                  </p>
+
+                  <p className="text-xs text-zinc-500">{client.email}</p>
+                </div>
+
+                <span className="rounded-xl bg-emerald-500/10 px-3 py-1 text-sm text-emerald-400">
+                  {client.count} ag.
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* TABELA */}
+      <div className="mt-6 rounded-3xl border border-zinc-800 bg-zinc-950/50 p-5">
+        <div className="mb-5 flex items-center gap-3">
+          <div className="rounded-2xl bg-emerald-500/10 p-3">
+            <Scissors className="text-emerald-500" size={20} />
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-white">Serviços</h3>
+
+            <p className="text-sm text-zinc-500">Relatório de cortes</p>
+          </div>
+        </div>
+
+        <div className="overflow-hidden rounded-2xl border border-zinc-800">
+          <table className="w-full">
+            <thead className="bg-zinc-900">
+              <tr className="text-left text-sm text-zinc-400">
+                <th className="p-4">Serviço</th>
+
+                <th className="p-4">Agendamentos</th>
+
+                <th className="p-4">Receita</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {sortedServices.map((service) => (
+                <tr key={service.name} className="border-t border-zinc-800">
+                  <td className="p-4 text-white">{service.name}</td>
+
+                  <td className="p-4 text-zinc-400">{service.count}</td>
+
+                  <td className="p-4 font-medium text-emerald-400">
+                    R$ {service.revenue.toFixed(2)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
