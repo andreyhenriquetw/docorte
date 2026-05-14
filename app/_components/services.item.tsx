@@ -335,9 +335,10 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                           months: "flex justify-center",
                           month: "space-y-4",
                           table: "w-full border-collapse",
-                          head_row: "flex",
-                          row: "mt-2 flex w-full justify-between",
-                          cell: "relative flex h-10 w-12 items-center justify-center p-0 text-center",
+                          head_row: "grid grid-cols-7",
+                          row: "mt-2 grid grid-cols-7",
+                          head_cell:
+                            "flex h-10 w-12 items-center justify-center text-sm text-zinc-400",
                           day: "flex h-9 w-9 items-center justify-center rounded-xl p-0 font-normal",
                           day_selected:
                             "bg-green-500 text-white hover:bg-green-600 rounded-xl",
