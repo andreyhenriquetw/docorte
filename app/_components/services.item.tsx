@@ -224,12 +224,10 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
       const selectedBarberName =
         barbers.find((b) => b.id === selectedBarber)?.name ?? "Barbeiro"
 
-      const formattedPrice =
-        "€ " +
-        Intl.NumberFormat("en-IE", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(Number(service.price))
+      const formattedPrice = Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(Number(service.price))
 
       const clientName = data?.user?.name ?? "Cliente"
 
@@ -290,7 +288,10 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
             <div className="mt-4 flex items-center justify-between">
               <p className="font-bold text-primary">
-                € {Number(service.price)}
+                {Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(Number(service.price))}
               </p>
 
               <Sheet
