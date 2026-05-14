@@ -1,37 +1,35 @@
 "use client"
 
-import { useEffect, useState } from "react"
-
+import { useEffect, useMemo, useState } from "react"
 import { BellRing } from "lucide-react"
 
-interface LiveAlertProps {
-  todayBookings: {
-    date: Date
-  }[]
+interface Booking {
+  id: string
+  date: Date
 }
 
-const LiveAlert = ({ todayBookings }: LiveAlertProps) => {
-  const [liveBookings, setLiveBookings] = useState(todayBookings)
+interface LiveAlertProps {
+  bookings: Booking[]
+}
+
+const LiveAlert = ({ bookings }: LiveAlertProps) => {
+  const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
-    const updateBookings = () => {
-      const now = new Date()
-
-      const filtered = todayBookings.filter((booking) => {
-        return new Date(booking.date) > now
-      })
-
-      setLiveBookings(filtered)
-    }
-
-    updateBookings()
-
-    const interval = setInterval(updateBookings, 60000)
+    const interval = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 60000)
 
     return () => clearInterval(interval)
-  }, [todayBookings])
+  }, [])
 
-  if (liveBookings.length === 0) {
+  const activeBookings = useMemo(() => {
+    return bookings.filter((booking) => {
+      return new Date(booking.date) >= currentTime
+    })
+  }, [bookings, currentTime])
+
+  if (activeBookings.length === 0) {
     return null
   }
 
@@ -43,7 +41,7 @@ const LiveAlert = ({ todayBookings }: LiveAlertProps) => {
 
       <div>
         <h2 className="text-lg font-semibold text-white">
-          Você possui {liveBookings.length} agendamento(s) hoje
+          Você possui {activeBookings.length} agendamento(s) hoje
         </h2>
 
         <p className="text-sm text-emerald-300">
