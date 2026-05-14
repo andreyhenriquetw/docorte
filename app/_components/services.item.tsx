@@ -337,7 +337,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                           table: "w-full border-collapse",
                           head_row: "flex",
                           row: "mt-2 flex w-full justify-between",
-                          cell: "relative flex h-9 w-9 items-center justify-center p-0 text-center",
+                          cell: "relative flex h-10 w-12 items-center justify-center p-0 text-center",
                           day: "flex h-9 w-9 items-center justify-center rounded-xl p-0 font-normal",
                           day_selected:
                             "bg-green-500 text-white hover:bg-green-600 rounded-xl",
@@ -471,7 +471,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                     )}
                   </div>
 
-                  <SheetFooter className="border-t border-zinc-800 bg-[#09090B] p-4">
+                  <SheetFooter className="sticky bottom-3 border-t border-zinc-800 bg-[#09090B]/95 px-4 pb-4 pt-3 backdrop-blur-md">
                     <Button
                       onClick={handCreateBooking}
                       disabled={
