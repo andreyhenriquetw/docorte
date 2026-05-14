@@ -306,7 +306,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="flex h-screen w-full flex-col overflow-hidden border-l border-zinc-800 bg-[#09090B] p-0 sm:max-w-md">
+                <SheetContent className="flex h-[100dvh] w-full flex-col border-l border-zinc-800 bg-[#09090B] p-0 sm:max-w-md">
                   <SheetHeader className="border-b p-4">
                     <SheetTitle>Fazer Reserva</SheetTitle>
                   </SheetHeader>
@@ -471,7 +471,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                     )}
                   </div>
 
-                  <SheetFooter className="sticky bottom-3 border-t border-zinc-800 bg-[#09090B]/95 px-4 pb-4 pt-3 backdrop-blur-md">
+                  <SheetFooter className="sticky bottom-3 border-t border-zinc-800 bg-[#09090B]/95 px-4 pt-3 backdrop-blur-md">
                     <Button
                       onClick={handCreateBooking}
                       disabled={
