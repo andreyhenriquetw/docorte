@@ -1,5 +1,6 @@
 import { db } from "@/app/_lib/prisma"
 import BookingDetailsDialog from "./_components/booking-details-dialog"
+import LiveAppointmentsAlert from "./_components/live-alert"
 
 import { CalendarDays, Clock3, User2, BellRing } from "lucide-react"
 import { toZonedTime } from "date-fns-tz"
@@ -22,10 +23,12 @@ const AppointmentsPage = async () => {
   const today = toZonedTime(new Date(), "America/Sao_Paulo")
 
   const tomorrow = new Date(today)
+
   tomorrow.setDate(today.getDate() + 1)
 
   const isSameDay = (date1: Date, date2: Date) => {
     const zonedDate1 = toZonedTime(date1, "America/Sao_Paulo")
+
     const zonedDate2 = toZonedTime(date2, "America/Sao_Paulo")
 
     return (
@@ -37,6 +40,7 @@ const AppointmentsPage = async () => {
 
   const upcomingBookings = bookings.filter((booking) => {
     const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
+
     return bookingDate >= now
   })
 
@@ -67,24 +71,8 @@ const AppointmentsPage = async () => {
         </button>
       </div>
 
-      {/* ALERTA */}
-      {todayBookings.length > 0 && (
-        <div className="flex items-center gap-4 rounded-3xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 to-zinc-950 p-5">
-          <div className="rounded-2xl bg-emerald-500/20 p-3">
-            <BellRing size={24} className="text-emerald-400" />
-          </div>
-
-          <div>
-            <h2 className="text-lg font-semibold text-white">
-              Você possui {todayBookings.length} agendamento(s) hoje
-            </h2>
-
-            <p className="text-sm text-emerald-300">
-              Confira os próximos horários abaixo.
-            </p>
-          </div>
-        </div>
-      )}
+      {/* ALERTA DINÂMICO */}
+      <LiveAppointmentsAlert todayBookings={todayBookings} />
 
       {/* CARDS */}
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -207,21 +195,8 @@ const AppointmentsPage = async () => {
                       : "border-zinc-800 bg-zinc-900/40 hover:border-zinc-700"
                 }`}
               >
-                {/* glow */}
-                <div
-                  className={`absolute right-0 top-0 h-32 w-32 rounded-full blur-3xl ${
-                    isToday
-                      ? "bg-emerald-500/10"
-                      : isTomorrow
-                        ? "bg-blue-500/10"
-                        : "bg-zinc-700/10"
-                  }`}
-                />
-
                 <div className="relative flex flex-col gap-6 p-5 lg:flex-row lg:items-center lg:justify-between">
-                  {/* esquerda */}
                   <div className="flex items-center gap-5">
-                    {/* horário */}
                     <div
                       className={`flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-3xl border ${
                         isToday
@@ -240,26 +215,11 @@ const AppointmentsPage = async () => {
                       </span>
                     </div>
 
-                    {/* infos */}
                     <div className="space-y-2">
                       <div className="flex flex-wrap items-center gap-3">
                         <h3 className="text-xl font-semibold text-white">
                           {booking.user.name}
                         </h3>
-
-                        {isToday ? (
-                          <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-400">
-                            Hoje
-                          </span>
-                        ) : isTomorrow ? (
-                          <span className="rounded-full bg-blue-500/20 px-3 py-1 text-xs font-semibold text-blue-400">
-                            Amanhã
-                          </span>
-                        ) : (
-                          <span className="rounded-full bg-zinc-800 px-3 py-1 text-xs font-semibold text-zinc-300">
-                            Próximo
-                          </span>
-                        )}
                       </div>
 
                       <div className="space-y-1">
@@ -288,7 +248,6 @@ const AppointmentsPage = async () => {
                     </div>
                   </div>
 
-                  {/* ações */}
                   <div className="flex items-center gap-3">
                     <BookingDetailsDialog booking={booking} />
 
