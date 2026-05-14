@@ -29,6 +29,11 @@ interface BookingDetailsDialogProps {
       name: string
     }
 
+    barber: {
+      name: string
+      specialty: string | null
+    } | null
+
     date: Date
 
     status: string
@@ -84,6 +89,19 @@ const BookingDetailsDialog = ({ booking }: BookingDetailsDialogProps) => {
             <h3 className="mt-1 text-lg font-semibold">
               {booking.service.name}
             </h3>
+          </div>
+
+          {/* barbeiro */}
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
+            <p className="text-sm text-zinc-500">Barbeiro</p>
+
+            <h3 className="mt-1 text-lg font-semibold text-white">
+              {booking.barber?.name || "Não definido"}
+            </h3>
+
+            <p className="text-sm text-zinc-400">
+              {booking.barber?.specialty || "Especialista"}
+            </p>
           </div>
 
           {/* data */}

@@ -9,6 +9,7 @@ const AppointmentsPage = async () => {
     include: {
       user: true,
       service: true,
+      barber: true,
     },
 
     orderBy: {
@@ -261,9 +262,15 @@ const AppointmentsPage = async () => {
                         )}
                       </div>
 
-                      <p className="text-base text-zinc-300">
-                        {booking.service.name}
-                      </p>
+                      <div className="space-y-1">
+                        <p className="text-base text-zinc-300">
+                          {booking.service.name}
+                        </p>
+
+                        <p className="text-sm text-emerald-400">
+                          Barbeiro: {booking.barber?.name || "Não definido"}
+                        </p>
+                      </div>
 
                       <div className="flex flex-wrap items-center gap-4 pt-1 text-sm text-zinc-500">
                         <div className="flex items-center gap-2">
