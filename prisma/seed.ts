@@ -7,7 +7,9 @@ async function seedDatabase() {
     const images = [
       "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWVIIfDpkTa08rXoOI3ve6ZLymfqzDCgd7RuBh",
     ]
+
     const creativeNames = ["KN DO CORTE"]
+
     const addresses = ["54 Drumnavanagh, Cavan, H12 X443, Irlanda"]
 
     const services = [
@@ -55,7 +57,7 @@ async function seedDatabase() {
       },
       {
         name: "Pigmentação",
-        description: "Cor que entrega um visuale legante.",
+        description: "Cor que entrega um visual elegante.",
         price: 10.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCW5DGNvEAi1HmlaNWvpAqfuyJLIeTPKd03R4tG",
@@ -90,7 +92,13 @@ async function seedDatabase() {
       },
     ]
 
-    // Criar apenas 1 barbearia (ou use o tamanho mínimo dos arrays)
+    // limpa dados antigos
+    await prisma.booking.deleteMany()
+    await prisma.barbershopService.deleteMany()
+    await prisma.barber.deleteMany()
+    await prisma.barbershop.deleteMany()
+
+    // cria barbearia
     const barbershop = await prisma.barbershop.create({
       data: {
         name: creativeNames[0],
@@ -98,25 +106,66 @@ async function seedDatabase() {
         imageUrl: images[0],
         phones: ["+352 874 772 097"],
         description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ac augue ullamcorper, pharetra orci mollis, auctor tellus. Phasellus pharetra erat ac libero efficitur tempus. Donec pretium convallis iaculis. Etiam eu felis sollicitudin, cursus mi vitae, iaculis magna. Nam non erat neque. In hac habitasse platea dictumst. Pellentesque molestie accumsan tellus id laoreet.",
+          "Barbearia premium especializada em cortes modernos, barba e estilo.",
       },
     })
 
+    // cria barbeiros
+    const barbers = await Promise.all([
+      prisma.barber.create({
+        data: {
+          name: "KN",
+          imageUrl: "/barber1.jpg",
+          barbershopId: barbershop.id,
+        },
+      }),
+
+      prisma.barber.create({
+        data: {
+          name: "Andrey",
+          imageUrl: "/barber2.jpg",
+          barbershopId: barbershop.id,
+        },
+      }),
+
+      prisma.barber.create({
+        data: {
+          name: "Lucas",
+          imageUrl: "/barber3.jpg",
+          barbershopId: barbershop.id,
+        },
+      }),
+    ])
+
+    // cria serviços
     for (const service of services) {
+      const randomBarber = barbers[Math.floor(Math.random() * barbers.length)]
+
       await prisma.barbershopService.create({
         data: {
           name: service.name,
           description: service.description,
           price: service.price,
           imageUrl: service.imageUrl,
-          barbershop: { connect: { id: barbershop.id } },
+
+          barbershop: {
+            connect: {
+              id: barbershop.id,
+            },
+          },
+
+          barber: {
+            connect: {
+              id: randomBarber.id,
+            },
+          },
         },
       })
     }
 
-    console.log("Seed finalizado com sucesso!")
+    console.log("✅ Seed finalizado com barbeiros!")
   } catch (error) {
-    console.error("Erro ao criar as barbearias:", error)
+    console.error("❌ Erro ao criar dados:", error)
   } finally {
     await prisma.$disconnect()
   }

@@ -5,15 +5,14 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String         @id @default(cuid())
+  email         String         @unique
   name          String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   emailVerified DateTime?
   image         String?
   accounts      Account[]
@@ -59,41 +58,67 @@ model VerificationToken {
 }
 
 model Barbershop {
-  id          String              @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   address     String
   phones      String[]
   description String
   imageUrl    String
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
-  services    BarbershopService[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  services BarbershopService[]
+  barbers  Barber[]
+}
+
+model Barber {
+  id           String  @id @default(uuid())
+  name         String
+  imageUrl     String?
+  specialty    String?
+  barbershopId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  barbershop Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+
+  services BarbershopService[]
+  bookings Booking[]
 }
 
 model BarbershopService {
-  id           String     @id @default(uuid())
-  name         String
-  description  String
-  imageUrl     String
-  price        Decimal    @db.Decimal(10, 2)
+  id          String  @id @default(uuid())
+  name        String
+  description String
+  imageUrl    String
+  price       Decimal @db.Decimal(10, 2)
+
   barbershopId String
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
-  bookings     Booking[]
+
+  barberId String?
+  barber   Barber? @relation(fields: [barberId], references: [id])
+
+  bookings Booking[]
 }
 
 model Booking {
-  id        String            @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
   serviceId String
+  barberId  String?
   date      DateTime
 
-  status    BookingStatus @default(CONFIRMED)
+  status BookingStatus @default(CONFIRMED)
 
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  service   BarbershopService @relation(fields: [serviceId], references: [id])
-  user      User              @relation(fields: [userId], references: [id])
+  service BarbershopService @relation(fields: [serviceId], references: [id])
+  user    User              @relation(fields: [userId], references: [id])
+
+  barber Barber? @relation(fields: [barberId], references: [id])
 
   @@unique([serviceId, date])
 }
@@ -112,4 +137,3 @@ model Notification {
   createdAt DateTime @default(now())
   user      User?    @relation(fields: [userId], references: [id])
 }
-

@@ -8,6 +8,7 @@ import { pusherServer } from "../_lib/pusher"
 
 interface CreateBookingParams {
   serviceId: string
+  barberId: string
   date: Date
 }
 
@@ -19,9 +20,11 @@ export const createBooking = async (params: CreateBookingParams) => {
   }
 
   const booking = await db.booking.create({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: {
-      ...params,
+      serviceId: params.serviceId,
+      barberId: params.barberId,
+      date: params.date,
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       userId: (session.user as any).id,
     },
@@ -29,14 +32,16 @@ export const createBooking = async (params: CreateBookingParams) => {
     include: {
       user: true,
       service: true,
+      barber: true,
     },
   })
 
-  // tempo real
+  // tempo real dashboard
   await pusherServer.trigger("dashboard", "new-booking", {
     id: booking.id,
     clientName: booking.user.name,
     service: booking.service.name,
+    barber: booking.barber?.name,
   })
 
   revalidatePath("/barbershops/[id]")

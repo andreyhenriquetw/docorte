@@ -2,7 +2,7 @@ import React from "react"
 import Overview from "./overview"
 import Appointments from "./appointments"
 import Clients from "./clients"
-import Financials from "./financials"
+
 import Reports from "./reports"
 import DailySummary from "./daily-summary"
 import { getServerSession } from "next-auth"
@@ -41,7 +41,7 @@ const Dashboard = async () => {
         {/* direita */}
         <div className="space-y-6">
           <DailySummary />
-          <Financials />
+
           <Clients />
         </div>
       </div>

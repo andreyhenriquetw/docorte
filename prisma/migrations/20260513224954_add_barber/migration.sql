@@ -1,0 +1,28 @@
+-- AlterTable
+ALTER TABLE "BarbershopService" ADD COLUMN     "barberId" TEXT;
+
+-- AlterTable
+ALTER TABLE "Booking" ADD COLUMN     "barberId" TEXT,
+ALTER COLUMN "status" SET DEFAULT 'CONFIRMED';
+
+-- CreateTable
+CREATE TABLE "Barber" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "imageUrl" TEXT,
+    "specialty" TEXT,
+    "barbershopId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Barber_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "Barber" ADD CONSTRAINT "Barber_barbershopId_fkey" FOREIGN KEY ("barbershopId") REFERENCES "Barbershop"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BarbershopService" ADD CONSTRAINT "BarbershopService_barberId_fkey" FOREIGN KEY ("barberId") REFERENCES "Barber"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Booking" ADD CONSTRAINT "Booking_barberId_fkey" FOREIGN KEY ("barberId") REFERENCES "Barber"("id") ON DELETE SET NULL ON UPDATE CASCADE;

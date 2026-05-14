@@ -16,13 +16,13 @@ interface BarbershopPageProps {
 }
 
 const BarbershopPage = async ({ params }: BarbershopPageProps) => {
-  // chamar banco de dados
   const barbershop = await db.barbershop.findUnique({
     where: {
       id: params.id,
     },
     include: {
       services: true,
+      barbers: true, // ← ADICIONADO
     },
   })
 
@@ -36,7 +36,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
       <div className="relative h-[250px] w-full">
         <Image
           alt={barbershop.name}
-          src={barbershop?.imageUrl}
+          src={barbershop.imageUrl}
           fill
           className="object-cover"
         />
@@ -62,6 +62,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
               <MenuIcon />
             </Button>
           </SheetTrigger>
+
           <SidebarSheet />
         </Sheet>
       </div>
@@ -80,9 +81,10 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
           <h1 className="text-xl font-semibold">{barbershop.name}</h1>
         </div>
+
         <div className="mb-2 flex items-center gap-2">
           <MapPinIcon className="text-primary" size={18} />
-          <p className="text-sm">{barbershop?.address}</p>
+          <p className="text-sm">{barbershop.address}</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -94,12 +96,16 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
       {/* SERVIÇOS */}
       <div className="space-y-3 border-b border-solid p-5">
         <h2 className="text-xs font-bold uppercase text-gray-400">Serviços</h2>
+
         <div className="space-y-3">
           {barbershop.services.map((service) => (
             <ServiceItem
               key={service.id}
-              barbershop={JSON.parse(JSON.stringify(barbershop))}
               service={JSON.parse(JSON.stringify(service))}
+              barbershop={{
+                name: barbershop.name,
+              }}
+              barbers={JSON.parse(JSON.stringify(barbershop.barbers))} // ← ADICIONADO
             />
           ))}
         </div>
