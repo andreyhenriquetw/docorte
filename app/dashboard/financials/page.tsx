@@ -7,8 +7,10 @@ import {
   DollarSign,
   BarChart3,
   Users,
+  User2,
 } from "lucide-react"
 
+import BarberDetailsDialog from "./_components/barber-details-dialog"
 import ExportReportButton from "./_components/export-report-button"
 import ServicesChart from "./_components/services-chart"
 
@@ -16,6 +18,12 @@ type ServiceRanking = {
   name: string
   total: number
   quantity: number
+}
+
+type BarberRanking = {
+  name: string
+  revenue: number
+  bookings: number
 }
 
 const formatCurrency = (value: number) => {
@@ -32,6 +40,7 @@ const FinancialsPage = async () => {
     include: {
       user: true,
       service: true,
+      barber: true,
     },
 
     orderBy: {
@@ -97,6 +106,75 @@ const FinancialsPage = async () => {
   ).sort((a, b) => b.total - a.total)
 
   const topService = servicesRanking[0] || null
+
+  const barbersRanking: BarberRanking[] = Object.values(
+    monthBookings.reduce<Record<string, BarberRanking>>((acc, booking) => {
+      const barberName = booking.barber?.name || "Não definido"
+
+      if (!acc[barberName]) {
+        acc[barberName] = {
+          name: barberName,
+          revenue: 0,
+          bookings: 0,
+        }
+      }
+
+      acc[barberName].revenue += Number(booking.service.price)
+
+      acc[barberName].bookings += 1
+
+      return acc
+    }, {}),
+  ).sort((a, b) => b.revenue - a.revenue)
+
+  const topBarber = barbersRanking[0] || null
+
+  const barbersFinancial = Object.values(
+    monthBookings.reduce<
+      Record<
+        string,
+        {
+          id: string
+          name: string
+          specialty: string | null
+          imageUrl?: string | null
+
+          totalRevenue: number
+          totalBookings: number
+
+          bookings: typeof monthBookings
+        }
+      >
+    >((acc, booking) => {
+      if (!booking.barber) {
+        return acc
+      }
+
+      const barberId = booking.barber.id
+
+      if (!acc[barberId]) {
+        acc[barberId] = {
+          id: booking.barber.id,
+          name: booking.barber.name,
+          specialty: booking.barber.specialty,
+          imageUrl: booking.barber.imageUrl,
+
+          totalRevenue: 0,
+          totalBookings: 0,
+
+          bookings: [],
+        }
+      }
+
+      acc[barberId].totalRevenue += Number(booking.service.price)
+
+      acc[barberId].totalBookings += 1
+
+      acc[barberId].bookings.push(booking)
+
+      return acc
+    }, {}),
+  )
 
   const uniqueClients = new Set(monthBookings.map((booking) => booking.user.id))
     .size
@@ -267,6 +345,57 @@ const FinancialsPage = async () => {
                 </div>
               ))}
             </div>
+
+            {/* SALDO BARBEIROS */}
+            <div className="rounded-3xl border border-zinc-800 bg-zinc-950/60 p-6">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-white">
+                  Saldo dos Barbeiros
+                </h2>
+
+                <p className="text-sm text-zinc-500">
+                  Resultado financeiro individual do mês.
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-3">
+                {barbersFinancial.map((barber) => (
+                  <div
+                    key={barber.id}
+                    className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10">
+                        <User2 className="text-emerald-400" />
+                      </div>
+
+                      <div>
+                        <h3 className="text-lg font-bold text-white">
+                          {barber.name}
+                        </h3>
+
+                        <p className="text-sm text-zinc-500">
+                          {barber.totalBookings} agendamento(s)
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 rounded-2xl bg-emerald-500/10 p-4">
+                      <p className="text-sm text-zinc-300">Faturamento</p>
+
+                      <h2 className="mt-2 text-3xl font-bold text-emerald-400">
+                        {barber.totalRevenue.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })}
+                      </h2>
+                    </div>
+
+                    <BarberDetailsDialog barber={barber} />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -319,6 +448,135 @@ const FinancialsPage = async () => {
             ) : (
               <div className="text-zinc-500">Nenhum dado encontrado.</div>
             )}
+          </div>
+
+          {/* BARBEIRO DESTAQUE */}
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-950/60 p-6">
+            <div className="mb-6 flex items-center gap-3">
+              <div className="rounded-2xl bg-blue-500/10 p-3">
+                <Users className="text-blue-400" />
+              </div>
+
+              <div>
+                <h2 className="text-xl font-semibold text-white">
+                  Barbeiro Destaque
+                </h2>
+
+                <p className="text-sm text-zinc-500">
+                  Melhor desempenho do mês.
+                </p>
+              </div>
+            </div>
+
+            {topBarber ? (
+              <div className="rounded-3xl bg-gradient-to-br from-blue-500 to-indigo-700 p-6">
+                <h3 className="text-2xl font-bold text-white">
+                  {topBarber.name}
+                </h3>
+
+                <p className="mt-2 text-sm text-blue-100">
+                  Barbeiro com maior faturamento no mês.
+                </p>
+
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  <div className="rounded-2xl bg-white/10 p-4 backdrop-blur">
+                    <p className="text-sm text-blue-100">Faturamento</p>
+
+                    <h2 className="mt-2 text-2xl font-bold text-white">
+                      {formatCurrency(topBarber.revenue)}
+                    </h2>
+                  </div>
+
+                  <div className="rounded-2xl bg-white/10 p-4 backdrop-blur">
+                    <p className="text-sm text-blue-100">Agendamentos</p>
+
+                    <h2 className="mt-2 text-2xl font-bold text-white">
+                      {topBarber.bookings}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-zinc-500">Nenhum barbeiro encontrado.</div>
+            )}
+          </div>
+
+          {/* RANKING BARBEIROS */}
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-950/60 p-6">
+            <div className="mb-6 flex items-center gap-3">
+              <div className="rounded-2xl bg-indigo-500/10 p-3">
+                <Users className="text-indigo-400" />
+              </div>
+
+              <div>
+                <h2 className="text-xl font-semibold text-white">
+                  Ranking de Barbeiros
+                </h2>
+
+                <p className="text-sm text-zinc-500">
+                  Desempenho individual do mês.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {barbersRanking.map((barber, index) => (
+                <div
+                  key={barber.name}
+                  className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5"
+                >
+                  <div className="mb-5 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`flex h-12 w-12 items-center justify-center rounded-2xl font-bold text-white ${
+                          index === 0
+                            ? "bg-emerald-500"
+                            : index === 1
+                              ? "bg-blue-500"
+                              : index === 2
+                                ? "bg-yellow-500"
+                                : "bg-zinc-700"
+                        }`}
+                      >
+                        #{index + 1}
+                      </div>
+
+                      <div>
+                        <h3 className="text-lg font-bold text-white">
+                          {barber.name}
+                        </h3>
+
+                        <p className="text-sm text-zinc-500">
+                          {barber.bookings} agendamento(s)
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-sm text-zinc-500">Faturamento</p>
+
+                      <h2 className="text-2xl font-bold text-emerald-400">
+                        {formatCurrency(barber.revenue)}
+                      </h2>
+                    </div>
+                  </div>
+
+                  {/* progresso */}
+                  <div className="h-3 overflow-hidden rounded-full bg-zinc-800">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-blue-500"
+                      style={{
+                        width: `${
+                          topBarber
+                            ? (barber.revenue / topBarber.revenue) * 100
+                            : 0
+                        }%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* RESUMO */}
