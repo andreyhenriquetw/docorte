@@ -239,7 +239,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 📅 Data: ${formattedDate} às ${formattedTime}
 💵 Preço: ${formattedPrice}`
 
-      const phoneNumber = "353874772097"
+      const phoneNumber = "93999034526"
 
       const encodedMessage = encodeURIComponent(message)
 
