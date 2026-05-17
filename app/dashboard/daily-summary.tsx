@@ -127,9 +127,9 @@ const DailySummary = ({
                 </div>
               </div>
 
-              <p className="text-sm text-zinc-400">{card.title}</p>
+              <p className="text-[13px] text-zinc-400">{card.title}</p>
 
-              <h3 className="mt-2 text-xl font-bold text-white md:text-2xl">
+              <h3 className="mt-2 text-[21px] font-bold text-white md:text-[22px]">
                 {card.value}
               </h3>
             </div>
