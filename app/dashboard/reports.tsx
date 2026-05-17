@@ -1,73 +1,120 @@
-import React from "react"
-import { getDashboardBookings } from "./_data/get-dashboard-bookings"
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
+
 import { BarChart3, Crown, Scissors, Users } from "lucide-react"
 
-const Reports = async () => {
-  const bookings = await getDashboardBookings()
+interface Booking {
+  id: string
+
+  user: {
+    id: string
+    name: string | null
+    email: string
+  }
+
+  service: {
+    name: string
+    price: number
+  }
+}
+
+interface ReportsProps {
+  bookings: Booking[]
+}
+
+const ITEMS_PER_PAGE = 5
+
+const Reports = ({ bookings }: ReportsProps) => {
+  const [page, setPage] = useState(1)
 
   // serviços
-  const serviceStats = bookings.reduce<
-    Record<
-      string,
-      {
-        count: number
-        revenue: number
+  const serviceStats = useMemo(() => {
+    return bookings.reduce<
+      Record<
+        string,
+        {
+          count: number
+          revenue: number
+        }
+      >
+    >((acc, booking) => {
+      const serviceName = booking.service.name
+
+      if (!acc[serviceName]) {
+        acc[serviceName] = {
+          count: 0,
+          revenue: 0,
+        }
       }
-    >
-  >((acc, booking) => {
-    const serviceName = booking.service.name
 
-    if (!acc[serviceName]) {
-      acc[serviceName] = {
-        count: 0,
-        revenue: 0,
-      }
-    }
+      acc[serviceName].count += 1
+      acc[serviceName].revenue += Number(booking.service.price)
 
-    acc[serviceName].count += 1
-    acc[serviceName].revenue += Number(booking.service.price)
+      return acc
+    }, {})
+  }, [bookings])
 
-    return acc
-  }, {})
-
-  const sortedServices = Object.entries(serviceStats)
-    .map(([name, data]) => ({
-      name,
-      ...data,
-    }))
-    .sort((a, b) => b.count - a.count)
+  const sortedServices = useMemo(() => {
+    return Object.entries(serviceStats)
+      .map(([name, data]) => ({
+        name,
+        ...data,
+      }))
+      .sort((a, b) => b.count - a.count)
+  }, [serviceStats])
 
   const topService = sortedServices[0]
 
   // clientes
-  const clientStats = bookings.reduce<
-    Record<
-      string,
-      {
-        name: string
-        email: string
-        count: number
-      }
-    >
-  >((acc, booking) => {
-    const userId = booking.user.id
+  const clientStats = useMemo(() => {
+    return bookings.reduce<
+      Record<
+        string,
+        {
+          name: string
+          email: string
+          count: number
+        }
+      >
+    >((acc, booking) => {
+      const userId = booking.user.id
 
-    if (!acc[userId]) {
-      acc[userId] = {
-        name: booking.user.name ?? "Sem nome",
-        email: booking.user.email,
-        count: 0,
+      if (!acc[userId]) {
+        acc[userId] = {
+          name: booking.user.name ?? "Sem nome",
+          email: booking.user.email,
+          count: 0,
+        }
       }
+
+      acc[userId].count += 1
+
+      return acc
+    }, {})
+  }, [bookings])
+
+  const topClients = useMemo(() => {
+    return Object.values(clientStats)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5)
+  }, [clientStats])
+
+  // paginação
+  const totalPages = Math.ceil(sortedServices.length / ITEMS_PER_PAGE)
+
+  const paginatedServices = useMemo(() => {
+    const start = (page - 1) * ITEMS_PER_PAGE
+    const end = start + ITEMS_PER_PAGE
+
+    return sortedServices.slice(start, end)
+  }, [sortedServices, page])
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(1)
     }
-
-    acc[userId].count += 1
-
-    return acc
-  }, {})
-
-  const topClients = Object.values(clientStats)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5)
+  }, [page, totalPages])
 
   return (
     <div className="rounded-[32px] border border-zinc-800 bg-gradient-to-b from-zinc-900 to-zinc-950 p-6 shadow-xl">
@@ -175,7 +222,7 @@ const Reports = async () => {
             </thead>
 
             <tbody>
-              {sortedServices.map((service) => (
+              {paginatedServices.map((service) => (
                 <tr key={service.name} className="border-t border-zinc-800">
                   <td className="p-4 text-white">{service.name}</td>
 
@@ -189,6 +236,43 @@ const Reports = async () => {
             </tbody>
           </table>
         </div>
+
+        {/* PAGINAÇÃO */}
+        {totalPages > 1 && (
+          <div className="mt-5 flex items-center justify-center gap-3">
+            <button
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={page === 1}
+              className="rounded-xl border border-zinc-700 px-4 py-2 text-sm text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Anterior
+            </button>
+
+            <div className="flex items-center gap-2">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setPage(index + 1)}
+                  className={`h-10 w-10 rounded-xl text-sm font-medium transition ${
+                    page === index + 1
+                      ? "bg-emerald-500 text-white"
+                      : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={page === totalPages}
+              className="rounded-xl border border-zinc-700 px-4 py-2 text-sm text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Próximo
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

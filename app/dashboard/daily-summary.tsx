@@ -1,21 +1,72 @@
-import React from "react"
-import { isToday } from "date-fns"
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
+
+import { isSameDay } from "date-fns"
+
+import { toZonedTime } from "date-fns-tz"
+
 import { CalendarCheck2, CircleDollarSign, Scissors } from "lucide-react"
-import { getConfirmedBookings } from "../_data/get-confirmed-bookings"
-import { getConcludedBookings } from "../_data/get-concluided-bookings"
 
-const DailySummary = async () => {
-  const confirmedBookings = await getConfirmedBookings()
+import { useRouter } from "next/navigation"
 
-  const concludedBookings = await getConcludedBookings()
+interface Booking {
+  id: string
 
-  const todayConfirmed = confirmedBookings.filter((booking) =>
-    isToday(booking.date),
-  )
+  date: Date
 
-  const todayConcluded = concludedBookings.filter((booking) =>
-    isToday(booking.date),
-  )
+  service: {
+    price: number
+  }
+}
+
+interface DailySummaryProps {
+  confirmedBookings: Booking[]
+
+  concludedBookings: Booking[]
+}
+
+const DailySummary = ({
+  confirmedBookings,
+  concludedBookings,
+}: DailySummaryProps) => {
+  const router = useRouter()
+
+  const [currentTime, setCurrentTime] = useState(new Date())
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date())
+
+      router.refresh()
+    }, 60000)
+
+    return () => clearInterval(interval)
+  }, [router])
+
+  const todayConfirmed = useMemo(() => {
+    return confirmedBookings.filter((booking) => {
+      const bookingDate = new Date(booking.date)
+
+      const bookingSP = toZonedTime(bookingDate, "America/Sao_Paulo")
+
+      const nowSP = toZonedTime(currentTime, "America/Sao_Paulo")
+
+      return isSameDay(bookingSP, nowSP)
+    })
+  }, [confirmedBookings, currentTime])
+
+  const todayConcluded = useMemo(() => {
+    return concludedBookings.filter((booking) => {
+      const bookingDate = new Date(booking.date)
+
+      const bookingSP = toZonedTime(bookingDate, "America/Sao_Paulo")
+
+      const nowSP = toZonedTime(currentTime, "America/Sao_Paulo")
+
+      return isSameDay(bookingSP, nowSP)
+    })
+  }, [concludedBookings, currentTime])
 
   const expectedRevenue = todayConfirmed.reduce(
     (total, booking) => total + Number(booking.service.price),
@@ -29,12 +80,14 @@ const DailySummary = async () => {
       icon: CalendarCheck2,
       color: "bg-blue-500/10 border-blue-500/20",
     },
+
     {
       title: "Finalizados hoje",
       value: todayConcluded.length,
       icon: Scissors,
       color: "bg-emerald-500/10 border-emerald-500/20",
     },
+
     {
       title: "Previsão",
       value: `R$ ${expectedRevenue.toFixed(2)}`,

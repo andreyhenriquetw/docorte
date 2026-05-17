@@ -14,6 +14,12 @@ import { notFound } from "next/navigation"
 
 import { getDashboardBookings } from "./_data/get-dashboard-bookings"
 
+import { getConfirmedBookings } from "../_data/get-confirmed-bookings"
+
+import { getConcludedBookings } from "../_data/get-concluided-bookings"
+
+export const dynamic = "force-dynamic"
+
 const Dashboard = async () => {
   const session = await getServerSession(authOptions)
 
@@ -21,8 +27,33 @@ const Dashboard = async () => {
     return notFound()
   }
 
-  // BUSCA OS AGENDAMENTOS
+  // BOOKINGS DASHBOARD
   const bookings = await getDashboardBookings()
+
+  // BOOKINGS RESUMO
+  const confirmedBookingsRaw = await getConfirmedBookings()
+
+  const concludedBookingsRaw = await getConcludedBookings()
+
+  const confirmedBookings = confirmedBookingsRaw.map((booking) => ({
+    ...booking,
+
+    service: {
+      ...booking.service,
+
+      price: Number(booking.service.price),
+    },
+  }))
+
+  const concludedBookings = concludedBookingsRaw.map((booking) => ({
+    ...booking,
+
+    service: {
+      ...booking.service,
+
+      price: Number(booking.service.price),
+    },
+  }))
 
   return (
     <div className="space-y-6">
@@ -44,12 +75,15 @@ const Dashboard = async () => {
         <div className="space-y-6">
           <Appointments bookings={bookings} />
 
-          <Reports />
+          <Reports bookings={bookings} />
         </div>
 
         {/* direita */}
         <div className="space-y-6">
-          <DailySummary />
+          <DailySummary
+            confirmedBookings={confirmedBookings}
+            concludedBookings={concludedBookings}
+          />
 
           <Clients />
         </div>

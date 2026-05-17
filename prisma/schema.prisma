@@ -126,6 +126,7 @@ model Booking {
 enum BookingStatus {
   PENDING
   CONFIRMED
+  COMPLETED
   CANCELED
 }
 

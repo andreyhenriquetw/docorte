@@ -5,8 +5,12 @@
 import { useEffect, useMemo, useState } from "react"
 
 import { isToday, isTomorrow } from "date-fns"
+
 import { ptBR } from "date-fns/locale"
+
 import { formatInTimeZone } from "date-fns-tz"
+
+import { useRouter } from "next/navigation"
 
 import { cancelBooking } from "../_actions/cancel-booking"
 
@@ -81,17 +85,22 @@ const getStatus = (date: Date) => {
 const LiveDashboardAppointments = ({
   bookings,
 }: LiveDashboardAppointmentsProps) => {
+  const router = useRouter()
+
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date())
-    }, 60000)
+
+      // ATUALIZA TODOS COMPONENTES SERVER
+      router.refresh()
+    }, 10000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [router])
 
-  // REMOVE AUTOMATICAMENTE AGENDAMENTOS JÁ PASSADOS
+  // REMOVE AUTOMATICAMENTE AGENDAMENTOS PASSADOS
   const activeBookings = useMemo(() => {
     return bookings.filter((booking) => {
       return new Date(booking.date) >= currentTime
@@ -177,6 +186,8 @@ const LiveDashboardAppointments = ({
             <form
               action={async () => {
                 await cancelBooking(booking.id)
+
+                router.refresh()
               }}
             >
               <button
