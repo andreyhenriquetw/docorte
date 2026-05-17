@@ -46,7 +46,7 @@ const Overview = ({ bookings }: OverviewProps) => {
     })
   }, [bookings, currentTime])
 
-  const dailyRevenue = activeBookings
+  const dailyRevenue = bookings
     .filter((booking) => isToday(new Date(booking.date)))
     .reduce((total, booking) => total + Number(booking.service.price), 0)
 
