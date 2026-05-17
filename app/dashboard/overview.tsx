@@ -34,7 +34,7 @@ const Overview = ({ bookings }: OverviewProps) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date())
-    }, 60000)
+    }, 10000)
 
     return () => clearInterval(interval)
   }, [])
@@ -63,44 +63,52 @@ const Overview = ({ bookings }: OverviewProps) => {
   const cards = [
     {
       title: "Faturamento",
-
       value: `R$ ${totalRevenue.toFixed(2)}`,
-
       icon: DollarSign,
-
       subtitle: `Hoje: R$ ${dailyRevenue.toFixed(2)}`,
+
+      gradient: "from-emerald-500/20 via-emerald-400/10 to-green-600/5",
+      border: "border-emerald-500/20",
+      glow: "shadow-[0_0_40px_rgba(16,185,129,0.12)]",
+      iconBg: "bg-gradient-to-br from-emerald-400 to-green-600",
     },
 
     {
       title: "Agendamentos",
-
       value: activeBookings.length,
-
       icon: CalendarDays,
-
       subtitle: "Total",
+
+      gradient: "from-violet-500/20 via-fuchsia-500/10 to-purple-600/5",
+      border: "border-violet-500/20",
+      glow: "shadow-[0_0_40px_rgba(139,92,246,0.12)]",
+      iconBg: "bg-gradient-to-br from-violet-500 to-fuchsia-500",
     },
 
     {
       title: "Clientes",
-
       value: uniqueClients,
-
       icon: Users,
-
       subtitle: "Únicos",
+
+      gradient: "from-sky-500/20 via-cyan-500/10 to-blue-600/5",
+      border: "border-sky-500/20",
+      glow: "shadow-[0_0_40px_rgba(14,165,233,0.12)]",
+      iconBg: "bg-gradient-to-br from-sky-500 to-cyan-500",
     },
 
     {
       title: "Próximo horário",
-
       value: nextBooking
         ? formatInTimeZone(nextBooking.date, "America/Sao_Paulo", "HH:mm")
         : "--:--",
-
       icon: Clock3,
-
       subtitle: nextBooking?.user?.name ?? "Sem agenda",
+
+      gradient: "from-amber-500/20 via-orange-500/10 to-yellow-500/5",
+      border: "border-amber-500/20",
+      glow: "shadow-[0_0_40px_rgba(245,158,11,0.12)]",
+      iconBg: "bg-gradient-to-br from-amber-400 to-orange-500",
     },
   ]
 
@@ -112,19 +120,37 @@ const Overview = ({ bookings }: OverviewProps) => {
         return (
           <div
             key={card.title}
-            className="rounded-3xl border border-zinc-800 bg-zinc-900/70 p-6 shadow-lg transition hover:border-emerald-500/40 hover:bg-zinc-900"
+            className={`group relative overflow-hidden rounded-[28px] border p-6 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] ${card.border} ${card.glow} `}
           >
-            <div className="mb-5 flex items-center justify-between">
-              <div className="rounded-2xl bg-zinc-800 p-3">
-                <Icon size={22} />
+            {/* Background premium gradient */}
+            <div
+              className={`absolute inset-0 bg-gradient-to-br ${card.gradient} `}
+            />
+
+            {/* Glow blur */}
+            <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/5 blur-3xl" />
+
+            <div className="relative z-10">
+              <div className="mb-5 flex items-start justify-between">
+                <div
+                  className={`flex h-11 w-11 items-center justify-center rounded-2xl text-white shadow-lg ${card.iconBg} `}
+                >
+                  <Icon size={24} />
+                </div>
+
+                <span className="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-sm font-medium text-zinc-300">
+                  {card.subtitle}
+                </span>
               </div>
 
-              <span className="text-sm text-zinc-500">{card.subtitle}</span>
+              <p className="text-sm font-medium tracking-wide text-zinc-400">
+                {card.title}
+              </p>
+
+              <h3 className="mt-2 text-3xl font-black tracking-tight text-white">
+                {card.value}
+              </h3>
             </div>
-
-            <p className="text-sm text-zinc-400">{card.title}</p>
-
-            <h3 className="mt-2 text-3xl font-bold text-white">{card.value}</h3>
           </div>
         )
       })}

@@ -47,7 +47,7 @@ const Appointments = ({ bookings }: AppointmentsProps) => {
   return (
     <div
       id="appointments"
-      className="rounded-[32px] border border-zinc-800 bg-zinc-900/70 p-6 shadow-xl"
+      className="relative overflow-hidden rounded-[32px] border border-violet-500/20 bg-gradient-to-br from-violet-500/10 via-zinc-900/95 to-blue-500/5 p-6 shadow-[0_0_45px_rgba(139,92,246,0.10)] backdrop-blur-xl"
     >
       <div className="mb-6 flex items-center justify-between">
         <div>
@@ -58,7 +58,7 @@ const Appointments = ({ bookings }: AppointmentsProps) => {
           <p className="text-sm text-zinc-500">Agenda dos clientes</p>
         </div>
 
-        <span className="rounded-xl bg-zinc-800 px-4 py-2 text-sm text-zinc-400">
+        <span className="rounded-2xl border border-violet-500/20 bg-violet-500/10 px-4 py-2 text-sm font-medium text-violet-300 backdrop-blur-md">
           {activeBookings.length} agendamento(s)
         </span>
       </div>
