@@ -1,13 +1,18 @@
 import React from "react"
+
 import Overview from "./overview"
 import Appointments from "./appointments"
 import Clients from "./clients"
 
 import Reports from "./reports"
 import DailySummary from "./daily-summary"
+
 import { getServerSession } from "next-auth"
 import { authOptions } from "../_lib/auth"
+
 import { notFound } from "next/navigation"
+
+import { getDashboardBookings } from "./_data/get-dashboard-bookings"
 
 const Dashboard = async () => {
   const session = await getServerSession(authOptions)
@@ -15,6 +20,9 @@ const Dashboard = async () => {
   if (!session?.user) {
     return notFound()
   }
+
+  // BUSCA OS AGENDAMENTOS
+  const bookings = await getDashboardBookings()
 
   return (
     <div className="space-y-6">
@@ -28,13 +36,14 @@ const Dashboard = async () => {
       </div>
 
       {/* cards métricas */}
-      <Overview />
+      <Overview bookings={bookings} />
 
       {/* grid principal */}
       <div className="grid gap-6 xl:grid-cols-[1.7fr_0.8fr]">
         {/* esquerda */}
         <div className="space-y-6">
-          <Appointments />
+          <Appointments bookings={bookings} />
+
           <Reports />
         </div>
 

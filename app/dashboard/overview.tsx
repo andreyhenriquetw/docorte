@@ -1,51 +1,105 @@
-import React from "react"
-import { getDashboardBookings } from "./_data/get-dashboard-bookings"
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
+
 import { isToday } from "date-fns"
+
 import { CalendarDays, Clock3, DollarSign, Users } from "lucide-react"
+
 import { formatInTimeZone } from "date-fns-tz"
 
-const Overview = async () => {
-  const allBookings = await getDashboardBookings()
+interface Booking {
+  id: string
 
-  const dailyRevenue = allBookings
-    .filter((booking) => isToday(booking.date))
+  date: Date
+
+  userId: string
+
+  user: {
+    name: string | null
+  }
+
+  service: {
+    price: number
+  }
+}
+
+interface OverviewProps {
+  bookings: Booking[]
+}
+
+const Overview = ({ bookings }: OverviewProps) => {
+  const [currentTime, setCurrentTime] = useState(new Date())
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 60000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  // REMOVE AGENDAMENTOS PASSADOS AUTOMATICAMENTE
+  const activeBookings = useMemo(() => {
+    return bookings.filter((booking) => {
+      return new Date(booking.date) >= currentTime
+    })
+  }, [bookings, currentTime])
+
+  const dailyRevenue = activeBookings
+    .filter((booking) => isToday(new Date(booking.date)))
     .reduce((total, booking) => total + Number(booking.service.price), 0)
 
-  const totalRevenue = allBookings.reduce(
+  const totalRevenue = activeBookings.reduce(
     (total, booking) => total + Number(booking.service.price),
     0,
   )
 
-  const uniqueClients = new Set(allBookings.map((booking) => booking.userId))
+  const uniqueClients = new Set(activeBookings.map((booking) => booking.userId))
     .size
 
-  const nextBooking = allBookings[0]
+  const nextBooking = activeBookings[0]
 
   const cards = [
     {
       title: "Faturamento",
+
       value: `R$ ${totalRevenue.toFixed(2)}`,
+
       icon: DollarSign,
+
       subtitle: `Hoje: R$ ${dailyRevenue.toFixed(2)}`,
     },
+
     {
       title: "Agendamentos",
-      value: allBookings.length,
+
+      value: activeBookings.length,
+
       icon: CalendarDays,
+
       subtitle: "Total",
     },
+
     {
       title: "Clientes",
+
       value: uniqueClients,
+
       icon: Users,
+
       subtitle: "Únicos",
     },
+
     {
       title: "Próximo horário",
+
       value: nextBooking
         ? formatInTimeZone(nextBooking.date, "America/Sao_Paulo", "HH:mm")
         : "--:--",
+
       icon: Clock3,
+
       subtitle: nextBooking?.user?.name ?? "Sem agenda",
     },
   ]

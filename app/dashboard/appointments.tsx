@@ -1,13 +1,48 @@
-// app/dashboard/appointments.tsx
+"use client"
 
-import React from "react"
-
-import { getDashboardBookings } from "./_data/get-dashboard-bookings"
+import React, { useEffect, useMemo, useState } from "react"
 
 import LiveDashboardAppointments from "./live-dashboard-appointments"
 
-const Appointments = async () => {
-  const bookings = await getDashboardBookings()
+interface Booking {
+  id: string
+
+  date: Date
+
+  user: {
+    name: string | null
+    email: string
+  }
+
+  service: {
+    name: string
+    price: number
+  }
+
+  status: string
+}
+
+interface AppointmentsProps {
+  bookings: Booking[]
+}
+
+const Appointments = ({ bookings }: AppointmentsProps) => {
+  const [currentTime, setCurrentTime] = useState(new Date())
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 60000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  // REMOVE AGENDAMENTOS PASSADOS EM TEMPO REAL
+  const activeBookings = useMemo(() => {
+    return bookings.filter((booking) => {
+      return new Date(booking.date) >= currentTime
+    })
+  }, [bookings, currentTime])
 
   return (
     <div
@@ -24,11 +59,11 @@ const Appointments = async () => {
         </div>
 
         <span className="rounded-xl bg-zinc-800 px-4 py-2 text-sm text-zinc-400">
-          {bookings.length} agendamentos
+          {activeBookings.length} agendamento(s)
         </span>
       </div>
 
-      <LiveDashboardAppointments bookings={bookings} />
+      <LiveDashboardAppointments bookings={activeBookings} />
     </div>
   )
 }
