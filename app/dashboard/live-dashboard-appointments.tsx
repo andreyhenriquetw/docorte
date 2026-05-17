@@ -7,7 +7,6 @@ import { useEffect, useMemo, useState } from "react"
 import { isToday, isTomorrow } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { formatInTimeZone } from "date-fns-tz"
-import { Decimal } from "@prisma/client/runtime/library"
 
 import { cancelBooking } from "../_actions/cancel-booking"
 
@@ -23,7 +22,7 @@ interface Booking {
 
   service: {
     name: string
-    price: Decimal
+    price: number
   }
 
   status: string

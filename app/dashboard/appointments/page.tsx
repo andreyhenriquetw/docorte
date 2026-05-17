@@ -8,7 +8,7 @@ import LiveAlert from "./_components/live-alert"
 import LiveAppointmentsList from "./_components/live-appointments-list"
 
 const AppointmentsPage = async () => {
-  const bookings = await db.booking.findMany({
+  const bookingsRaw = await db.booking.findMany({
     include: {
       user: {
         select: {
@@ -33,6 +33,16 @@ const AppointmentsPage = async () => {
       date: "asc",
     },
   })
+
+  const bookings = bookingsRaw.map((booking) => ({
+    ...booking,
+
+    service: {
+      ...booking.service,
+
+      price: Number(booking.service.price),
+    },
+  }))
 
   const now = toZonedTime(new Date(), "America/Sao_Paulo")
 

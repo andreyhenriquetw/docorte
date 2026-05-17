@@ -142,7 +142,20 @@ const FinancialsPage = async () => {
           totalRevenue: number
           totalBookings: number
 
-          bookings: typeof monthBookings
+          bookings: {
+            id: string
+            date: Date
+            status: string
+
+            user: {
+              name: string | null
+            }
+
+            service: {
+              name: string
+              price: number
+            }
+          }[]
         }
       >
     >((acc, booking) => {
@@ -170,7 +183,20 @@ const FinancialsPage = async () => {
 
       acc[barberId].totalBookings += 1
 
-      acc[barberId].bookings.push(booking)
+      acc[barberId].bookings.push({
+        id: booking.id,
+        date: booking.date,
+        status: booking.status,
+
+        user: {
+          name: booking.user.name,
+        },
+
+        service: {
+          name: booking.service.name,
+          price: Number(booking.service.price),
+        },
+      })
 
       return acc
     }, {}),
