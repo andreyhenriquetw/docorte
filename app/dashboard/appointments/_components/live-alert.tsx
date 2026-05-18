@@ -34,19 +34,30 @@ const LiveAlert = ({ bookings }: LiveAlertProps) => {
   }
 
   return (
-    <div className="flex items-center gap-4 rounded-3xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 to-zinc-950 p-5">
-      <div className="rounded-2xl bg-emerald-500/20 p-3">
-        <BellRing size={24} className="text-emerald-400" />
-      </div>
+    <div className="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 to-zinc-950 p-5 shadow-lg shadow-emerald-950/20">
+      {/* brilho animado */}
+      <div className="absolute inset-0 animate-[ping_2s_ease-in-out_infinite] bg-emerald-400/5" />
 
-      <div>
-        <h2 className="text-lg font-semibold text-white">
-          Você possui {activeBookings.length} agendamento(s) hoje
-        </h2>
+      <div className="relative flex items-center gap-4">
+        {/* ícone */}
+        <div className="relative">
+          <div className="absolute inset-0 animate-ping rounded-2xl bg-emerald-400/30" />
 
-        <p className="text-sm text-emerald-300">
-          Confira os próximos horários abaixo.
-        </p>
+          <div className="relative rounded-2xl bg-emerald-500/20 p-3">
+            <BellRing size={24} className="text-emerald-400" />
+          </div>
+        </div>
+
+        {/* texto */}
+        <div>
+          <h2 className="text-lg font-semibold text-white">
+            Você possui {activeBookings.length} agendamento(s) hoje
+          </h2>
+
+          <p className="text-sm text-emerald-300">
+            Confira os próximos horários abaixo.
+          </p>
+        </div>
       </div>
     </div>
   )

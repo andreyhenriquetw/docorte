@@ -7,6 +7,8 @@ import { toZonedTime } from "date-fns-tz"
 import LiveAlert from "./_components/live-alert"
 import LiveAppointmentsList from "./_components/live-appointments-list"
 
+import FinishedBookingsModal from "./_components/finished-bookings-modal"
+
 const AppointmentsPage = async () => {
   const bookingsRaw = await db.booking.findMany({
     include: {
@@ -64,10 +66,18 @@ const AppointmentsPage = async () => {
     )
   }
 
+  // FUTUROS
   const upcomingBookings = bookings.filter((booking) => {
     const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
 
     return bookingDate >= now
+  })
+
+  // FINALIZADOS
+  const finishedBookings = bookings.filter((booking) => {
+    const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
+
+    return bookingDate < now
   })
 
   const todayBookings = upcomingBookings.filter((booking) =>
@@ -92,9 +102,13 @@ const AppointmentsPage = async () => {
           <p className="text-zinc-400">Gerencie os horários da barbearia.</p>
         </div>
 
-        <button className="rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 px-5 py-3 font-medium text-white transition-all hover:scale-[1.02]">
-          Novo Agendamento
-        </button>
+        <div className="flex items-center gap-3">
+          <FinishedBookingsModal bookings={finishedBookings} />
+
+          <button className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/15 to-zinc-950 px-5 py-3 font-medium text-white shadow-lg shadow-emerald-950/20 transition-all hover:scale-[1.02] hover:border-emerald-500/40 hover:from-emerald-500/25">
+            Novo Agendamento
+          </button>
+        </div>
       </div>
 
       {/* ALERTA AO VIVO */}
@@ -172,8 +186,8 @@ const AppointmentsPage = async () => {
       </div>
 
       {/* PRÓXIMOS AGENDAMENTOS */}
-      <div className="rounded-3xl border border-zinc-800 bg-zinc-950/60">
-        <div className="flex items-center justify-between border-b border-zinc-800 p-6">
+      <div className="rounded-3xl border border-emerald-500/15 bg-gradient-to-b from-emerald-500/[0.05] via-zinc-950 to-black shadow-xl shadow-emerald-950/10">
+        <div className="flex items-center justify-between border-b border-emerald-500/10 p-6">
           <div>
             <h2 className="text-xl font-bold text-white">
               Próximos Agendamentos
@@ -184,8 +198,8 @@ const AppointmentsPage = async () => {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 px-4 py-2">
-            <span className="text-sm font-medium text-zinc-300">
+          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 backdrop-blur-sm">
+            <span className="text-sm font-medium text-emerald-300">
               {upcomingBookings.length} próximos
             </span>
           </div>
