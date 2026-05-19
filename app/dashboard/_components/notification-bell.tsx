@@ -31,7 +31,7 @@ export default function NotificationBell() {
   }, [])
 
   return (
-    <div ref={boxRef} className="relative">
+    <div ref={boxRef} className="relative z-[9999]">
       <button
         onClick={() => {
           const nextOpen = !open
@@ -63,7 +63,7 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-16 z-50 w-[370px] overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-950 shadow-2xl">
+        <div className="absolute right-0 top-16 z-[9999] w-[370px] overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-950 shadow-2xl">
           <div className="border-b border-zinc-800 p-4">
             <h3 className="font-semibold text-white">Notificações</h3>
           </div>

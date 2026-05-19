@@ -15,10 +15,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <NotificationProvider>
           <DashboardSidebar />
 
-          <main className="flex-1">
+          <main className="relative flex-1 overflow-visible">
             <BookingNotification />
 
-            <div className="border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
+            <div className="relative z-[999] overflow-visible border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
               <DashboardHeader />
             </div>
 
