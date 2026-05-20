@@ -1,5 +1,7 @@
 "use server"
 
+import { startOfMonth, endOfMonth } from "date-fns"
+
 import { db } from "../../_lib/prisma"
 
 import { toZonedTime } from "date-fns-tz"
@@ -22,7 +24,7 @@ export const getDashboardBookings = async () => {
     },
   })
 
-  // BUSCA SOMENTE AGENDAMENTOS FUTUROS
+  // PEGA TODOS OS AGENDAMENTOS DO MÊS
   const bookings = await db.booking.findMany({
     where: {
       status: {
@@ -30,7 +32,8 @@ export const getDashboardBookings = async () => {
       },
 
       date: {
-        gte: now,
+        gte: startOfMonth(now),
+        lte: endOfMonth(now),
       },
     },
 
