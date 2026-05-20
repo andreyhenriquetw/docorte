@@ -306,7 +306,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                <SheetContent className="flex h-[100dvh] w-full flex-col border-l border-zinc-800 bg-[#09090B] p-0 sm:max-w-md">
+                <SheetContent className="flex h-[100dvh] w-full flex-col border-l border-zinc-800 bg-[#09090B] p-0 sm:max-w-md [&>button:hover]:scale-105 [&>button:hover]:border-red-500/40 [&>button:hover]:bg-red-500/10 [&>button:hover]:text-red-400 [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-full [&>button]:border [&>button]:border-zinc-700 [&>button]:bg-zinc-900 [&>button]:p-1.5 [&>button]:text-white [&>button]:opacity-100 [&>button]:shadow-lg [&>button]:transition-all">
                   <SheetHeader className="border-b p-4">
                     <SheetTitle>Fazer Reserva</SheetTitle>
                   </SheetHeader>
