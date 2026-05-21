@@ -24,6 +24,7 @@ import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
 import { toZonedTime } from "date-fns-tz"
+import { updateUserProfile } from "../_actions/update-user-profile"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -109,6 +110,12 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
   const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
 
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false)
+
+  const [name, setName] = useState(data?.user?.name || "")
+
+  const [phone, setPhone] = useState("")
+
   const [selectedDay, setSelectedDay] = useState<Date>()
 
   const [selectedBarber, setSelectedBarber] = useState<string>()
@@ -171,6 +178,18 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
     }
   }, [selectedTime])
 
+  useEffect(() => {
+    if (data?.user) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hasPhone = (data.user as any)?.phone
+
+      if (!hasPhone) {
+        setName(data.user.name ?? "")
+        setProfileDialogOpen(true)
+      }
+    }
+  }, [data])
+
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedTime) return
 
@@ -182,6 +201,14 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
   const handleBookingClick = () => {
     if (data?.user) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hasPhone = (data.user as any)?.phone
+
+      if (!hasPhone) {
+        setProfileDialogOpen(true)
+        return
+      }
+
       return setBookingSheetIsOpen(true)
     }
 
@@ -254,6 +281,31 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
       console.error(error)
 
       toast.error("Erro ao criar reserva!")
+    }
+  }
+
+  const handleUpdateProfile = async () => {
+    try {
+      if (!name || !phone) {
+        toast.error("Preencha nome e WhatsApp")
+        return
+      }
+
+      await updateUserProfile({
+        name,
+        phone,
+      })
+
+      toast.success("Perfil atualizado!")
+
+      setProfileDialogOpen(false)
+
+      // abre o agendamento depois de salvar
+      setBookingSheetIsOpen(true)
+    } catch (error) {
+      console.error(error)
+
+      toast.error("Erro ao salvar perfil")
     }
   }
 
@@ -496,6 +548,44 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
       >
         <DialogContent className="w-[90%]">
           <SignInDialog />
+        </DialogContent>
+      </Dialog>
+      <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
+        <DialogContent className="border-zinc-800 bg-zinc-900 text-white sm:max-w-md">
+          <div className="space-y-5">
+            <div>
+              <h2 className="text-2xl font-bold">Complete seu cadastro</h2>
+
+              <p className="text-sm text-zinc-400">
+                Precisamos do seu WhatsApp para confirmar agendamentos.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <input
+                type="text"
+                placeholder="Seu nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="h-12 w-full rounded-2xl border border-zinc-700 bg-zinc-800 px-4 text-white outline-none focus:border-green-500"
+              />
+
+              <input
+                type="tel"
+                placeholder="Seu WhatsApp"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="h-12 w-full rounded-2xl border border-zinc-700 bg-zinc-800 px-4 text-white outline-none focus:border-green-500"
+              />
+            </div>
+
+            <Button
+              className="h-12 w-full rounded-2xl bg-green-500 font-bold text-black hover:bg-green-400"
+              onClick={handleUpdateProfile}
+            >
+              CONTINUAR
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </>

@@ -30,7 +30,7 @@ async function seedDatabase() {
       {
         name: "Sobrancelha",
         description: "Expressão acentuada com modelagem precisa.",
-        price: 3.0,
+        price: 5.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWI1WyCI98omUnsYOVxbyz6NA7vLH12FSMDdrW",
       },
@@ -65,14 +65,14 @@ async function seedDatabase() {
       {
         name: "Corte + Barba",
         description: "Combo para visual renovado, bem definido.",
-        price: 20.0,
+        price: 30.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWvADDaSiCzS5Ldp6gfYOMwD3cGXmI97juiKNy",
       },
       {
         name: "Corte + Barba + Sobrancelha",
         description: "Combo completo para um visual impecável.",
-        price: 23.0,
+        price: 35.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWrqmwXI1ulNCWtEmGLOXUwr3MDPQYIv1a8hT0",
       },
@@ -104,7 +104,7 @@ async function seedDatabase() {
         name: creativeNames[0],
         address: addresses[0],
         imageUrl: images[0],
-        phones: ["+352 874 772 097"],
+        phones: ["+55 93 999903-4526"],
         description:
           "Barbearia premium especializada em cortes modernos, barba e estilo.",
       },

@@ -11,6 +11,7 @@ model User {
   id            String         @id @default(cuid())
   email         String         @unique
   name          String?
+  phone         String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   emailVerified DateTime?
@@ -109,6 +110,8 @@ model Booking {
   serviceId String
   barberId  String?
   date      DateTime
+
+  reminderSent Boolean @default(false)
 
   status BookingStatus @default(CONFIRMED)
 
