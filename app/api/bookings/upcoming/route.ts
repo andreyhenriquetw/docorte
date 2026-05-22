@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const now = new Date()
 
-    const thirtyMinutesLater = new Date(now.getTime() + 24 * 60 * 1000)
+    const thirtyMinutesLater = new Date(now.getTime() + 30 * 60 * 1000)
 
     const bookings = await db.booking.findMany({
       where: {

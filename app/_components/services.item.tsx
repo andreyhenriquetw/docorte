@@ -42,11 +42,11 @@ const getOpeningHours = (date: Date) => {
   const day = date.getDay()
 
   if (day >= 1 && day <= 4) {
-    return { open: 16, close: 21 }
+    return { open: 16, close: 22 }
   }
 
   if (day === 5) {
-    return { open: 14, close: 21 }
+    return { open: 14, close: 22 }
   }
 
   if (day === 6 || day === 0) {
