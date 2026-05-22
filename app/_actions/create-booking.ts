@@ -95,21 +95,19 @@ export const createBooking = async (params: CreateBookingParams) => {
         timeZone: "America/Sao_Paulo",
       }).format(new Date(booking.date))
 
-      await fetch(
-        "https://suggested-tmp-beneficial-created.trycloudflare.com/message/sendText/barber",
-        {
-          method: "POST",
+      await fetch("http://localhost:8080/message/sendText/barber", {
+        method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-            apikey: "123456",
-          },
+        headers: {
+          "Content-Type": "application/json",
+          apikey: "123456",
+        },
 
-          body: JSON.stringify({
-            number: `55${phone}`,
+        body: JSON.stringify({
+          number: `55${phone}`,
 
-            textMessage: {
-              text: `Olá ${booking.user.name}, seu agendamento foi confirmado ✅
+          textMessage: {
+            text: `Olá ${booking.user.name}, seu agendamento foi confirmado ✅
 
 💈 Barbearia: ${booking.service.barbershop.name}
 ✂️ Serviço: ${booking.service.name}
@@ -117,10 +115,9 @@ export const createBooking = async (params: CreateBookingParams) => {
 📅 Data: ${formattedDate}
 
 Obrigado pela preferência.`,
-            },
-          }),
-        },
-      )
+          },
+        }),
+      })
     }
   } catch (error) {
     console.error("Erro ao enviar WhatsApp:", error)

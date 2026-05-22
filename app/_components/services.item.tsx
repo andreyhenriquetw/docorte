@@ -569,7 +569,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
           </div>
 
           {/* formulário */}
-          <div className="space-y-3 px-5 py-4">
+          <div className="space-y-3 px-5 py-5">
             <div className="space-y-2">
               <label className="text-sm font-medium text-zinc-300">
                 Seu nome
