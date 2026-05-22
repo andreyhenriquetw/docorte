@@ -551,39 +551,70 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
         </DialogContent>
       </Dialog>
       <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
-        <DialogContent className="border-zinc-800 bg-zinc-900 text-white sm:max-w-md">
-          <div className="space-y-5">
-            <div>
-              <h2 className="text-2xl font-bold">Complete seu cadastro</h2>
+        <DialogContent className="overflow-hidden rounded-[32px] border border-zinc-800 bg-[#09090B] p-0 text-white sm:max-w-[420px]">
+          {/* topo premium */}
+          <div className="relative overflow-hidden border-b border-zinc-800 bg-gradient-to-b from-zinc-900 to-[#09090B] px-5 pb-5 pt-7">
+            <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-green-500/10 blur-3xl" />
 
-              <p className="text-sm text-zinc-400">
-                Precisamos do seu WhatsApp para confirmar agendamentos.
+            <div className="relative z-10">
+              <h2 className="text-[22px] font-bold leading-tight tracking-tight">
+                Complete seu cadastro
+              </h2>
+
+              <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                Precisamos de algumas informações para confirmar seus
+                agendamentos no WhatsApp.
+              </p>
+            </div>
+          </div>
+
+          {/* formulário */}
+          <div className="space-y-3 px-5 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-zinc-300">
+                Seu nome
+              </label>
+
+              <input
+                type="text"
+                placeholder="Digite seu nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="h-14 w-full rounded-2xl border border-zinc-800 bg-zinc-900/80 px-4 text-[15px] text-white outline-none transition-all placeholder:text-zinc-500 focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-zinc-300">
+                WhatsApp
+              </label>
+
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-zinc-500">
+                  +55
+                </span>
+
+                <input
+                  type="tel"
+                  placeholder="93 99999-9999"
+                  value={phone}
+                  onChange={(e) =>
+                    setPhone(e.target.value.replace(/\D/g, "").slice(0, 11))
+                  }
+                  className="h-14 w-full rounded-2xl border border-zinc-800 bg-zinc-900/80 pl-14 pr-4 text-[15px] text-white outline-none transition-all placeholder:text-zinc-500 focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
+                />
+              </div>
+
+              <p className="text-xs text-zinc-500">
+                Digite apenas DDD + número
               </p>
             </div>
 
-            <div className="space-y-3">
-              <input
-                type="text"
-                placeholder="Seu nome"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="h-12 w-full rounded-2xl border border-zinc-700 bg-zinc-800 px-4 text-white outline-none focus:border-green-500"
-              />
-
-              <input
-                type="tel"
-                placeholder="Seu WhatsApp"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="h-12 w-full rounded-2xl border border-zinc-700 bg-zinc-800 px-4 text-white outline-none focus:border-green-500"
-              />
-            </div>
-
             <Button
-              className="h-12 w-full rounded-2xl bg-green-500 font-bold text-black hover:bg-green-400"
+              className="mt-2 h-14 w-full rounded-2xl bg-green-500 text-[15px] font-semibold text-black transition-all hover:scale-[1.01] hover:bg-green-400 active:scale-[0.99]"
               onClick={handleUpdateProfile}
             >
-              CONTINUAR
+              Continuar
             </Button>
           </div>
         </DialogContent>
