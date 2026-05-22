@@ -577,10 +577,12 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
               <input
                 type="text"
-                placeholder="Digite seu nome"
+                placeholder="Seu nome"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="h-14 w-full rounded-2xl border border-zinc-800 bg-zinc-900/80 px-4 text-[15px] text-white outline-none transition-all placeholder:text-zinc-500 focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
+                autoComplete="name"
+                spellCheck={false}
+                className="h-14 w-full rounded-2xl border border-zinc-800 bg-zinc-900/80 px-4 text-white caret-green-500 outline-none transition-all selection:bg-transparent selection:text-white focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
               />
             </div>
 
