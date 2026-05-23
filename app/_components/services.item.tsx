@@ -11,7 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "./ui/sheet"
-import { Calendar } from "./ui/calendar"
+
 import { ptBR } from "date-fns/locale"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { isPast, set, format } from "date-fns"
@@ -126,6 +126,8 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
 
+  const [loading, setLoading] = useState(false)
+
   const barberSectionRef = useRef<HTMLDivElement | null>(null)
   const timeSectionRef = useRef<HTMLDivElement | null>(null)
   const confirmSectionRef = useRef<HTMLDivElement | null>(null)
@@ -236,41 +238,13 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
     try {
       if (!selectedDate || !selectedBarber) return
 
+      setLoading(true)
+
       await createBooking({
         serviceId: service.id,
         barberId: selectedBarber,
         date: selectedDate,
       })
-
-      const formattedDate = format(selectedDate, "dd/MM/yyyy", {
-        locale: ptBR,
-      })
-
-      const formattedTime = format(selectedDate, "HH:mm")
-
-      const selectedBarberName =
-        barbers.find((b) => b.id === selectedBarber)?.name ?? "Barbeiro"
-
-      const formattedPrice = Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(Number(service.price))
-
-      const clientName = data?.user?.name ?? "Cliente"
-
-      const message = `Olá, sou ${clientName} e gostaria de confirmar meu agendamento:
-
-💈 Barbearia: ${barbershop.name}
-✂️ Serviço: ${service.name}
-💇‍♂️ Barbeiro: ${selectedBarberName}
-📅 Data: ${formattedDate} às ${formattedTime}
-💵 Preço: ${formattedPrice}`
-
-      const phoneNumber = "93999034526"
-
-      const encodedMessage = encodeURIComponent(message)
-
-      window.location.href = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`
 
       handleBookingSheetOpenChange()
 
@@ -281,6 +255,8 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
       console.error(error)
 
       toast.error("Erro ao criar reserva!")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -376,28 +352,48 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                         </p>
                       </div>
 
-                      <Calendar
-                        mode="single"
-                        locale={ptBR}
-                        selected={selectedDay}
-                        onSelect={handleDateSelect}
-                        fromDate={new Date()}
-                        className="mx-auto"
-                        classNames={{
-                          months: "flex justify-center",
-                          month: "space-y-4",
-                          table: "w-full border-collapse",
-                          head_row: "grid grid-cols-7",
-                          row: "mt-2 grid grid-cols-7",
-                          head_cell:
-                            "flex h-10 w-12 items-center justify-center text-sm text-zinc-400",
-                          day: "flex h-9 w-9 items-center justify-center rounded-xl p-0 font-normal",
-                          day_selected:
-                            "bg-green-500 text-white hover:bg-green-600 rounded-xl",
-                          day_today:
-                            "border border-green-500 text-green-400 rounded-xl",
-                        }}
-                      />
+                      <div className="overflow-x-auto pb-2">
+                        <div className="flex min-w-max gap-3 px-1">
+                          {Array.from({ length: 6 }).map((_, index) => {
+                            const date = new Date()
+
+                            date.setDate(date.getDate() + index)
+
+                            const isSelected =
+                              selectedDay &&
+                              format(selectedDay, "yyyy-MM-dd") ===
+                                format(date, "yyyy-MM-dd")
+
+                            return (
+                              <button
+                                key={index}
+                                onClick={() => handleDateSelect(date)}
+                                className={`group flex h-[88px] w-[72px] shrink-0 flex-col items-center justify-center rounded-3xl border transition-all duration-200 ${
+                                  isSelected
+                                    ? "border-yellow-400 bg-yellow-400 text-black shadow-lg shadow-yellow-500/20"
+                                    : "border-zinc-800 bg-zinc-900 text-white hover:border-zinc-600 hover:bg-zinc-800"
+                                }`}
+                              >
+                                <span
+                                  className={`text-[12px] uppercase tracking-wide ${
+                                    isSelected
+                                      ? "text-black/100"
+                                      : "text-yellow-500"
+                                  }`}
+                                >
+                                  {format(date, "EEE", {
+                                    locale: ptBR,
+                                  })}
+                                </span>
+
+                                <span className="mt-2 text-2xl font-bold">
+                                  {format(date, "d")}
+                                </span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
                     </div>
 
                     {/* barbeiros */}
@@ -424,7 +420,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                               onClick={() => setSelectedBarber(barber.id)}
                               className={`w-full rounded-3xl border transition-all duration-200 ${
                                 selectedBarber === barber.id
-                                  ? "border-green-500 bg-green-500/10"
+                                  ? "border-yellow-500 bg-yellow-500/10"
                                   : "border-zinc-800 bg-zinc-900"
                               }`}
                             >
@@ -445,7 +441,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
                                   <span className="mt-1 text-xs text-zinc-400">
                                     {barber.specialty ||
-                                      "Barbeiro profissional"}
+                                      "Disponível para todos os serviços"}
                                   </span>
                                 </div>
 
@@ -487,7 +483,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                               onClick={() => handleTimeSelect(time)}
                               className={`h-11 rounded-2xl text-sm font-semibold transition-all ${
                                 selectedTime === time
-                                  ? "bg-green-500 text-black hover:bg-green-400"
+                                  ? "bg-yellow-500 text-black hover:bg-yellow-400"
                                   : "border-zinc-700 bg-zinc-900 text-white hover:bg-zinc-800"
                               }`}
                             >
@@ -528,11 +524,22 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                     <Button
                       onClick={handCreateBooking}
                       disabled={
-                        !selectedDay || !selectedTime || !selectedBarber
+                        !selectedDay ||
+                        !selectedTime ||
+                        !selectedBarber ||
+                        loading
                       }
-                      className="h-14 w-full rounded-2xl bg-green-500 text-base font-bold text-black hover:bg-green-400"
+                      className="h-14 w-full rounded-2xl bg-yellow-500 text-base font-bold text-black hover:bg-yellow-400"
                     >
-                      CONFIRMAR NO WHATSAPP
+                      {loading ? (
+                        <div className="flex items-center gap-2">
+                          <div className="h-5 w-5 animate-spin rounded-full border-2 border-black border-t-transparent" />
+
+                          <span>Confirmando...</span>
+                        </div>
+                      ) : (
+                        "CONFIRMAR AGENDAMENTO"
+                      )}
                     </Button>
                   </SheetFooter>
                 </SheetContent>
