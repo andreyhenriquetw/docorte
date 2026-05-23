@@ -26,6 +26,8 @@ import { useRouter } from "next/navigation"
 import { toZonedTime } from "date-fns-tz"
 import { updateUserProfile } from "../_actions/update-user-profile"
 
+import { Loader2 } from "lucide-react"
+
 interface ServiceItemProps {
   service: BarbershopService
   barbershop: Pick<Barbershop, "name">
@@ -127,6 +129,8 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
 
   const [loading, setLoading] = useState(false)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const barberSectionRef = useRef<HTMLDivElement | null>(null)
   const timeSectionRef = useRef<HTMLDivElement | null>(null)
@@ -328,10 +332,48 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
               >
                 <Button
                   variant="secondary"
-                  size="sm"
-                  onClick={handleBookingClick}
+                  className="relative overflow-hidden p-[1.1px]"
+                  disabled={isLoading}
+                  onClick={() => {
+                    setIsLoading(true)
+
+                    setTimeout(() => {
+                      handleBookingClick()
+                      setIsLoading(false)
+                    }, 1200)
+                  }}
                 >
-                  Reservar
+                  {isLoading ? (
+                    <>
+                      <div
+                        className="absolute inset-[-1000%] animate-[spin_6s_linear_infinite]"
+                        style={{
+                          background:
+                            "conic-gradient(from 90deg at 50% 50%, transparent 0%, #EAB308 20%, transparent 40%)",
+                        }}
+                      />
+
+                      <div className="z-10 flex min-w-[110px] items-center justify-center rounded-[calc(var(--radius)-1px)] bg-secondary px-4 py-2">
+                        <Loader2 className="h-4 w-4 animate-spin text-[#EAB308]" />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        className="absolute inset-[-1000%] animate-[spin_6s_linear_infinite]"
+                        style={{
+                          background:
+                            "conic-gradient(from 90deg at 50% 50%, transparent 0%, #EAB308 20%, transparent 40%)",
+                        }}
+                      />
+
+                      <div className="z-10 flex min-w-[85px] items-center justify-center rounded-[calc(var(--radius)-1px)] bg-secondary px-4 py-2">
+                        <span className="text-sm font-semibold uppercase tracking-tight">
+                          Reservar
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </Button>
 
                 <SheetContent className="flex h-[100dvh] w-full flex-col border-l border-zinc-800 bg-[#09090B] p-0 sm:max-w-md [&>button:hover]:scale-105 [&>button:hover]:border-red-500/40 [&>button:hover]:bg-red-500/10 [&>button:hover]:text-red-400 [&>button]:right-4 [&>button]:top-4 [&>button]:rounded-full [&>button]:border [&>button]:border-zinc-700 [&>button]:bg-zinc-900 [&>button]:p-1.5 [&>button]:text-white [&>button]:opacity-100 [&>button]:shadow-lg [&>button]:transition-all">

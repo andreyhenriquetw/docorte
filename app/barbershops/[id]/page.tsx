@@ -76,7 +76,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         </Sheet>
 
         {/* Conteúdo inferior */}
-        <div className="absolute bottom-8 left-4 z-20">
+        <div className="absolute bottom-8 left-5 z-20">
           {/* Badges */}
           <div className="mb-2 flex items-center gap-2">
             <div className="flex h-[28px] items-center gap-1 rounded-md px-2 shadow-lg backdrop-blur-md">
