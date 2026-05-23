@@ -79,7 +79,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         <div className="absolute bottom-8 left-4 z-20">
           {/* Badges */}
           <div className="mb-2 flex items-center gap-2">
-            <div className="flex items-center gap-1 rounded-md px-2 py-[5px] shadow-lg backdrop-blur-md">
+            <div className="flex h-[28px] items-center gap-1 rounded-md px-2 shadow-lg backdrop-blur-md">
               <StarIcon
                 className="fill-transparent stroke-[2.3] text-yellow-500"
                 size={11}
@@ -87,8 +87,8 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
               <span className="text-[12px] font-bold text-white">4.9</span>
             </div>
 
-            <div className="rounded-md px-2 py-[5px] backdrop-blur-md">
-              <span className="text-[12px] font-medium text-white">
+            <div className="flex h-[28px] items-center rounded-md px-2 backdrop-blur-md">
+              <span className="fill-transparent stroke-[2.3] text-[12px] font-bold text-white">
                 70 avaliações
               </span>
             </div>
