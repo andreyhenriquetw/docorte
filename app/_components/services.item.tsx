@@ -25,7 +25,6 @@ import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
 import { toZonedTime } from "date-fns-tz"
 import { updateUserProfile } from "../_actions/update-user-profile"
-
 import { Loader2 } from "lucide-react"
 
 interface ServiceItemProps {
@@ -129,8 +128,6 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
 
   const [loading, setLoading] = useState(false)
-
-  const [isLoading, setIsLoading] = useState(false)
 
   const barberSectionRef = useRef<HTMLDivElement | null>(null)
   const timeSectionRef = useRef<HTMLDivElement | null>(null)
@@ -332,47 +329,24 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
               >
                 <Button
                   variant="secondary"
-                  className="relative overflow-hidden p-[1.1px]"
-                  disabled={isLoading}
+                  size="sm"
+                  className="min-w-[90px]"
+                  disabled={loading}
                   onClick={() => {
-                    setIsLoading(true)
+                    setLoading(true)
 
                     setTimeout(() => {
                       handleBookingClick()
-                      setIsLoading(false)
+                      setLoading(false)
                     }, 1200)
                   }}
                 >
-                  {isLoading ? (
-                    <>
-                      <div
-                        className="absolute inset-[-1000%] animate-[spin_6s_linear_infinite]"
-                        style={{
-                          background:
-                            "conic-gradient(from 90deg at 50% 50%, transparent 0%, #EAB308 20%, transparent 40%)",
-                        }}
-                      />
-
-                      <div className="z-10 flex min-w-[110px] items-center justify-center rounded-[calc(var(--radius)-1px)] bg-secondary px-4 py-2">
-                        <Loader2 className="h-4 w-4 animate-spin text-[#EAB308]" />
-                      </div>
-                    </>
+                  {loading ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="h-4 w-4 animate-spin text-[#EAB308]" />
+                    </div>
                   ) : (
-                    <>
-                      <div
-                        className="absolute inset-[-1000%] animate-[spin_6s_linear_infinite]"
-                        style={{
-                          background:
-                            "conic-gradient(from 90deg at 50% 50%, transparent 0%, #EAB308 20%, transparent 40%)",
-                        }}
-                      />
-
-                      <div className="z-10 flex min-w-[85px] items-center justify-center rounded-[calc(var(--radius)-1px)] bg-secondary px-4 py-2">
-                        <span className="text-sm font-semibold uppercase tracking-tight">
-                          Reservar
-                        </span>
-                      </div>
-                    </>
+                    "Reservar"
                   )}
                 </Button>
 
