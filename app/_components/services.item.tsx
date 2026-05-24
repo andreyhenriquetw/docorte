@@ -338,7 +338,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                     setTimeout(() => {
                       handleBookingClick()
                       setLoading(false)
-                    }, 800)
+                    }, 400)
                   }}
                 >
                   {loading ? (
