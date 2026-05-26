@@ -3,7 +3,7 @@ import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa"
 
 const BarbershopActions = () => {
   return (
-    <div className="relative z-10 -mt-6 rounded-t-[30px] bg-background px-1 pt-5">
+    <div className="relative z-10 -mt-6 rounded-t-[30px] bg-background px-2 pt-5">
       {/* icones */}
       <div className="-mt-1 flex items-center justify-between gap-3">
         <button className="flex flex-1 flex-col items-center gap-2">
