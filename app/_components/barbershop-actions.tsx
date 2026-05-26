@@ -8,7 +8,7 @@ const BarbershopActions = () => {
       <div className="-mt-1 flex items-center justify-between gap-3">
         <button className="flex flex-1 flex-col items-center gap-2">
           <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
-            <FaWhatsapp size={22} className="text-green-500" />
+            <FaWhatsapp size={27} className="text-green-500" />
           </div>
 
           <span className="text-[12px] text-zinc-300">WhatsApp</span>
@@ -16,7 +16,7 @@ const BarbershopActions = () => {
 
         <button className="flex flex-1 flex-col items-center gap-2">
           <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
-            <FaInstagram size={22} className="text-pink-500" />
+            <FaInstagram size={27} className="text-pink-500" />
           </div>
 
           <span className="text-[12px] text-zinc-300">Instagram</span>
@@ -24,7 +24,7 @@ const BarbershopActions = () => {
 
         <button className="flex flex-1 flex-col items-center gap-2">
           <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
-            <FaFacebookF size={20} className="text-blue-500" />
+            <FaFacebookF size={24} className="text-blue-500" />
           </div>
 
           <span className="text-[12px] text-zinc-300">Facebook</span>
@@ -32,7 +32,7 @@ const BarbershopActions = () => {
 
         <button className="flex flex-1 flex-col items-center gap-2">
           <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
-            <MapPinIcon size={22} className="text-red-500" />
+            <MapPinIcon size={25} className="text-red-500" />
           </div>
 
           <span className="text-[12px] text-zinc-300">Localização</span>
