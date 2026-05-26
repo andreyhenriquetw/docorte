@@ -5,7 +5,7 @@ import SidebarSheet from "@/app/_components/sidebar-sheet"
 import { Button } from "@/app/_components/ui/button"
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet"
 import { db } from "@/app/_lib/prisma"
-import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react"
+import { ChevronLeftIcon, MenuIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -58,11 +58,12 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
   const horarioHoje = horarios.find((h) => h.dia.toLowerCase() === diaAtual)
 
-  const abertoAgora =
+  const abertoAgora = Boolean(
     horarioHoje?.abre &&
-    horarioHoje?.fecha &&
-    horaAtual >= horarioHoje.abre &&
-    horaAtual <= horarioHoje.fecha
+      horarioHoje?.fecha &&
+      horaAtual >= horarioHoje.abre &&
+      horaAtual <= horarioHoje.fecha,
+  )
 
   return (
     <div>
@@ -106,75 +107,11 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         </Sheet>
 
         {/* Conteúdo inferior */}
-        <div className="absolute bottom-8 left-5 z-20">
-          {/* STATUS */}
-          <div
-            className={`mb-2 inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur-md ${
-              abertoAgora
-                ? "border-emerald-500/20 bg-black/30"
-                : "border-red-500/20 bg-black/30"
-            }`}
-          >
-            {/* luz animada */}
-            <div className="relative flex h-2.5 w-2.5 items-center justify-center">
-              <div
-                className={`absolute h-2.5 w-2.5 animate-ping rounded-full opacity-75 ${
-                  abertoAgora ? "bg-emerald-400" : "bg-red-400"
-                }`}
-              />
-
-              <div
-                className={`relative h-2.5 w-2.5 rounded-full ${
-                  abertoAgora
-                    ? "bg-emerald-400 shadow-[0_0_10px_#4ade80]"
-                    : "bg-red-400 shadow-[0_0_10px_#f87171]"
-                }`}
-              />
-            </div>
-
-            <span
-              className={`text-[12px] font-semibold ${
-                abertoAgora ? "text-emerald-300" : "text-red-300"
-              }`}
-            >
-              {abertoAgora ? "Aberto agora" : "Fechado"}
-            </span>
-          </div>
-          {/* Badges */}
-          <div className="mb-2 flex items-center gap-2">
-            <div className="flex h-[28px] items-center gap-1 rounded-md px-2 shadow-lg backdrop-blur-md">
-              <StarIcon
-                className="fill-transparent stroke-[2.3] text-yellow-500"
-                size={11}
-              />
-              <span className="text-[12px] font-bold text-white">4.9</span>
-            </div>
-
-            <div className="flex h-[28px] items-center rounded-md px-2 backdrop-blur-md">
-              <span className="fill-transparent stroke-[2.3] text-[12px] font-bold text-white">
-                70 avaliações
-              </span>
-            </div>
-          </div>
-
-          {/* Nome */}
-          <h1 className="text-[23px] font-bold leading-tight tracking-tight text-white drop-shadow-lg">
-            {barbershop.name}
-          </h1>
-
-          {/* Endereço + Status */}
-          <div className="mt-2 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-1.5">
-              <MapPinIcon className="text-white/90" size={14} />
-
-              <p className="text-[13px] text-zinc-200">{barbershop.address}</p>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* INFO / ACTIONS / TITULO */}
-      <BarbershopActions />
+      {/* INFO / ACTIONS / TITULO */}
+      <BarbershopActions abertoAgora={abertoAgora} barbershop={barbershop} />
 
       {/* SERVIÇOS TABS */}
       <BarbershopTabs
