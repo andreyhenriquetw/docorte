@@ -1,3 +1,4 @@
+import BarbershopTabs from "@/app/_components/BarbershopTabs"
 import ServiceItem from "@/app/_components/services.item"
 import SidebarSheet from "@/app/_components/sidebar-sheet"
 import { Button } from "@/app/_components/ui/button"
@@ -33,12 +34,12 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
   const horarios = [
     { dia: "Domingo", abre: null, fecha: null },
-    { dia: "Segunda-feira", abre: "09:00", fecha: "18:00" },
-    { dia: "Terça-feira", abre: "09:00", fecha: "18:00" },
-    { dia: "Quarta-feira", abre: "09:00", fecha: "18:00" },
+    { dia: "Segunda-feira", abre: "09:00", fecha: "20:00" },
+    { dia: "Terça-feira", abre: "09:00", fecha: "20:00" },
+    { dia: "Quarta-feira", abre: "09:00", fecha: "20:00" },
     { dia: "Quinta-feira", abre: "09:00", fecha: "20:00" },
     { dia: "Sexta-feira", abre: "09:00", fecha: "20:00" },
-    { dia: "Sábado", abre: "10:00", fecha: "16:00" },
+    { dia: "Sábado", abre: "10:00", fecha: "20:00" },
   ]
 
   const agora = new Date()
@@ -108,7 +109,6 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         {/* Conteúdo inferior */}
         <div className="absolute bottom-8 left-5 z-20">
           {/* STATUS */}
-          {/* STATUS */}
           <div
             className={`mb-2 inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur-md ${
               abertoAgora
@@ -163,7 +163,6 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
             {barbershop.name}
           </h1>
 
-          {/* Endereço */}
           {/* Endereço + Status */}
           <div className="mt-2 flex items-center justify-between gap-3">
             <div className="flex items-center gap-1.5">
@@ -175,8 +174,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         </div>
       </div>
 
-      {/* TITULO */}
-      {/* INFO / ACTIONS */}
+      {/* INFO / ACTIONS / TITULO */}
       <div className="relative z-10 -mt-6 rounded-t-[32px] bg-background px-5 pt-5">
         {/* icones */}
         <div className="-mt-1 flex items-center justify-between gap-3">
@@ -214,49 +212,82 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         </div>
 
         {/* menu fixo */}
-        <div className="sticky top-0 z-30 mt-4 border-b border-zinc-800 bg-background">
-          <div className="hide-scrollbar flex items-center gap-6 overflow-x-auto py-4">
-            <button className="relative whitespace-nowrap text-sm font-semibold text-white">
-              Serviços
-              <div className="absolute -bottom-4 left-0 h-[3px] w-full rounded-full bg-primary" />
-            </button>
-
-            <button className="whitespace-nowrap text-sm text-zinc-400">
-              Combos
-            </button>
-
-            <button className="whitespace-nowrap text-sm text-zinc-400">
-              Galeria
-            </button>
-
-            <button className="whitespace-nowrap text-sm text-zinc-400">
-              Especialistas
-            </button>
-
-            <button className="whitespace-nowrap text-sm text-zinc-400">
-              Avaliações
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* SERVIÇOS */}
-      <div className="space-y-3 border-b border-solid p-5">
-        <h2 className="text-xs font-bold uppercase text-gray-400">Serviços</h2>
+      <BarbershopTabs
+        services={
+          <div className="-mt-9 space-y-3 border-b border-solid p-5">
+            <h2 className="text-xs font-bold uppercase text-gray-400">
+              Serviços
+            </h2>
 
-        <div className="space-y-3">
-          {barbershop.services.map((service) => (
-            <ServiceItem
-              key={service.id}
-              service={JSON.parse(JSON.stringify(service))}
-              barbershop={{
-                name: barbershop.name,
-              }}
-              barbers={JSON.parse(JSON.stringify(barbershop.barbers))} // ← ADICIONADO
-            />
-          ))}
-        </div>
-      </div>
+            <div className="space-y-3">
+              {barbershop.services.map((service) => (
+                <ServiceItem
+                  key={service.id}
+                  service={JSON.parse(JSON.stringify(service))}
+                  barbershop={{
+                    name: barbershop.name,
+                  }}
+                  barbers={JSON.parse(JSON.stringify(barbershop.barbers))}
+                />
+              ))}
+            </div>
+          </div>
+        }
+        combos={
+          <div className="-mt-9 p-5">
+            <h2 className="text-xs font-bold uppercase text-gray-400">
+              Combos
+            </h2>
+
+            <div className="mt-4 rounded-2xl border border-zinc-800 bg-zinc-900 p-6 text-center text-zinc-400">
+              Nenhum combo disponível.
+            </div>
+          </div>
+        }
+        gallery={
+          <div className="-mt-9 p-5">
+            <h2 className="text-xs font-bold uppercase text-gray-400">
+              Galeria
+            </h2>
+
+            <div className="mt-4 rounded-2xl border border-zinc-800 bg-zinc-900 p-6 text-center text-zinc-400">
+              Nenhuma imagem disponível.
+            </div>
+          </div>
+        }
+        specialists={
+          <div className="-mt-9 p-5">
+            <h2 className="text-xs font-bold uppercase text-gray-400">
+              Especialistas
+            </h2>
+
+            <div className="mt-4 space-y-3">
+              {barbershop.barbers.map((barber) => (
+                <div
+                  key={barber.id}
+                  className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4"
+                >
+                  <p className="font-semibold text-white">{barber.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+        reviews={
+          <div className="-mt-9 p-5">
+            <h2 className="text-xs font-bold uppercase text-gray-400">
+              Avaliações
+            </h2>
+
+            <div className="mt-4 rounded-2xl border border-zinc-800 bg-zinc-900 p-6 text-center text-zinc-400">
+              Nenhuma avaliação disponível.
+            </div>
+          </div>
+        }
+      />
 
       {/* HORÁRIO DE FUNCIONAMENTO */}
       {/* Título */}
