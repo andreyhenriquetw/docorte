@@ -1,4 +1,3 @@
-import PhoneItem from "@/app/_components/phone-item"
 import ServiceItem from "@/app/_components/services.item"
 import SidebarSheet from "@/app/_components/sidebar-sheet"
 import { Button } from "@/app/_components/ui/button"
@@ -9,8 +8,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { UsersIcon, AwardIcon } from "lucide-react"
-import { AnimatedCounter } from "@/app/_components/AnimatedCounter"
+import { FaWhatsapp, FaInstagram, FaFacebookF } from "react-icons/fa"
 
 interface BarbershopPageProps {
   params: {
@@ -33,9 +31,41 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
     return notFound()
   }
 
+  const horarios = [
+    { dia: "Domingo", abre: null, fecha: null },
+    { dia: "Segunda-feira", abre: "09:00", fecha: "18:00" },
+    { dia: "Terça-feira", abre: "09:00", fecha: "18:00" },
+    { dia: "Quarta-feira", abre: "09:00", fecha: "18:00" },
+    { dia: "Quinta-feira", abre: "09:00", fecha: "20:00" },
+    { dia: "Sexta-feira", abre: "09:00", fecha: "20:00" },
+    { dia: "Sábado", abre: "10:00", fecha: "16:00" },
+  ]
+
+  const agora = new Date()
+
+  // Brasil (evita bug de timezone do servidor)
+  const diaAtual = agora.toLocaleDateString("pt-BR", {
+    weekday: "long",
+    timeZone: "America/Sao_Paulo",
+  })
+
+  const horaAtual = agora.toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "America/Sao_Paulo",
+  })
+
+  const horarioHoje = horarios.find((h) => h.dia.toLowerCase() === diaAtual)
+
+  const abertoAgora =
+    horarioHoje?.abre &&
+    horarioHoje?.fecha &&
+    horaAtual >= horarioHoje.abre &&
+    horaAtual <= horarioHoje.fecha
+
   return (
     <div>
-      {/* IMAGEM */}
       {/* IMAGEM */}
       <div className="relative h-[300px] w-full overflow-hidden">
         <Image
@@ -77,6 +107,40 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
         {/* Conteúdo inferior */}
         <div className="absolute bottom-8 left-5 z-20">
+          {/* STATUS */}
+          {/* STATUS */}
+          <div
+            className={`mb-2 inline-flex items-center gap-2 rounded-full border px-3 py-1 backdrop-blur-md ${
+              abertoAgora
+                ? "border-emerald-500/20 bg-black/30"
+                : "border-red-500/20 bg-black/30"
+            }`}
+          >
+            {/* luz animada */}
+            <div className="relative flex h-2.5 w-2.5 items-center justify-center">
+              <div
+                className={`absolute h-2.5 w-2.5 animate-ping rounded-full opacity-75 ${
+                  abertoAgora ? "bg-emerald-400" : "bg-red-400"
+                }`}
+              />
+
+              <div
+                className={`relative h-2.5 w-2.5 rounded-full ${
+                  abertoAgora
+                    ? "bg-emerald-400 shadow-[0_0_10px_#4ade80]"
+                    : "bg-red-400 shadow-[0_0_10px_#f87171]"
+                }`}
+              />
+            </div>
+
+            <span
+              className={`text-[12px] font-semibold ${
+                abertoAgora ? "text-emerald-300" : "text-red-300"
+              }`}
+            >
+              {abertoAgora ? "Aberto agora" : "Fechado"}
+            </span>
+          </div>
           {/* Badges */}
           <div className="mb-2 flex items-center gap-2">
             <div className="flex h-[28px] items-center gap-1 rounded-md px-2 shadow-lg backdrop-blur-md">
@@ -100,44 +164,78 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
           </h1>
 
           {/* Endereço */}
-          <div className="mt-1.5 flex items-center gap-1.5">
-            <MapPinIcon className="text-white/90" size={14} />
-            <p className="text-[13px] text-zinc-200">{barbershop.address}</p>
+          {/* Endereço + Status */}
+          <div className="mt-2 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-1.5">
+              <MapPinIcon className="text-white/90" size={14} />
+
+              <p className="text-[13px] text-zinc-200">{barbershop.address}</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* TITULO */}
-      <div className="relative z-10 -mt-6 rounded-t-[30px] border-b border-solid bg-background p-5">
-        <div className="grid grid-cols-3 gap-3">
-          {/* Avaliação */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-yellow-500/15 bg-gradient-to-br from-yellow-500/20 via-yellow-500/10 to-transparent p-3.5 shadow-sm backdrop-blur-md">
-            <StarIcon
-              className="mb-1.5 fill-transparent stroke-[2.2] text-yellow-400"
-              size={17}
-            />
-            <span className="text-[22px] font-bold leading-none text-white">
-              <AnimatedCounter value={4.9} decimals={1} />
-            </span>
-            <span className="mt-1 text-[13px] text-zinc-300">Avaliação</span>
-          </div>
+      {/* INFO / ACTIONS */}
+      <div className="relative z-10 -mt-6 rounded-t-[32px] bg-background px-5 pt-5">
+        {/* icones */}
+        <div className="-mt-1 flex items-center justify-between gap-3">
+          <button className="flex flex-1 flex-col items-center gap-2">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
+              <FaWhatsapp size={22} className="text-green-500" />
+            </div>
 
-          {/* Clientes */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-blue-500/15 bg-gradient-to-br from-blue-500/20 via-blue-500/10 to-transparent p-3.5 shadow-sm backdrop-blur-md">
-            <UsersIcon className="mb-1.5 text-blue-400" size={17} />
-            <span className="text-[22px] font-bold leading-none text-white">
-              <AnimatedCounter value={70} />
-            </span>
-            <span className="mt-1 text-[13px] text-zinc-300">Clientes</span>
-          </div>
+            <span className="text-[12px] text-zinc-300">WhatsApp</span>
+          </button>
 
-          {/* Anos */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-emerald-500/15 bg-gradient-to-br from-emerald-500/20 via-emerald-500/10 to-transparent p-3.5 shadow-sm backdrop-blur-md">
-            <AwardIcon className="mb-1.5 text-emerald-400" size={17} />
-            <span className="text-[22px] font-bold leading-none text-white">
-              <AnimatedCounter value={5} />+
-            </span>
-            <span className="mt-1 text-[13px] text-zinc-300">Anos</span>
+          <button className="flex flex-1 flex-col items-center gap-2">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
+              <FaInstagram size={22} className="text-pink-500" />
+            </div>
+
+            <span className="text-[12px] text-zinc-300">Instagram</span>
+          </button>
+
+          <button className="flex flex-1 flex-col items-center gap-2">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
+              <FaFacebookF size={20} className="text-blue-500" />
+            </div>
+
+            <span className="text-[12px] text-zinc-300">Facebook</span>
+          </button>
+
+          <button className="flex flex-1 flex-col items-center gap-2">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
+              <MapPinIcon size={22} className="text-red-500" />
+            </div>
+
+            <span className="text-[12px] text-zinc-300">Localização</span>
+          </button>
+        </div>
+
+        {/* menu fixo */}
+        <div className="sticky top-0 z-30 mt-4 border-b border-zinc-800 bg-background">
+          <div className="hide-scrollbar flex items-center gap-6 overflow-x-auto py-4">
+            <button className="relative whitespace-nowrap text-sm font-semibold text-white">
+              Serviços
+              <div className="absolute -bottom-4 left-0 h-[3px] w-full rounded-full bg-primary" />
+            </button>
+
+            <button className="whitespace-nowrap text-sm text-zinc-400">
+              Combos
+            </button>
+
+            <button className="whitespace-nowrap text-sm text-zinc-400">
+              Galeria
+            </button>
+
+            <button className="whitespace-nowrap text-sm text-zinc-400">
+              Especialistas
+            </button>
+
+            <button className="whitespace-nowrap text-sm text-zinc-400">
+              Avaliações
+            </button>
           </div>
         </div>
       </div>
@@ -160,11 +258,78 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         </div>
       </div>
 
-      {/* CONTATO */}
-      <div className="space-y-3 p-5">
-        {barbershop.phones.map((phone) => (
-          <PhoneItem key={phone} phone={phone} />
-        ))}
+      {/* HORÁRIO DE FUNCIONAMENTO */}
+      {/* Título */}
+      <div className="mt-7 px-5 pb-6">
+        <div className="mb-4 flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+
+          <h2 className="text-[15px] font-semibold text-white">
+            Horário de funcionamento
+          </h2>
+        </div>
+        <div className="rounded-[24px] border border-zinc-800 bg-zinc-950/70 p-4 shadow-lg backdrop-blur-md">
+          {/* Dias */}
+          <div className="space-y-2">
+            {horarios.map((item) => {
+              const hoje = item.dia.toLowerCase() === diaAtual
+
+              return (
+                <div
+                  key={item.dia}
+                  className={`flex items-center justify-between rounded-xl border px-4 py-3 transition-all ${
+                    hoje
+                      ? "border-zinc-600 bg-zinc-800/70 shadow-md"
+                      : "border-zinc-900 bg-zinc-900/60"
+                  }`}
+                >
+                  {/* esquerda */}
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`h-2 w-2 rounded-full ${
+                        item.abre ? "bg-lime-400" : "bg-red-400"
+                      }`}
+                    />
+
+                    <span className="text-[14px] font-medium text-amber-400">
+                      {item.dia}
+                    </span>
+
+                    {hoje && (
+                      <span className="rounded-md bg-zinc-600 px-2 py-[2px] text-[10px] font-semibold text-white">
+                        Hoje
+                      </span>
+                    )}
+                  </div>
+
+                  {/* direita */}
+                  <span
+                    className={`text-[14px] font-semibold ${
+                      item.abre ? "text-amber-400" : "text-red-400"
+                    }`}
+                  >
+                    {item.abre ? `${item.abre} - ${item.fecha}` : "Fechado"}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </div>
   )
