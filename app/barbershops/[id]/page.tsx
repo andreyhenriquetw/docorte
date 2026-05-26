@@ -1,3 +1,4 @@
+import BarbershopActions from "@/app/_components/barbershop-actions"
 import BarbershopTabs from "@/app/_components/BarbershopTabs"
 import ServiceItem from "@/app/_components/services.item"
 import SidebarSheet from "@/app/_components/sidebar-sheet"
@@ -8,8 +9,6 @@ import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-
-import { FaWhatsapp, FaInstagram, FaFacebookF } from "react-icons/fa"
 
 interface BarbershopPageProps {
   params: {
@@ -175,46 +174,9 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
       </div>
 
       {/* INFO / ACTIONS / TITULO */}
-      <div className="relative z-10 -mt-6 rounded-t-[32px] bg-background px-5 pt-5">
-        {/* icones */}
-        <div className="-mt-1 flex items-center justify-between gap-3">
-          <button className="flex flex-1 flex-col items-center gap-2">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
-              <FaWhatsapp size={22} className="text-green-500" />
-            </div>
+      <BarbershopActions />
 
-            <span className="text-[12px] text-zinc-300">WhatsApp</span>
-          </button>
-
-          <button className="flex flex-1 flex-col items-center gap-2">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
-              <FaInstagram size={22} className="text-pink-500" />
-            </div>
-
-            <span className="text-[12px] text-zinc-300">Instagram</span>
-          </button>
-
-          <button className="flex flex-1 flex-col items-center gap-2">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
-              <FaFacebookF size={20} className="text-blue-500" />
-            </div>
-
-            <span className="text-[12px] text-zinc-300">Facebook</span>
-          </button>
-
-          <button className="flex flex-1 flex-col items-center gap-2">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
-              <MapPinIcon size={22} className="text-red-500" />
-            </div>
-
-            <span className="text-[12px] text-zinc-300">Localização</span>
-          </button>
-        </div>
-
-        {/* menu fixo */}
-      </div>
-
-      {/* SERVIÇOS */}
+      {/* SERVIÇOS TABS */}
       <BarbershopTabs
         services={
           <div className="-mt-9 space-y-3 border-b border-solid p-5">
