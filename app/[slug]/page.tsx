@@ -68,7 +68,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
   return (
     <div>
       {/* IMAGEM */}
-      <div className="relative h-[300px] w-full overflow-hidden">
+      <div className="relative h-[260px] w-full overflow-hidden">
         <Image
           alt={barbershop.name}
           src={barbershop.imageUrl}
@@ -109,7 +109,6 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         {/* Conteúdo inferior */}
       </div>
 
-      {/* INFO / ACTIONS / TITULO */}
       {/* INFO / ACTIONS / TITULO */}
       <BarbershopActions abertoAgora={abertoAgora} barbershop={barbershop} />
 

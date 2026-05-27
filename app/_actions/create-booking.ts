@@ -49,7 +49,7 @@ export const createBooking = async (params: CreateBookingParams) => {
   // ENVIA DADOS PARA O N8N
   try {
     await fetch(
-      "https://dial-custom-thee-parental.trycloudflare.com/webhook/novo-agendamento",
+      "https://doll-washington-minimal-rochester.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
