@@ -77,7 +77,7 @@ const BarbershopItem = ({ barbershop }: BarberShopItemProps) => {
               </div>
             ) : (
               <Link
-                href={`/barbershops/${barbershop.id}`}
+                href={`/${barbershop.slug}`}
                 className="relative flex h-full w-full items-center justify-center"
               >
                 <div

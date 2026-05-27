@@ -16,9 +16,23 @@ async function seedDatabase() {
       {
         name: "Corte de Cabelo",
         description: "Estilo personalizado com as últimas tendências.",
-        price: 15.0,
+        price: 25.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWLnzZk0p9UQfGIRqvtH0Z4B3xeXr618hwn2dD",
+      },
+      {
+        name: "Corte + Barba",
+        description: "Combo para visual renovado, bem definido.",
+        price: 30.0,
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWvADDaSiCzS5Ldp6gfYOMwD3cGXmI97juiKNy",
+      },
+      {
+        name: "Corte + Barba + Sobrancelha",
+        description: "Combo completo para um visual impecável.",
+        price: 35.0,
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWrqmwXI1ulNCWtEmGLOXUwr3MDPQYIv1a8hT0",
       },
       {
         name: "Barba",
@@ -62,20 +76,7 @@ async function seedDatabase() {
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCW5DGNvEAi1HmlaNWvpAqfuyJLIeTPKd03R4tG",
       },
-      {
-        name: "Corte + Barba",
-        description: "Combo para visual renovado, bem definido.",
-        price: 30.0,
-        imageUrl:
-          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWvADDaSiCzS5Ldp6gfYOMwD3cGXmI97juiKNy",
-      },
-      {
-        name: "Corte + Barba + Sobrancelha",
-        description: "Combo completo para um visual impecável.",
-        price: 35.0,
-        imageUrl:
-          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWrqmwXI1ulNCWtEmGLOXUwr3MDPQYIv1a8hT0",
-      },
+
       {
         name: "Luzes + Corte",
         description: "Realce o visual com luzes e corte moderno.",
@@ -102,9 +103,10 @@ async function seedDatabase() {
     const barbershop = await prisma.barbershop.create({
       data: {
         name: creativeNames[0],
+        slug: "agende-aqui",
         address: addresses[0],
         imageUrl: images[0],
-        phones: ["+55 93 999903-4526"],
+        phones: ["+55 35 8815-0081"],
         description:
           "Barbearia premium especializada em cortes modernos, barba e estilo.",
       },
@@ -116,22 +118,6 @@ async function seedDatabase() {
         data: {
           name: "KN",
           imageUrl: "/barber1.jpg",
-          barbershopId: barbershop.id,
-        },
-      }),
-
-      prisma.barber.create({
-        data: {
-          name: "Andrey",
-          imageUrl: "/barber2.jpg",
-          barbershopId: barbershop.id,
-        },
-      }),
-
-      prisma.barber.create({
-        data: {
-          name: "Lucas",
-          imageUrl: "/barber3.jpg",
           barbershopId: barbershop.id,
         },
       }),
