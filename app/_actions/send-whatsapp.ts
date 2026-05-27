@@ -8,7 +8,7 @@ export const sendWhatsappMessage = async ({
   text: string
 }) => {
   try {
-    await fetch("http://localhost:8080/message/sendText/barber", {
+    await fetch("http://host.docker.internal:8080/message/sendText/barber", {
       method: "POST",
 
       headers: {
