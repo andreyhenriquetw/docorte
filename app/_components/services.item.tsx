@@ -26,7 +26,7 @@ import { useRouter } from "next/navigation"
 import { toZonedTime } from "date-fns-tz"
 import { updateUserProfile } from "../_actions/update-user-profile"
 import { Loader2 } from "lucide-react"
-
+import { FaWhatsapp } from "react-icons/fa"
 interface ServiceItemProps {
   service: BarbershopService
   barbershop: Pick<Barbershop, "name">
@@ -119,9 +119,15 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
   const [selectedDay, setSelectedDay] = useState<Date>()
 
-  const [selectedBarber, setSelectedBarber] = useState<string>()
+  const [selectedBarber, setSelectedBarber] = useState<string>(barbers[0]!.id)
 
   const [selectedTime, setSelectedTime] = useState<string>()
+
+  const [paymentMethod, setPaymentMethod] = useState<"pix" | "money" | null>(
+    null,
+  )
+
+  const [cashAmount, setCashAmount] = useState("")
 
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
 
@@ -132,6 +138,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   const barberSectionRef = useRef<HTMLDivElement | null>(null)
   const timeSectionRef = useRef<HTMLDivElement | null>(null)
   const confirmSectionRef = useRef<HTMLDivElement | null>(null)
+  const paymentSectionRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const fetch = async () => {
@@ -171,7 +178,18 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   }, [selectedBarber])
 
   useEffect(() => {
-    if (selectedTime && confirmSectionRef.current) {
+    if (selectedTime && paymentSectionRef.current) {
+      setTimeout(() => {
+        paymentSectionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+      }, 250)
+    }
+  }, [selectedTime])
+
+  useEffect(() => {
+    if (paymentMethod && confirmSectionRef.current) {
       setTimeout(() => {
         confirmSectionRef.current?.scrollIntoView({
           behavior: "smooth",
@@ -179,7 +197,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
         })
       }, 250)
     }
-  }, [selectedTime])
+  }, [paymentMethod])
 
   useEffect(() => {
     if (data?.user) {
@@ -221,7 +239,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   const handleBookingSheetOpenChange = () => {
     setSelectedDay(undefined)
     setSelectedTime(undefined)
-    setSelectedBarber(undefined)
+    setSelectedBarber(barbers[0]!.id)
     setDayBookings([])
     setBookingSheetIsOpen(false)
   }
@@ -245,6 +263,10 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
         serviceId: service.id,
         barberId: selectedBarber,
         date: selectedDate,
+
+        paymentMethod: paymentMethod as "pix" | "money",
+
+        cashAmount: paymentMethod === "money" ? cashAmount : undefined,
       })
 
       handleBookingSheetOpenChange()
@@ -285,6 +307,13 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
       toast.error("Erro ao salvar perfil")
     }
   }
+
+  const servicePrice = Number(service.price)
+
+  const change =
+    paymentMethod === "money" && cashAmount
+      ? Number(cashAmount) - servicePrice
+      : 0
 
   const timeList = useMemo(() => {
     if (!selectedDay) return []
@@ -413,7 +442,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                     </div>
 
                     {/* barbeiros */}
-                    {selectedDay && (
+                    {false && selectedDay && (
                       <div
                         ref={barberSectionRef}
                         className="border-b border-zinc-800 px-3 py-5"
@@ -510,8 +539,91 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                       </div>
                     )}
 
-                    {/* resumo */}
+                    {/* PAGAMENTO */}
+
                     {selectedDate && (
+                      <div
+                        ref={paymentSectionRef}
+                        className="border-b border-zinc-800 px-3 py-5"
+                      >
+                        <div className="mb-4">
+                          <h2 className="text-lg font-bold text-white">
+                            Forma de pagamento
+                          </h2>
+
+                          <p className="text-sm text-zinc-400">
+                            Escolha como deseja pagar
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setPaymentMethod("pix")}
+                            className={`rounded-3xl border p-4 transition-all ${
+                              paymentMethod === "pix"
+                                ? "border-green-500 bg-green-500/10"
+                                : "border-zinc-800 bg-zinc-900"
+                            }`}
+                          >
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <span className="text-3xl">💳</span>
+
+                              <span className="font-semibold text-white">
+                                PIX
+                              </span>
+                            </div>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setPaymentMethod("money")}
+                            className={`rounded-3xl border p-4 transition-all ${
+                              paymentMethod === "money"
+                                ? "border-yellow-500 bg-yellow-500/10"
+                                : "border-zinc-800 bg-zinc-900"
+                            }`}
+                          >
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <span className="text-3xl">💵</span>
+
+                              <span className="font-semibold text-white">
+                                Dinheiro
+                              </span>
+                            </div>
+                          </button>
+                        </div>
+
+                        {paymentMethod === "money" && (
+                          <div className="mt-4">
+                            <label className="mb-2 block text-sm text-zinc-300">
+                              Valor que o cliente vai pagar
+                            </label>
+
+                            <input
+                              type="number"
+                              placeholder="Ex: 50"
+                              value={cashAmount}
+                              onChange={(e) => setCashAmount(e.target.value)}
+                              className="h-12 w-full rounded-2xl border border-zinc-800 bg-zinc-900 px-4 text-white outline-none focus:border-yellow-500"
+                            />
+
+                            {Number(cashAmount) > servicePrice && (
+                              <p className="mt-2 text-sm text-green-400">
+                                Troco:{" "}
+                                {Intl.NumberFormat("pt-BR", {
+                                  style: "currency",
+                                  currency: "BRL",
+                                }).format(change)}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* resumo */}
+                    {selectedDate && paymentMethod && (
                       <div ref={confirmSectionRef} className="px-3 py-5">
                         <div className="mb-4">
                           <h2 className="text-lg font-bold text-white">
@@ -529,6 +641,8 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                               barbershop={barbershop}
                               service={service}
                               selectedDate={selectedDate}
+                              paymentMethod={paymentMethod}
+                              cashAmount={cashAmount}
                             />
                           </div>
                         </div>
@@ -543,6 +657,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                         !selectedDay ||
                         !selectedTime ||
                         !selectedBarber ||
+                        !paymentMethod ||
                         loading
                       }
                       className="h-14 w-full rounded-2xl bg-yellow-500 text-base font-bold text-black hover:bg-yellow-400"
@@ -574,14 +689,21 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
         </DialogContent>
       </Dialog>
       <Dialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen}>
-        <DialogContent className="overflow-hidden rounded-[32px] border border-zinc-800 bg-[#09090B] p-0 text-white sm:max-w-[420px]">
+        <DialogContent className="top-[32%] translate-y-[-42%] overflow-hidden rounded-[32px] border border-zinc-800 bg-[#09090B] p-0 text-white sm:top-[50%] sm:max-w-[420px] sm:translate-y-[-50%]">
           {/* topo premium */}
           <div className="relative overflow-hidden border-b border-zinc-800 bg-gradient-to-b from-zinc-900 to-[#09090B] px-5 pb-5 pt-7">
             <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-green-500/10 blur-3xl" />
 
             <div className="relative z-10">
-              <h2 className="text-[22px] font-bold leading-tight tracking-tight">
-                Complete seu cadastro
+              <h2 className="flex items-center gap-2 text-[22px] font-bold leading-tight tracking-tight">
+                <span>Complete seu cadastro</span>
+
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/10 ring-1 ring-green-500/20">
+                  <FaWhatsapp
+                    className="text-green-500 drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]"
+                    size={20}
+                  />
+                </div>
               </h2>
 
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">
@@ -593,23 +715,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
           {/* formulário */}
           <div className="space-y-3 px-5 py-5">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300">
-                Seu nome
-              </label>
-
-              <input
-                type="text"
-                placeholder="Seu nome"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                autoComplete="name"
-                spellCheck={false}
-                className="h-14 w-full rounded-2xl border border-zinc-800 bg-zinc-900/80 px-4 text-white caret-green-500 outline-none transition-all selection:bg-transparent selection:text-white focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
-              />
-            </div>
-
-            <div className="space-y-2">
+            <div className="-mt-5 space-y-2">
               <label className="text-sm font-medium text-zinc-300">
                 WhatsApp
               </label>
@@ -621,7 +727,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
                 <input
                   type="tel"
-                  placeholder="93 99999-9999"
+                  placeholder="35 99199-9999"
                   value={phone}
                   onChange={(e) =>
                     setPhone(e.target.value.replace(/\D/g, "").slice(0, 11))

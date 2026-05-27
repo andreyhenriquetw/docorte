@@ -52,9 +52,9 @@ const BarbershopActions = ({
 
       {/* Badges */}
       <div className="mb-2 flex items-center gap-2">
-        <div className="flex h-[28px] items-center gap-1 rounded-md px-2 shadow-lg backdrop-blur-md">
+        <div className="flex h-[28px] items-center gap-1 rounded-md shadow-lg backdrop-blur-md">
           <StarIcon
-            size={13}
+            size={14}
             className="relative top-[-1px] fill-yellow-500/30 stroke-[2.5] text-yellow-500"
           />
 
@@ -63,7 +63,7 @@ const BarbershopActions = ({
           </span>
         </div>
 
-        <div className="flex h-[28px] items-center rounded-md px-2 backdrop-blur-md">
+        <div className="flex h-[28px] items-center rounded-md backdrop-blur-md">
           <span className="text-[12px] font-bold leading-none text-white">
             70 avaliações
           </span>
@@ -71,13 +71,13 @@ const BarbershopActions = ({
       </div>
 
       {/* Nome */}
-      <h1 className="text-[23px] font-bold leading-tight tracking-tight text-white">
+      <h1 className="-mt-2 text-[23px] font-bold leading-tight tracking-tight text-white">
         {barbershop.name}
       </h1>
 
       {/* Endereço */}
-      <div className="mt-2 flex items-center gap-1.5">
-        <MapPinIcon className="text-white/90" size={14} />
+      <div className="mt-1 flex items-center gap-1.5">
+        <MapPinIcon className="text-white/90" size={15} />
 
         <p className="text-[13px] text-zinc-200">{barbershop.address}</p>
       </div>

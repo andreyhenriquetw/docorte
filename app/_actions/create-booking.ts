@@ -10,6 +10,10 @@ interface CreateBookingParams {
   serviceId: string
   barberId: string
   date: Date
+
+  paymentMethod: "pix" | "money"
+
+  cashAmount?: string
 }
 
 export const createBooking = async (params: CreateBookingParams) => {
@@ -75,6 +79,19 @@ export const createBooking = async (params: CreateBookingParams) => {
         barbershop: {
           id: booking.service.barbershop.id,
           name: booking.service.barbershop.name,
+        },
+
+        payment: {
+          method: params.paymentMethod,
+
+          servicePrice: Number(booking.service.price),
+
+          cashAmount: params.cashAmount || null,
+
+          change:
+            params.paymentMethod === "money" && params.cashAmount
+              ? Number(params.cashAmount) - Number(booking.service.price)
+              : null,
         },
 
         date: booking.date,
