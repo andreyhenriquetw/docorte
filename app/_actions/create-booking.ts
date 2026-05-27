@@ -49,7 +49,7 @@ export const createBooking = async (params: CreateBookingParams) => {
   // ENVIA DADOS PARA O N8N
   try {
     await fetch(
-      "https://wake-broad-extras-upper.trycloudflare.com/webhook/novo-agendamento",
+      "https://chairman-later-photographic-builder.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
