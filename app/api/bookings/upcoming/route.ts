@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const now = new Date()
 
-    const thirtyMinutesLater = new Date(now.getTime() + 60 * 60 * 1000)
+    const thirtyMinutesLater = new Date(now.getTime() + 30 * 60 * 1000)
 
     const bookings = await db.booking.findMany({
       where: {
@@ -22,25 +22,13 @@ export async function GET() {
       include: {
         user: true,
 
-        service: {
-          include: {
-            barbershop: true,
-          },
-        },
+        service: true,
 
         barber: true,
       },
     })
 
-    const filteredBookings = bookings.filter((booking) => {
-      const diff = booking.date.getTime() - now.getTime()
-
-      const minutes = diff / 1000 / 60
-
-      return minutes >= 0 && minutes <= 30
-    })
-
-    return NextResponse.json(filteredBookings)
+    return NextResponse.json(bookings)
   } catch (error) {
     console.error(error)
 
