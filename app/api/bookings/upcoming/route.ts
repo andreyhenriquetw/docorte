@@ -8,15 +8,12 @@ export async function GET() {
     const bookings = await db.booking.findMany({
       where: {
         reminderSent: false,
-
         status: "CONFIRMED",
       },
 
       include: {
         user: true,
-
         service: true,
-
         barber: true,
       },
     })
