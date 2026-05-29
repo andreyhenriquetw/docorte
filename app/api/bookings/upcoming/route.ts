@@ -37,7 +37,7 @@ export async function GET() {
 
       const minutes = diff / 1000 / 60
 
-      return minutes >= 29 && minutes <= 30
+      return minutes >= 0 && minutes <= 999
     })
 
     return NextResponse.json(filteredBookings)
