@@ -5,6 +5,8 @@ export async function GET() {
   try {
     const now = new Date()
 
+    console.log("AGORA:", now.toISOString())
+
     const bookings = await db.booking.findMany({
       where: {
         reminderSent: false,
@@ -18,12 +20,28 @@ export async function GET() {
       },
     })
 
+    bookings.forEach((booking) => {
+      const diff = booking.date.getTime() - now.getTime()
+
+      const minutes = diff / 1000 / 60
+
+      console.log(
+        "BOOKING:",
+        booking.id,
+        "DATA:",
+        booking.date.toISOString(),
+        "MINUTOS:",
+        minutes,
+      )
+    })
+
     const filteredBookings = bookings.filter((booking) => {
       const diff = booking.date.getTime() - now.getTime()
 
       const minutes = diff / 1000 / 60
 
-      return minutes >= 29 && minutes <= 30
+      // TEMPORÁRIO PARA TESTE
+      return minutes >= 0 && minutes <= 60
     })
 
     return NextResponse.json(filteredBookings)
