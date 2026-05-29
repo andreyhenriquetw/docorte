@@ -49,7 +49,7 @@ export const createBooking = async (params: CreateBookingParams) => {
   // ENVIA DADOS PARA O N8N
   try {
     await fetch(
-      "https://parents-policies-glow-ict.trycloudflare.com/webhook/novo-agendamento",
+      "https://found-crossword-sustainable-detected.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
