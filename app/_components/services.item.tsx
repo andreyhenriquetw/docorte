@@ -51,7 +51,7 @@ const getOpeningHours = (date: Date) => {
   }
 
   if (day === 6 || day === 0) {
-    return { open: 9, close: 23 }
+    return { open: 9, close: 24 }
   }
 
   return null
