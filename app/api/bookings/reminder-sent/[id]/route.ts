@@ -38,15 +38,6 @@ export async function GET() {
       const bookingMinute = bookingDate.getMinutes()
 
       console.log("BOOKING:", booking.id, bookingHour + ":" + bookingMinute)
-
-      // exemplo:
-      // agora 13:30 → pega 14:00
-      return (
-        bookingHour === currentHour + 1 &&
-        currentMinute >= 29 &&
-        currentMinute <= 31 &&
-        bookingMinute === 0
-      )
     })
 
     return NextResponse.json(filteredBookings)
