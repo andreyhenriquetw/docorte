@@ -40,7 +40,7 @@ export async function GET() {
         minutes,
       )
 
-      return minutes >= 28 && minutes <= 31
+      return minutes >= 29 && minutes <= 31
     })
 
     return NextResponse.json(filteredBookings)

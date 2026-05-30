@@ -206,6 +206,8 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
     return set(selectedDay, {
       hours: Number(selectedTime.split(":")[0]),
       minutes: Number(selectedTime.split(":")[1]),
+      seconds: 0,
+      milliseconds: 0,
     })
   }, [selectedDay, selectedTime])
 
