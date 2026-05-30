@@ -45,6 +45,7 @@ export const createBooking = async (params: CreateBookingParams) => {
   })
 
   // WEBHOOK CONFIRMAÇÃO
+  // WEBHOOK CONFIRMAÇÃO
   try {
     console.log("ENVIANDO PARA N8N")
 
@@ -52,15 +53,39 @@ export const createBooking = async (params: CreateBookingParams) => {
       "https://performance-compliant-wto-deck.trycloudflare.com/webhook-test/novo-agendamento",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
 
         body: JSON.stringify({
-          test: true,
           bookingId: booking.id,
-          clientName: booking.user.name,
-          phone: booking.user.phone,
+
+          client: {
+            id: booking.user.id,
+            name: booking.user.name,
+            email: booking.user.email,
+            phone: booking.user.phone,
+          },
+
+          service: {
+            id: booking.service.id,
+            name: booking.service.name,
+            price: Number(booking.service.price),
+          },
+
+          barbershop: {
+            id: booking.service.barbershop.id,
+            name: booking.service.barbershop.name,
+          },
+
+          payment: {
+            method: params.paymentMethod,
+            cashAmount: params.cashAmount || null,
+          },
+
+          date: booking.date,
+          reminderSent: booking.reminderSent,
         }),
       },
     )
