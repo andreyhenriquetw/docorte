@@ -58,7 +58,7 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
 
   const times: string[] = []
 
-  for (let hour = config.open; hour < config.close; hour++) {
+  for (let hour = config.open; hour <= config.close; hour++) {
     times.push(`${String(hour).padStart(2, "0")}:00`)
   }
 
