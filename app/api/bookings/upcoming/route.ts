@@ -16,7 +16,6 @@ export async function GET() {
       include: {
         user: true,
         service: true,
-        barber: true,
       },
     })
 
@@ -37,11 +36,11 @@ export async function GET() {
 
     const filteredBookings = bookings.filter((booking) => {
       const diff = booking.date.getTime() - now.getTime()
-
       const minutes = diff / 1000 / 60
 
-      // TEMPORÁRIO PARA TESTE
-      return minutes >= 0
+      console.log("BOOKING:", booking.id, "MINUTOS:", minutes)
+
+      return minutes >= 29 && minutes <= 30
     })
 
     return NextResponse.json(filteredBookings)
