@@ -49,7 +49,7 @@ export const createBooking = async (params: CreateBookingParams) => {
   // ENVIA DADOS PARA O N8N
   try {
     await fetch(
-      "https://emerging-atomic-season-successfully.trycloudflare.com/webhook/novo-agendamento",
+      "https://commander-posting-klein-alexander.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
