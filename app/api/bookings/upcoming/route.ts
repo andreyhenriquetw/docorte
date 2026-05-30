@@ -40,7 +40,6 @@ export async function GET() {
         minutes,
       )
 
-      // janela segura
       return minutes >= 28 && minutes <= 31
     })
 
