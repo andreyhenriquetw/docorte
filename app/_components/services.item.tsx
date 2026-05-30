@@ -39,25 +39,11 @@ interface ServiceItemProps {
   }[]
 }
 
-const getOpeningHours = (date: Date) => {
-  const day = date.getDay()
-
-  // Segunda a Quinta
-  if (day >= 1 && day <= 4) {
-    return { open: 9, close: 20 }
+const getOpeningHours = () => {
+  return {
+    open: 9,
+    close: 23,
   }
-
-  // Sexta
-  if (day === 5) {
-    return { open: 9, close: 23 }
-  }
-
-  // Sábado e Domingo
-  if (day === 6 || day === 0) {
-    return { open: 9, close: 20 }
-  }
-
-  return null
 }
 
 interface GetTimeListProps {
@@ -66,7 +52,7 @@ interface GetTimeListProps {
 }
 
 const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
-  const config = getOpeningHours(selectedDay)
+  const config = getOpeningHours()
 
   if (!config) return []
 
