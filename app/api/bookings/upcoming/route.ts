@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server"
 import { db } from "@/app/_lib/prisma"
+import { toZonedTime } from "date-fns-tz"
 
 export async function GET() {
   try {
-    const now = new Date()
+    const now = toZonedTime(new Date(), "America/Sao_Paulo")
 
-    console.log("AGORA:", now.toISOString())
+    console.log("AGORA:", now)
 
     const bookings = await db.booking.findMany({
       where: {
@@ -15,32 +16,32 @@ export async function GET() {
 
       include: {
         user: true,
-        service: true,
+        service: {
+          include: {
+            barbershop: true,
+          },
+        },
       },
     })
 
-    bookings.forEach((booking) => {
-      const diff = booking.date.getTime() - now.getTime()
+    const filteredBookings = bookings.filter((booking) => {
+      const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
+
+      const diff = bookingDate.getTime() - now.getTime()
 
       const minutes = diff / 1000 / 60
 
       console.log(
         "BOOKING:",
         booking.id,
-        "DATA:",
-        booking.date.toISOString(),
+        "HORÁRIO:",
+        bookingDate,
         "MINUTOS:",
         minutes,
       )
-    })
 
-    const filteredBookings = bookings.filter((booking) => {
-      const diff = booking.date.getTime() - now.getTime()
-      const minutes = diff / 1000 / 60
-
-      console.log("BOOKING:", booking.id, "MINUTOS:", minutes)
-
-      return minutes >= 29 && minutes <= 30
+      // janela segura
+      return minutes >= 28 && minutes <= 31
     })
 
     return NextResponse.json(filteredBookings)
