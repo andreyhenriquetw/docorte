@@ -41,7 +41,7 @@ export async function GET() {
       const minutes = diff / 1000 / 60
 
       // TEMPORÁRIO PARA TESTE
-      return minutes >= 0 && minutes <= 60
+      return minutes >= 25 && minutes <= 60
     })
 
     return NextResponse.json(filteredBookings)
