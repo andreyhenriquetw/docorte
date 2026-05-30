@@ -46,55 +46,32 @@ export const createBooking = async (params: CreateBookingParams) => {
 
   // WEBHOOK CONFIRMAÇÃO
   try {
-    await fetch(
+    console.log("ENVIANDO PARA N8N")
+
+    const response = await fetch(
       "https://performance-compliant-wto-deck.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
         },
 
         body: JSON.stringify({
-          id: booking.id,
-
-          client: {
-            id: booking.user.id,
-            name: booking.user.name,
-            email: booking.user.email,
-            phone: booking.user.phone,
-          },
-
-          service: {
-            id: booking.service.id,
-            name: booking.service.name,
-            price: Number(booking.service.price),
-          },
-
-          barbershop: {
-            id: booking.service.barbershop.id,
-            name: booking.service.barbershop.name,
-          },
-
-          payment: {
-            method: params.paymentMethod,
-
-            servicePrice: Number(booking.service.price),
-
-            cashAmount: params.cashAmount || null,
-
-            change:
-              params.paymentMethod === "money" && params.cashAmount
-                ? Number(params.cashAmount) - Number(booking.service.price)
-                : null,
-          },
-
-          date: booking.date,
+          test: true,
+          bookingId: booking.id,
+          clientName: booking.user.name,
+          phone: booking.user.phone,
         }),
       },
     )
+
+    console.log("STATUS N8N:", response.status)
+
+    const result = await response.text()
+
+    console.log("RESPOSTA N8N:", result)
   } catch (error) {
-    console.error("Erro ao enviar webhook:", error)
+    console.error("ERRO AO ENVIAR N8N:", error)
   }
 
   // DASHBOARD TEMPO REAL
