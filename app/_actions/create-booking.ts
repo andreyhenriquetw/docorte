@@ -50,7 +50,7 @@ export const createBooking = async (params: CreateBookingParams) => {
     console.log("ENVIANDO PARA N8N")
 
     const response = await fetch(
-      "https://performance-compliant-wto-deck.trycloudflare.com/webhook-test/novo-agendamento",
+      "https://performance-compliant-wto-deck.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
