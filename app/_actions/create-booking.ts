@@ -10,9 +10,7 @@ interface CreateBookingParams {
   serviceId: string
   barberId: string
   date: Date
-
   paymentMethod: "pix" | "money"
-
   cashAmount?: string
 }
 
@@ -31,6 +29,8 @@ export const createBooking = async (params: CreateBookingParams) => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       userId: (session.user as any).id,
+
+      reminderSent: false,
     },
 
     include: {
@@ -41,12 +41,10 @@ export const createBooking = async (params: CreateBookingParams) => {
           barbershop: true,
         },
       },
-
-      barber: true,
     },
   })
 
-  // ENVIA DADOS PARA O N8N
+  // WEBHOOK CONFIRMAÇÃO
   try {
     await fetch(
       "https://performance-compliant-wto-deck.trycloudflare.com/webhook/novo-agendamento",
@@ -58,7 +56,7 @@ export const createBooking = async (params: CreateBookingParams) => {
         },
 
         body: JSON.stringify({
-          bookingId: booking.id,
+          id: booking.id,
 
           client: {
             id: booking.user.id,
@@ -71,11 +69,6 @@ export const createBooking = async (params: CreateBookingParams) => {
             id: booking.service.id,
             name: booking.service.name,
             price: Number(booking.service.price),
-          },
-
-          barber: {
-            id: booking.barber?.id,
-            name: booking.barber?.name,
           },
 
           barbershop: {
@@ -101,18 +94,18 @@ export const createBooking = async (params: CreateBookingParams) => {
       },
     )
   } catch (error) {
-    console.error("Erro ao enviar para o n8n:", error)
+    console.error("Erro ao enviar webhook:", error)
   }
 
-  // TEMPO REAL DASHBOARD
+  // DASHBOARD TEMPO REAL
   await pusherServer.trigger("dashboard", "new-booking", {
     id: booking.id,
     clientName: booking.user.name,
     service: booking.service.name,
-    barber: booking.barber?.name,
   })
 
   revalidatePath("/barbershops/[id]", "page")
+
   revalidatePath("/bookings")
   revalidatePath("/dashboard")
 
