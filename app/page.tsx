@@ -13,6 +13,10 @@ import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { getConfirmedBookings } from "./_data/get-confirmed-bookings"
 
+import { toZonedTime } from "date-fns-tz"
+
+const brazilDate = toZonedTime(new Date(), "America/Sao_Paulo")
+
 const Home = async () => {
   const session = await getServerSession(authOptions)
   const barbershops = await db.barbershop.findMany({})
@@ -29,11 +33,13 @@ const Home = async () => {
         </h2>
         <p>
           <span className="capitalize">
-            {format(new Date(), "EEEE, dd", { locale: ptBR })}
+            {format(brazilDate, "EEEE, dd", { locale: ptBR })}
           </span>
+
           <span>&nbsp;de&nbsp;</span>
+
           <span className="capitalize">
-            {format(new Date(), "MMMM", { locale: ptBR })}
+            {format(brazilDate, "MMMM", { locale: ptBR })}
           </span>
         </p>
 
