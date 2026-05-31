@@ -32,7 +32,7 @@ export async function GET() {
 
       console.log(booking.user.name, "FALTAM:", diffMinutes)
 
-      return diffMinutes >= 29 && diffMinutes <= 31
+      return diffMinutes >= 0 && diffMinutes <= 120
     })
 
     return NextResponse.json(filteredBookings)
