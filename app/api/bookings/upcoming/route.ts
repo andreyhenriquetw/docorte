@@ -27,7 +27,7 @@ export async function GET() {
 
       console.log("CLIENTE:", booking.user.name, "FALTAM:", diffMinutes, "MIN")
 
-      return diffMinutes >= 0 && diffMinutes <= 120
+      return diffMinutes >= 29 && diffMinutes <= 31
     })
 
     return NextResponse.json(filteredBookings)
