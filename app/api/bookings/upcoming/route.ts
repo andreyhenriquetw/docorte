@@ -34,7 +34,7 @@ export async function GET() {
       console.log(booking.user.name, "faltam", minutes, "minutos")
 
       // dispara quando faltar entre 28 e 31 minutos
-      return minutes >= 28 && minutes <= 31
+      return minutes >= 10 && minutes <= 15
     })
 
     return NextResponse.json(filteredBookings)
