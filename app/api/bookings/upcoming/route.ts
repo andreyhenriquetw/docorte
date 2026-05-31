@@ -31,20 +31,15 @@ export async function GET() {
       const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
 
       const diff = bookingDate.getTime() - now.getTime()
-
       const minutes = diff / 1000 / 60
 
-      console.log(
-        "BOOKING:",
-        booking.id,
-        "HORARIO:",
-        bookingDate,
-        "MINUTES:",
-        minutes,
-      )
+      console.log("AGORA:", now.toISOString())
 
-      // janela segura
-      return minutes >= 28 && minutes <= 31
+      console.log("AGENDAMENTO:", bookingDate.toISOString())
+
+      console.log("MINUTOS RESTANTES:", minutes)
+
+      return minutes >= 38 && minutes <= 41
     })
 
     return NextResponse.json(filteredBookings)
