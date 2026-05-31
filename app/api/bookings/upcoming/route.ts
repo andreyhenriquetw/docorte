@@ -28,15 +28,11 @@ export async function GET() {
     const filteredBookings = bookings.filter((booking) => {
       const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
 
-      const reminderTime = new Date(bookingDate.getTime() - 30 * 60 * 1000)
+      const diffMinutes = (bookingDate.getTime() - now.getTime()) / 1000 / 60
 
-      const nowRounded = new Date(now)
-      nowRounded.setSeconds(0, 0)
+      console.log(booking.user.name, "FALTAM:", diffMinutes)
 
-      const reminderRounded = new Date(reminderTime)
-      reminderRounded.setSeconds(0, 0)
-
-      return nowRounded.getTime() === reminderRounded.getTime()
+      return diffMinutes >= 29 && diffMinutes <= 31
     })
 
     return NextResponse.json(filteredBookings)
