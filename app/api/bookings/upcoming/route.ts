@@ -6,8 +6,6 @@ export async function GET() {
   try {
     const now = toZonedTime(new Date(), "America/Sao_Paulo")
 
-    console.log("AGORA BR:", now.toISOString())
-
     const bookings = await db.booking.findMany({
       where: {
         reminderSent: false,
@@ -27,28 +25,19 @@ export async function GET() {
       },
     })
 
-    const debugData = bookings.map((booking) => {
+    const filteredBookings = bookings.filter((booking) => {
       const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
 
       const diff = bookingDate.getTime() - now.getTime()
-
       const minutes = diff / 1000 / 60
 
-      console.log("===================================")
-      console.log("AGORA:", now.toISOString())
-      console.log("AGENDAMENTO:", bookingDate.toISOString())
-      console.log("MINUTOS RESTANTES:", minutes)
+      console.log(booking.user.name, "faltam", minutes, "minutos")
 
-      return {
-        id: booking.id,
-        now: now.toISOString(),
-        bookingDate: bookingDate.toISOString(),
-        minutes,
-        client: booking.user.name,
-      }
+      // dispara quando faltar entre 28 e 31 minutos
+      return minutes >= 28 && minutes <= 31
     })
 
-    return NextResponse.json(debugData)
+    return NextResponse.json(filteredBookings)
   } catch (error) {
     console.error(error)
 
