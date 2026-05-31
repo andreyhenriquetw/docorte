@@ -44,7 +44,7 @@ export async function GET() {
       )
 
       // janela segura
-      return minutes >= 28 && minutes <= 31
+      return minutes >= -10000 && minutes <= 10000
     })
 
     return NextResponse.json(filteredBookings)
