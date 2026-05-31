@@ -39,7 +39,7 @@ export async function GET() {
 
       console.log("MINUTOS RESTANTES:", minutes)
 
-      return minutes >= 38 && minutes <= 41
+      return minutes >= 0 && minutes <= 120
     })
 
     return NextResponse.json(filteredBookings)
