@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server"
 import { db } from "@/app/_lib/prisma"
-import { toZonedTime } from "date-fns-tz"
 
 export async function GET() {
   try {
-    const now = toZonedTime(new Date(), "America/Sao_Paulo")
-
     const bookings = await db.booking.findMany({
       where: {
         reminderSent: false,
@@ -26,13 +23,11 @@ export async function GET() {
     })
 
     const filteredBookings = bookings.filter((booking) => {
-      const bookingDate = toZonedTime(booking.date, "America/Sao_Paulo")
+      const diffMinutes = (booking.date.getTime() - Date.now()) / 1000 / 60
 
-      const diffMinutes = (bookingDate.getTime() - now.getTime()) / 1000 / 60
+      console.log("CLIENTE:", booking.user.name, "FALTAM:", diffMinutes, "MIN")
 
-      console.log(booking.user.name, "FALTAM:", diffMinutes)
-
-      return diffMinutes >= 0 && diffMinutes <= 120
+      return diffMinutes >= 29 && diffMinutes <= 31
     })
 
     return NextResponse.json(filteredBookings)
