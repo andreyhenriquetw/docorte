@@ -41,16 +41,16 @@ export const createBooking = async (params: CreateBookingParams) => {
           barbershop: true,
         },
       },
+
+      barber: true,
     },
   })
 
-  // WEBHOOK CONFIRMAÇÃO
-  // WEBHOOK CONFIRMAÇÃO
-  try {
-    console.log("ENVIANDO PARA N8N")
+  // N8N ENVIAR DADOS
 
-    const response = await fetch(
-      "https://euro-knows-traditions-actor.trycloudflare.com/webhook/novo-agendamento",
+  try {
+    await fetch(
+      "https://lawsuit-thinkpad-initiative-baker.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
@@ -74,6 +74,11 @@ export const createBooking = async (params: CreateBookingParams) => {
             price: Number(booking.service.price),
           },
 
+          barber: {
+            id: booking.barber?.id,
+            name: booking.barber?.name,
+          },
+
           barbershop: {
             id: booking.service.barbershop.id,
             name: booking.service.barbershop.name,
@@ -81,22 +86,23 @@ export const createBooking = async (params: CreateBookingParams) => {
 
           payment: {
             method: params.paymentMethod,
+
+            servicePrice: Number(booking.service.price),
+
             cashAmount: params.cashAmount || null,
+
+            change:
+              params.paymentMethod === "money" && params.cashAmount
+                ? Number(params.cashAmount) - Number(booking.service.price)
+                : null,
           },
 
           date: booking.date,
-          reminderSent: booking.reminderSent,
         }),
       },
     )
-
-    console.log("STATUS N8N:", response.status)
-
-    const result = await response.text()
-
-    console.log("RESPOSTA N8N:", result)
   } catch (error) {
-    console.error("ERRO AO ENVIAR N8N:", error)
+    console.error("Erro ao enviar para o n8n:", error)
   }
 
   // DASHBOARD TEMPO REAL

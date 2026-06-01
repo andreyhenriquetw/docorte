@@ -1,12 +1,13 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
+
 import { db } from "@/app/_lib/prisma"
 
 export async function PATCH(
-  req: Request,
+  request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
-    await db.booking.update({
+    const booking = await db.booking.update({
       where: {
         id: params.id,
       },
@@ -15,19 +16,13 @@ export async function PATCH(
       },
     })
 
-    return NextResponse.json({
-      success: true,
-    })
+    return NextResponse.json(booking)
   } catch (error) {
     console.error(error)
 
     return NextResponse.json(
-      {
-        error: "Erro ao atualizar lembrete",
-      },
-      {
-        status: 500,
-      },
+      { error: "Erro ao atualizar lembrete" },
+      { status: 500 },
     )
   }
 }
