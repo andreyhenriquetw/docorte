@@ -24,7 +24,7 @@ export async function GET() {
       const minutes = diff / 1000 / 60
 
       // janela de segurança
-      return minutes >= 25 && minutes <= 30
+      return minutes >= 20 && minutes <= 40
     })
 
     return NextResponse.json(reminders)
