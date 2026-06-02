@@ -18,26 +18,26 @@ export async function GET() {
       },
     })
 
-    const reminders = bookings.filter((booking) => {
+    const result = bookings.map((booking) => {
       const diff = booking.date.getTime() - now.getTime()
 
       const minutes = diff / 1000 / 60
 
-      // TESTE TEMPORÁRIO
-      return minutes >= -120 && minutes <= 120
+      return {
+        id: booking.id,
+        bookingDate: booking.date,
+        now,
+        diffMinutes: minutes,
+      }
     })
 
-    return NextResponse.json(reminders)
+    return NextResponse.json(result)
   } catch (error) {
     console.error(error)
 
     return NextResponse.json(
-      {
-        error: "Erro ao buscar lembretes",
-      },
-      {
-        status: 500,
-      },
+      { error: "Erro ao buscar lembretes" },
+      { status: 500 },
     )
   }
 }
