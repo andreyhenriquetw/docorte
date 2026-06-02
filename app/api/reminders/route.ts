@@ -2,19 +2,42 @@ import { NextResponse } from "next/server"
 import { db } from "@/app/_lib/prisma"
 
 export async function GET() {
-  const bookings = await db.booking.findMany({
-    where: {
-      reminderSent: false,
-    },
-  })
+  try {
+    const now = new Date()
 
-  return NextResponse.json(
-    bookings.map((booking) => ({
-      id: booking.id,
-      bookingDate: booking.date,
-      localHour: booking.date.toLocaleString("pt-BR", {
-        timeZone: "America/Sao_Paulo",
-      }),
-    })),
-  )
+    const bookings = await db.booking.findMany({
+      where: {
+        status: "CONFIRMED",
+        reminderSent: false,
+      },
+
+      include: {
+        user: true,
+        service: true,
+        barber: true,
+      },
+    })
+
+    const reminders = bookings.filter((booking) => {
+      const diff = booking.date.getTime() - now.getTime()
+
+      const minutes = diff / 1000 / 60
+
+      // janela de segurança
+      return minutes >= 25 && minutes <= 30
+    })
+
+    return NextResponse.json(reminders)
+  } catch (error) {
+    console.error(error)
+
+    return NextResponse.json(
+      {
+        error: "Erro ao buscar lembretes",
+      },
+      {
+        status: 500,
+      },
+    )
+  }
 }
