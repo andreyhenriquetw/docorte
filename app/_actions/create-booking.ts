@@ -21,6 +21,15 @@ export const createBooking = async (params: CreateBookingParams) => {
     throw new Error("Usuário não autenticado")
   }
 
+  console.log("Recebido:", params.date)
+  console.log("ISO:", params.date.toISOString())
+  console.log(
+    "São Paulo:",
+    params.date.toLocaleString("pt-BR", {
+      timeZone: "America/Sao_Paulo",
+    }),
+  )
+
   console.log("DATA RECEBIDA:", params.date)
 
   const booking = await db.booking.create({
