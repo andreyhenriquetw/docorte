@@ -3,8 +3,6 @@ import { db } from "@/app/_lib/prisma"
 
 export async function GET() {
   try {
-    const now = new Date()
-
     const bookings = await db.booking.findMany({
       where: {
         status: "CONFIRMED",
@@ -18,16 +16,7 @@ export async function GET() {
       },
     })
 
-    const reminders = bookings.filter((booking) => {
-      const diff = booking.date.getTime() - now.getTime()
-
-      const minutes = diff / 1000 / 60
-
-      // janela de segurança
-      return minutes >= 28 && minutes <= 30
-    })
-
-    return NextResponse.json(reminders)
+    return NextResponse.json(bookings)
   } catch (error) {
     console.error(error)
 
