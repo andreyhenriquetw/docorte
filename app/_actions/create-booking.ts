@@ -51,7 +51,7 @@ export const createBooking = async (params: CreateBookingParams) => {
   // N8N ENVIAR DADOS
 
   try {
-    await fetch("http://localhost:5678/webhook/novo-agendamento", {
+    await fetch("https://tender-highly-organisations-blank.trycloudflare.com", {
       method: "POST",
 
       headers: {
