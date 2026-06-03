@@ -18,28 +18,24 @@ export async function GET() {
       },
     })
 
-    const reminders = bookings.filter((booking) => {
+    const debug = bookings.map((booking) => {
       const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
 
-      console.log(booking.user.name, "FALTAM:", diffMinutes)
-
-      return NextResponse.json({
-        ambiente: "VERCEL TESTE 999",
-        agora: new Date().toISOString(),
-      })
+      return {
+        cliente: booking.user.name,
+        bookingDate: booking.date,
+        now,
+        diffMinutes,
+      }
     })
 
-    return NextResponse.json(reminders)
+    return NextResponse.json(debug)
   } catch (error) {
     console.error(error)
 
     return NextResponse.json(
-      {
-        error: "Erro ao buscar lembretes",
-      },
-      {
-        status: 500,
-      },
+      { error: "Erro ao buscar lembretes" },
+      { status: 500 },
     )
   }
 }
