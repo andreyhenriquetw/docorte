@@ -42,7 +42,7 @@ interface ServiceItemProps {
 const getOpeningHours = () => {
   return {
     open: 9,
-    close: 23,
+    close: 24,
   }
 }
 
