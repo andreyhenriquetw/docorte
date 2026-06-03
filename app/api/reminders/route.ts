@@ -18,18 +18,13 @@ export async function GET() {
       },
     })
 
-    const debug = bookings.map((booking) => {
+    const reminders = bookings.filter((booking) => {
       const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
 
-      return {
-        cliente: booking.user.name,
-        bookingDate: booking.date,
-        now,
-        diffMinutes,
-      }
+      return diffMinutes >= 50 && diffMinutes <= 60
     })
 
-    return NextResponse.json(debug)
+    return NextResponse.json(reminders)
   } catch (error) {
     console.error(error)
 
