@@ -5,10 +5,17 @@ export async function GET() {
   try {
     const now = new Date()
 
-    const bookings = await db.booking.findMany({
+    const thirtyMinutesLater = new Date(now.getTime() + 30 * 60 * 1000)
+
+    const reminders = await db.booking.findMany({
       where: {
         status: "CONFIRMED",
         reminderSent: false,
+
+        date: {
+          gt: now,
+          lte: thirtyMinutesLater,
+        },
       },
 
       include: {
@@ -18,19 +25,17 @@ export async function GET() {
       },
     })
 
-    const reminders = bookings.filter((booking) => {
-      const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
-
-      return diffMinutes <= 30 && diffMinutes > 0
-    })
-
     return NextResponse.json(reminders)
   } catch (error) {
     console.error(error)
 
     return NextResponse.json(
-      { error: "Erro ao buscar lembretes" },
-      { status: 500 },
+      {
+        error: "Erro ao buscar lembretes",
+      },
+      {
+        status: 500,
+      },
     )
   }
 }
