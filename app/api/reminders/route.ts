@@ -19,21 +19,15 @@ export async function GET() {
     })
 
     return NextResponse.json(
-      bookings.map((booking) => ({
-        cliente: booking.user.name,
+      bookings.map((booking) => {
+        const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
 
-        utc: booking.date.toISOString(),
-
-        saoPaulo: booking.date.toLocaleString("pt-BR", {
-          timeZone: "America/Sao_Paulo",
-        }),
-
-        nowUTC: now.toISOString(),
-
-        nowSaoPaulo: now.toLocaleString("pt-BR", {
-          timeZone: "America/Sao_Paulo",
-        }),
-      })),
+        return {
+          cliente: booking.user.name,
+          utc: booking.date,
+          diffMinutes,
+        }
+      }),
     )
   } catch (error) {
     console.error(error)
