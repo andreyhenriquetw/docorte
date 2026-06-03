@@ -23,7 +23,10 @@ export async function GET() {
 
       console.log(booking.user.name, "FALTAM:", diffMinutes)
 
-      return diffMinutes >= 29 && diffMinutes <= 30
+      return NextResponse.json({
+        ambiente: "VERCEL TESTE 999",
+        agora: new Date().toISOString(),
+      })
     })
 
     return NextResponse.json(reminders)
