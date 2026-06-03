@@ -18,13 +18,23 @@ export async function GET() {
       },
     })
 
-    const reminders = bookings.filter((booking) => {
-      const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
+    return NextResponse.json(
+      bookings.map((booking) => ({
+        cliente: booking.user.name,
 
-      return diffMinutes >= 50 && diffMinutes <= 60
-    })
+        utc: booking.date.toISOString(),
 
-    return NextResponse.json(reminders)
+        saoPaulo: booking.date.toLocaleString("pt-BR", {
+          timeZone: "America/Sao_Paulo",
+        }),
+
+        nowUTC: now.toISOString(),
+
+        nowSaoPaulo: now.toLocaleString("pt-BR", {
+          timeZone: "America/Sao_Paulo",
+        }),
+      })),
+    )
   } catch (error) {
     console.error(error)
 
