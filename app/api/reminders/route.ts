@@ -2,12 +2,22 @@ import { NextResponse } from "next/server"
 import { db } from "@/app/_lib/prisma"
 
 export async function GET() {
+  const now = new Date()
+
   const bookings = await db.booking.findMany({
-    orderBy: {
-      createdAt: "desc",
+    where: {
+      status: "CONFIRMED",
+      reminderSent: false,
     },
-    take: 5,
   })
 
-  return NextResponse.json(bookings)
+  return NextResponse.json({
+    serverNow: now.toISOString(),
+
+    bookings: bookings.map((booking) => ({
+      id: booking.id,
+      bookingDate: booking.date.toISOString(),
+      diffMinutes: (booking.date.getTime() - now.getTime()) / 1000 / 60,
+    })),
+  })
 }
