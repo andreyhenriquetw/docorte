@@ -62,7 +62,7 @@ export const createBooking = async (params: CreateBookingParams) => {
 
   try {
     await fetch(
-      "https://court-meets-secretary-essential.trycloudflare.com/webhook/novo-agendamento",
+      "https://girlfriend-upper-created-erp.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
