@@ -5,10 +5,18 @@ export async function GET() {
   try {
     const now = new Date()
 
-    const bookings = await db.booking.findMany({
+    const reminders = await db.booking.findMany({
       where: {
         status: "CONFIRMED",
         reminderSent: false,
+
+        reminderDate: {
+          lte: now,
+        },
+
+        date: {
+          gt: now,
+        },
       },
 
       include: {
@@ -16,12 +24,10 @@ export async function GET() {
         service: true,
         barber: true,
       },
-    })
 
-    const reminders = bookings.filter((booking) => {
-      const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
-
-      return diffMinutes >= 1 && diffMinutes <= 120
+      orderBy: {
+        reminderDate: "asc",
+      },
     })
 
     return NextResponse.json(reminders)
@@ -29,8 +35,12 @@ export async function GET() {
     console.error(error)
 
     return NextResponse.json(
-      { error: "Erro ao buscar lembretes" },
-      { status: 500 },
+      {
+        error: "Erro ao buscar lembretes",
+      },
+      {
+        status: 500,
+      },
     )
   }
 }
