@@ -9,24 +9,19 @@ export async function GET() {
       where: {
         status: "CONFIRMED",
         reminderSent: false,
-
         reminderDate: {
           lte: now,
-        },
-
-        date: {
-          gt: now,
         },
       },
 
       include: {
         user: true,
-        service: true,
+        service: {
+          include: {
+            barbershop: true,
+          },
+        },
         barber: true,
-      },
-
-      orderBy: {
-        reminderDate: "asc",
       },
     })
 
@@ -35,12 +30,8 @@ export async function GET() {
     console.error(error)
 
     return NextResponse.json(
-      {
-        error: "Erro ao buscar lembretes",
-      },
-      {
-        status: 500,
-      },
+      { error: "Erro ao buscar lembretes" },
+      { status: 500 },
     )
   }
 }
