@@ -5,24 +5,23 @@ export async function GET() {
   try {
     const now = new Date()
 
-    const reminders = await db.booking.findMany({
+    const bookings = await db.booking.findMany({
       where: {
         status: "CONFIRMED",
         reminderSent: false,
-        reminderDate: {
-          lte: now,
-        },
       },
 
       include: {
         user: true,
-        service: {
-          include: {
-            barbershop: true,
-          },
-        },
+        service: true,
         barber: true,
       },
+    })
+
+    const reminders = bookings.filter((booking) => {
+      const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
+
+      return diffMinutes >= 28 && diffMinutes <= 31
     })
 
     return NextResponse.json(reminders)
