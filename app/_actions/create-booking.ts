@@ -34,7 +34,7 @@ export const createBooking = async (params: CreateBookingParams) => {
 
   // LEMBRETE 2 HORAS ANTES
   const reminderDate = new Date(params.date)
-  reminderDate.setHours(reminderDate.getHours() - 2)
+  reminderDate.setHours(reminderDate.getHours() - 30)
 
   const booking = await db.booking.create({
     data: {
