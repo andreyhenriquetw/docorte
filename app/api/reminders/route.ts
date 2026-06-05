@@ -37,7 +37,7 @@ export async function GET() {
       })
 
       // dispara entre 28 e 32 minutos antes
-      return diffMinutes >= 0 && diffMinutes <= 300
+      return diffMinutes >= 28 && diffMinutes <= 32
     })
 
     return NextResponse.json(reminders)
