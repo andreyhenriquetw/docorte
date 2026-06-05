@@ -26,9 +26,18 @@ export async function GET() {
     })
 
     const reminders = bookings.filter((booking) => {
-      const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
+      const bookingDate = new Date(booking.date)
 
-      return diffMinutes >= 28 && diffMinutes <= 45
+      const diffMinutes = (bookingDate.getTime() - now.getTime()) / 1000 / 60
+
+      console.log({
+        cliente: booking.user.name,
+        agendamento: bookingDate.toISOString(),
+        minutosRestantes: Math.round(diffMinutes),
+      })
+
+      // dispara entre 28 e 32 minutos antes
+      return diffMinutes >= 28 && diffMinutes <= 32
     })
 
     return NextResponse.json(reminders)
@@ -36,8 +45,12 @@ export async function GET() {
     console.error(error)
 
     return NextResponse.json(
-      { error: "Erro ao buscar lembretes" },
-      { status: 500 },
+      {
+        error: "Erro ao buscar lembretes",
+      },
+      {
+        status: 500,
+      },
     )
   }
 }
