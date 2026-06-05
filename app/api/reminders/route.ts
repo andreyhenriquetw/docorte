@@ -9,6 +9,9 @@ export async function GET() {
       where: {
         status: "CONFIRMED",
         reminderSent: false,
+        date: {
+          gte: now,
+        },
       },
 
       include: {
@@ -16,12 +19,16 @@ export async function GET() {
         service: true,
         barber: true,
       },
+
+      orderBy: {
+        date: "asc",
+      },
     })
 
     const reminders = bookings.filter((booking) => {
       const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
 
-      return diffMinutes >= 0 && diffMinutes <= 120
+      return diffMinutes <= 120
     })
 
     return NextResponse.json(reminders)
