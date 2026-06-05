@@ -28,7 +28,7 @@ export async function GET() {
     const reminders = bookings.filter((booking) => {
       const diffMinutes = (booking.date.getTime() - now.getTime()) / 1000 / 60
 
-      return diffMinutes <= 140
+      return diffMinutes <= 150
     })
 
     return NextResponse.json(reminders)
