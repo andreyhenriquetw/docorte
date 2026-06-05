@@ -32,6 +32,10 @@ export const createBooking = async (params: CreateBookingParams) => {
 
   console.log("DATA RECEBIDA:", params.date)
 
+  // LEMBRETE 2 HORAS ANTES
+  const reminderDate = new Date(params.date)
+  reminderDate.setHours(reminderDate.getHours() - 2)
+
   const booking = await db.booking.create({
     data: {
       serviceId: params.serviceId,
@@ -42,6 +46,7 @@ export const createBooking = async (params: CreateBookingParams) => {
       userId: (session.user as any).id,
 
       reminderSent: false,
+      reminderDate,
     },
 
     include: {
@@ -56,8 +61,6 @@ export const createBooking = async (params: CreateBookingParams) => {
       barber: true,
     },
   })
-
-  // N8N ENVIAR DADOShttp://localhost:5678/webhook/novo-agendamento
 
   try {
     await fetch(
@@ -109,6 +112,7 @@ export const createBooking = async (params: CreateBookingParams) => {
           },
 
           date: booking.date,
+          reminderDate: booking.reminderDate,
         }),
       },
     )
@@ -116,7 +120,6 @@ export const createBooking = async (params: CreateBookingParams) => {
     console.error("Erro ao enviar para o n8n:", error)
   }
 
-  // DASHBOARD TEMPO REAL
   await pusherServer.trigger("dashboard", "new-booking", {
     id: booking.id,
     clientName: booking.user.name,
@@ -124,7 +127,6 @@ export const createBooking = async (params: CreateBookingParams) => {
   })
 
   revalidatePath("/barbershops/[id]", "page")
-
   revalidatePath("/bookings")
   revalidatePath("/dashboard")
 
