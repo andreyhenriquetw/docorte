@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server"
 import { db } from "@/app/_lib/prisma"
+import { toZonedTime } from "date-fns-tz"
 
 export async function GET() {
   try {
-    const now = new Date()
+    const now = toZonedTime(new Date(), "America/Sao_Paulo")
 
     const bookings = await db.booking.findMany({
       where: {

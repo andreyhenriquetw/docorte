@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../_lib/auth"
 
 import { db } from "../_lib/prisma"
+import { toZonedTime } from "date-fns-tz"
 
 export const getConfirmedBookings = async () => {
   const session = await getServerSession(authOptions)
@@ -13,6 +14,8 @@ export const getConfirmedBookings = async () => {
   if (!session?.user?.email) {
     return []
   }
+
+  const now = toZonedTime(new Date(), "America/Sao_Paulo")
 
   const bookings = await db.booking.findMany({
     where: {
@@ -23,7 +26,7 @@ export const getConfirmedBookings = async () => {
       status: "CONFIRMED",
 
       date: {
-        gte: new Date(),
+        gte: now,
       },
     },
 

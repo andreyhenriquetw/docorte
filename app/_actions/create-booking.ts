@@ -61,7 +61,7 @@ export const createBooking = async (params: CreateBookingParams) => {
 
   try {
     await fetch(
-      "https://f0f9-2804-2674-4019-6900-a88a-9610-82d7-7106.ngrok-free.app/webhook/novo-agendamento",
+      "https://priced-hello-despite-phrases.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
