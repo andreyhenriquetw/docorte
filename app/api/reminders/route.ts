@@ -3,6 +3,8 @@ import { NextResponse } from "next/server"
 import { db } from "@/app/_lib/prisma"
 import { formatInTimeZone } from "date-fns-tz"
 
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   try {
     const now = new Date()
@@ -34,6 +36,19 @@ export async function GET() {
       },
     })
 
+    console.log({
+      mensagem: "reminders query",
+      agoraUTC: now.toISOString(),
+      agoraSP: nowSaoPaulo,
+      windowEndUTC: windowEnd.toISOString(),
+      windowEndSP: formatInTimeZone(
+        windowEnd,
+        "America/Sao_Paulo",
+        "yyyy-MM-dd HH:mm:ssXXX",
+      ),
+      bookingsEncontrados: bookings.length,
+    })
+
     const reminders = bookings.filter((booking) => {
       const bookingDate = new Date(booking.date)
       const diffMinutes = (bookingDate.getTime() - now.getTime()) / 1000 / 60
@@ -52,10 +67,14 @@ export async function GET() {
       })
 
       // dispara entre 28 e 32 minutos antes
-      return diffMinutes >= 28 && diffMinutes <= 40
+      return diffMinutes >= 28 && diffMinutes <= 50
     })
 
-    return NextResponse.json(reminders)
+    return NextResponse.json(reminders, {
+      headers: {
+        "Cache-Control": "no-store, max-age=0",
+      },
+    })
   } catch (error) {
     console.error(error)
 
@@ -65,6 +84,9 @@ export async function GET() {
       },
       {
         status: 500,
+        headers: {
+          "Cache-Control": "no-store, max-age=0",
+        },
       },
     )
   }
