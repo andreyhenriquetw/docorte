@@ -1,10 +1,17 @@
+import { addMinutes } from "date-fns"
 import { NextResponse } from "next/server"
 import { db } from "@/app/_lib/prisma"
-import { toZonedTime } from "date-fns-tz"
+import { formatInTimeZone } from "date-fns-tz"
 
 export async function GET() {
   try {
-    const now = toZonedTime(new Date(), "America/Sao_Paulo")
+    const now = new Date()
+    const windowEnd = addMinutes(now, 60)
+    const nowSaoPaulo = formatInTimeZone(
+      now,
+      "America/Sao_Paulo",
+      "yyyy-MM-dd HH:mm:ssXXX",
+    )
 
     const bookings = await db.booking.findMany({
       where: {
@@ -12,6 +19,7 @@ export async function GET() {
         reminderSent: false,
         date: {
           gte: now,
+          lte: windowEnd,
         },
       },
 
@@ -28,17 +36,23 @@ export async function GET() {
 
     const reminders = bookings.filter((booking) => {
       const bookingDate = new Date(booking.date)
-
       const diffMinutes = (bookingDate.getTime() - now.getTime()) / 1000 / 60
 
       console.log({
         cliente: booking.user.name,
-        agendamento: bookingDate.toISOString(),
+        agendamentoUTC: bookingDate.toISOString(),
+        agendamentoSP: formatInTimeZone(
+          bookingDate,
+          "America/Sao_Paulo",
+          "yyyy-MM-dd HH:mm:ssXXX",
+        ),
+        agoraUTC: now.toISOString(),
+        agoraSP: nowSaoPaulo,
         minutosRestantes: Math.round(diffMinutes),
       })
 
       // dispara entre 28 e 32 minutos antes
-      return diffMinutes >= 28 && diffMinutes <= 32
+      return diffMinutes >= 28 && diffMinutes <= 40
     })
 
     return NextResponse.json(reminders)
