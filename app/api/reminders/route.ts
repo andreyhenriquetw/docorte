@@ -9,7 +9,7 @@ export async function GET() {
   try {
     const now = new Date()
     const reminderStart = addMinutes(now, 28)
-    const reminderEnd = addMinutes(now, 50)
+    const reminderEnd = addMinutes(now, 58)
     const nowSaoPaulo = formatInTimeZone(
       now,
       "America/Sao_Paulo",
