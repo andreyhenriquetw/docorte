@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic"
 export async function GET() {
   try {
     const now = new Date()
-    const windowEnd = addMinutes(now, 60)
+    const reminderStart = addMinutes(now, 28)
+    const reminderEnd = addMinutes(now, 50)
     const nowSaoPaulo = formatInTimeZone(
       now,
       "America/Sao_Paulo",
@@ -20,8 +21,8 @@ export async function GET() {
         status: "CONFIRMED",
         reminderSent: false,
         date: {
-          gte: now,
-          lte: windowEnd,
+          gte: reminderStart,
+          lte: reminderEnd,
         },
       },
 
@@ -40,16 +41,22 @@ export async function GET() {
       mensagem: "reminders query",
       agoraUTC: now.toISOString(),
       agoraSP: nowSaoPaulo,
-      windowEndUTC: windowEnd.toISOString(),
-      windowEndSP: formatInTimeZone(
-        windowEnd,
+      reminderStartUTC: reminderStart.toISOString(),
+      reminderStartSP: formatInTimeZone(
+        reminderStart,
+        "America/Sao_Paulo",
+        "yyyy-MM-dd HH:mm:ssXXX",
+      ),
+      reminderEndUTC: reminderEnd.toISOString(),
+      reminderEndSP: formatInTimeZone(
+        reminderEnd,
         "America/Sao_Paulo",
         "yyyy-MM-dd HH:mm:ssXXX",
       ),
       bookingsEncontrados: bookings.length,
     })
 
-    const reminders = bookings.filter((booking) => {
+    const reminders = bookings.map((booking) => {
       const bookingDate = new Date(booking.date)
       const diffMinutes = (bookingDate.getTime() - now.getTime()) / 1000 / 60
 
@@ -66,8 +73,7 @@ export async function GET() {
         minutosRestantes: Math.round(diffMinutes),
       })
 
-      // dispara entre 28 e 32 minutos antes
-      return diffMinutes >= 28 && diffMinutes <= 50
+      return booking
     })
 
     return NextResponse.json(reminders, {
