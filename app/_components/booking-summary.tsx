@@ -63,17 +63,6 @@ const BookingSummary = ({
                 }).format(Number(cashAmount))}
               </p>
             </div>
-
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm text-zinc-400">Troco</h2>
-
-              <p className="text-sm text-green-400">
-                {Intl.NumberFormat("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                }).format(Number(cashAmount) - Number(service.price))}
-              </p>
-            </div>
           </>
         )}
 

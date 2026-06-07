@@ -1,3 +1,5 @@
+""
+
 import BarbershopActions from "@/app/_components/barbershop-actions"
 import BarbershopTabs from "@/app/_components/BarbershopTabs"
 import ServiceItem from "@/app/_components/services.item"
@@ -6,9 +8,10 @@ import { Button } from "@/app/_components/ui/button"
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet"
 import { db } from "@/app/_lib/prisma"
 import { ChevronLeftIcon, MenuIcon } from "lucide-react"
-import Image from "next/image"
+
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { BarbershopCarousel } from "../_components/perfil-carrocel"
 
 interface BarbershopPageProps {
   params: {
@@ -60,20 +63,22 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
   const abertoAgora = Boolean(
     horarioHoje?.abre &&
-      horarioHoje?.fecha &&
-      horaAtual >= horarioHoje.abre &&
-      horaAtual <= horarioHoje.fecha,
+    horarioHoje?.fecha &&
+    horaAtual >= horarioHoje.abre &&
+    horaAtual <= horarioHoje.fecha,
   )
 
   return (
     <div>
       {/* IMAGEM */}
       <div className="relative h-[260px] w-full overflow-hidden">
-        <Image
-          alt={barbershop.name}
-          src={barbershop.imageUrl}
-          fill
-          className="object-cover"
+        <BarbershopCarousel
+          name={barbershop.name}
+          images={[
+            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWVIIfDpkTa08rXoOI3ve6ZLymfqzDCgd7RuBh",
+            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWnxTTr3OX1jYqswm2JFvGCdAVuhayHnS8ceLK",
+            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWqpDzANdwUyoZv4s35M6KNmVDp7diLuq8gW1R",
+          ]}
         />
 
         {/* Overlay premium */}

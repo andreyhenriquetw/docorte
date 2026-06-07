@@ -71,7 +71,7 @@ const BarbershopActions = ({
       </div>
 
       {/* Nome */}
-      <h1 className="-mt-2 text-[23px] font-bold leading-tight tracking-tight text-white">
+      <h1 className="-mt-2 text-[19px] font-bold leading-tight tracking-tight text-white">
         {barbershop.name}
       </h1>
 
