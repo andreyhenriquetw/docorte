@@ -18,7 +18,7 @@ export function BarbershopCarousel({ images, name }: BarbershopCarouselProps) {
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{
-          delay: 3000,
+          delay: 6000,
           disableOnInteraction: false,
         }}
         pagination={{

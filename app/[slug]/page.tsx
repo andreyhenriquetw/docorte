@@ -75,8 +75,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         <BarbershopCarousel
           name={barbershop.name}
           images={[
-            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWVIIfDpkTa08rXoOI3ve6ZLymfqzDCgd7RuBh",
-            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWnxTTr3OX1jYqswm2JFvGCdAVuhayHnS8ceLK",
+            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWEwqQRa7fGsMhvZBRQPLc0Sqm5JEIgKWkTFV8",
             "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWqpDzANdwUyoZv4s35M6KNmVDp7diLuq8gW1R",
           ]}
         />
