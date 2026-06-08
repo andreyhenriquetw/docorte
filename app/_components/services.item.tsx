@@ -27,6 +27,7 @@ import { toZonedTime } from "date-fns-tz"
 import { updateUserProfile } from "../_actions/update-user-profile"
 import { Loader2 } from "lucide-react"
 import { FaWhatsapp } from "react-icons/fa"
+import { useCallback } from "react"
 interface ServiceItemProps {
   service: BarbershopService
   barbershop: Pick<Barbershop, "name">
@@ -129,6 +130,20 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   const confirmSectionRef = useRef<HTMLDivElement | null>(null)
   const paymentSectionRef = useRef<HTMLDivElement | null>(null)
 
+  const resetBookingForm = useCallback(() => {
+    setSelectedDay(undefined)
+
+    setSelectedBarber(barbers[0]!.id)
+
+    setSelectedTime(undefined)
+
+    setPaymentMethod(null)
+
+    setCashAmount("")
+
+    setDayBookings([])
+  }, [barbers])
+
   useEffect(() => {
     const fetch = async () => {
       if (!selectedDay) return
@@ -200,6 +215,20 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
     }
   }, [data])
 
+  useEffect(() => {
+    const handlePopState = () => {
+      setBookingSheetIsOpen(false)
+
+      resetBookingForm()
+    }
+
+    window.addEventListener("popstate", handlePopState)
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState)
+    }
+  }, [resetBookingForm])
+
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedTime) return
 
@@ -221,7 +250,11 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
         return
       }
 
-      return setBookingSheetIsOpen(true)
+      window.history.pushState({ bookingSheet: true }, "")
+
+      setBookingSheetIsOpen(true)
+
+      return
     }
 
     setSignInDialogIsOpen(true)
@@ -345,7 +378,13 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
               <Sheet
                 open={bookingSheetIsOpen}
-                onOpenChange={handleBookingSheetOpenChange}
+                onOpenChange={(open) => {
+                  setBookingSheetIsOpen(open)
+
+                  if (!open) {
+                    resetBookingForm()
+                  }
+                }}
               >
                 <Button
                   variant="secondary"
@@ -363,7 +402,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                 >
                   {loading ? (
                     <div className="flex items-center justify-center">
-                      <Loader2 className="h-4 w-4 animate-spin text-[#EAB308]" />
+                      <Loader2 className="h-4 w-4 animate-spin text-[#493fff]" />
                     </div>
                   ) : (
                     "Reservar"
@@ -406,7 +445,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                                 onClick={() => handleDateSelect(date)}
                                 className={`group flex h-[88px] w-[72px] shrink-0 flex-col items-center justify-center rounded-3xl border transition-all duration-200 ${
                                   isSelected
-                                    ? "border-yellow-400 bg-yellow-400 text-black shadow-lg shadow-yellow-500/20"
+                                    ? "border-blue-500 bg-blue-500 text-black shadow-lg shadow-yellow-500/20"
                                     : "border-zinc-800 bg-zinc-900 text-white hover:border-zinc-600 hover:bg-zinc-800"
                                 }`}
                               >
@@ -414,7 +453,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                                   className={`text-[12px] uppercase tracking-wide ${
                                     isSelected
                                       ? "text-black/100"
-                                      : "text-yellow-500"
+                                      : "text-blue-600"
                                   }`}
                                 >
                                   {format(date, "EEE", {
@@ -456,7 +495,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                               onClick={() => setSelectedBarber(barber.id)}
                               className={`w-full rounded-3xl border transition-all duration-200 ${
                                 selectedBarber === barber.id
-                                  ? "border-yellow-500 bg-yellow-500/10"
+                                  ? "border-blue-500 bg-yellow-500/10"
                                   : "border-zinc-800 bg-zinc-900"
                               }`}
                             >
@@ -519,7 +558,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                               onClick={() => handleTimeSelect(time)}
                               className={`h-11 rounded-2xl text-sm font-semibold transition-all ${
                                 selectedTime === time
-                                  ? "bg-yellow-500 text-black hover:bg-yellow-400"
+                                  ? "bg-blue-500 text-black hover:bg-blue-500"
                                   : "border-zinc-700 bg-zinc-900 text-white hover:bg-zinc-800"
                               }`}
                             >
@@ -651,7 +690,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                         !paymentMethod ||
                         loading
                       }
-                      className="h-14 w-full rounded-2xl bg-yellow-500 text-base font-bold text-black hover:bg-yellow-400"
+                      className="h-14 w-full rounded-2xl bg-blue-500 text-base font-bold text-black hover:bg-blue-400"
                     >
                       {loading ? (
                         <div className="flex items-center gap-2">
@@ -718,7 +757,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
                 <input
                   type="tel"
-                  placeholder="35 99199-9999"
+                  placeholder="93 99199-9999"
                   value={phone}
                   onChange={(e) =>
                     setPhone(e.target.value.replace(/\D/g, "").slice(0, 11))

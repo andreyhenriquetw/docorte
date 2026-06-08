@@ -86,7 +86,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
           name={barbershop.name}
           images={[
             "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCW8j9bLHr6TC3FtJkygIaZRYqdbml9Uw2OX1DB",
-            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWcVdvqOIGy9Jqxt1gbS8UVZ24lBcFDsaAoHnu",
+            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWkNkPXOVBNEhwAajZgqOu3vci0UCpRHebDfPd",
           ]}
         />
 
