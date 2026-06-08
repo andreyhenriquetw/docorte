@@ -204,7 +204,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
       {/* HORÁRIO DE FUNCIONAMENTO */}
       {/* Título */}
       <div className="mt-7 border-b border-solid px-5 pb-2">
-        <div className="mb-3 flex items-center gap-2">
+        <div className="mb-1 flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
             <svg
               xmlns="http://www.w3.org/2000/svg"
