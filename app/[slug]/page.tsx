@@ -7,7 +7,17 @@ import SidebarSheet from "@/app/_components/sidebar-sheet"
 import { Button } from "@/app/_components/ui/button"
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet"
 import { db } from "@/app/_lib/prisma"
-import { ChevronLeftIcon, MenuIcon } from "lucide-react"
+import {
+  ChevronLeftIcon,
+  MenuIcon,
+  CreditCard,
+  Wallet,
+  Banknote,
+  Instagram,
+  Facebook,
+  Share2,
+} from "lucide-react"
+import { FaWhatsapp } from "react-icons/fa"
 
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -193,8 +203,8 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
 
       {/* HORÁRIO DE FUNCIONAMENTO */}
       {/* Título */}
-      <div className="mt-7 px-5 pb-6">
-        <div className="mb-4 flex items-center gap-2">
+      <div className="mt-7 border-b border-solid px-5 pb-2">
+        <div className="mb-3 flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -213,47 +223,41 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
           </div>
 
           <h2 className="text-[15px] font-semibold text-white">
-            Horário de funcionamento
+            Horário de atendimento
           </h2>
         </div>
-        <div className="rounded-[24px] border border-zinc-800 bg-zinc-950/70 p-4 shadow-lg backdrop-blur-md">
-          {/* Dias */}
-          <div className="space-y-2">
+
+        <div className="rounded-2xl px-3 py-5">
+          <div className="space-y-4">
             {horarios.map((item) => {
               const hoje = item.dia.toLowerCase() === diaAtual
 
               return (
                 <div
                   key={item.dia}
-                  className={`flex items-center justify-between rounded-xl border px-4 py-3 transition-all ${
-                    hoje
-                      ? "border-zinc-600 bg-zinc-800/70 shadow-md"
-                      : "border-zinc-900 bg-zinc-900/60"
-                  }`}
+                  className="flex items-center justify-between"
                 >
-                  {/* esquerda */}
+                  {/* ESQUERDA */}
                   <div className="flex items-center gap-2">
                     <div
-                      className={`h-2 w-2 rounded-full ${
-                        item.abre ? "bg-lime-400" : "bg-red-400"
+                      className={`h-2.5 w-2.5 rounded-full ${
+                        item.abre ? "bg-green-500" : "bg-red-500"
                       }`}
                     />
 
-                    <span className="text-[14px] font-medium text-amber-400">
-                      {item.dia}
-                    </span>
+                    <span className="text-sm text-zinc-300">{item.dia}</span>
 
                     {hoje && (
-                      <span className="rounded-md bg-zinc-600 px-2 py-[2px] text-[10px] font-semibold text-white">
+                      <span className="rounded-full bg-emerald-900/40 px-2.5 py-1 text-[10px] font-medium text-emerald-400">
                         Hoje
                       </span>
                     )}
                   </div>
 
-                  {/* direita */}
+                  {/* DIREITA */}
                   <span
-                    className={`text-[14px] font-semibold ${
-                      item.abre ? "text-amber-400" : "text-red-400"
+                    className={`text-sm font-medium ${
+                      item.abre ? "text-zinc-400" : "text-red-400"
                     }`}
                   >
                     {item.abre ? `${item.abre} - ${item.fecha}` : "Fechado"}
@@ -262,6 +266,79 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
               )
             })}
           </div>
+        </div>
+      </div>
+
+      {/* FORMAS DE PAGAMENTO */}
+      <div className="border-b border-zinc-800 px-5 py-6">
+        <div className="mb-6 flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
+            <CreditCard className="h-4 w-4 text-white" />
+          </div>
+
+          <h2 className="text-[15px] font-semibold text-white">
+            Formas de pagamento
+          </h2>
+        </div>
+
+        <div className="flex flex-wrap gap-3">
+          {[
+            { icon: Wallet, label: "Dinheiro" },
+            { icon: CreditCard, label: "Cartão de Crédito" },
+            { icon: CreditCard, label: "Cartão de Débito" },
+            { icon: Banknote, label: "PIX" },
+            { icon: CreditCard, label: "Mastercard" },
+            { icon: CreditCard, label: "Elo" },
+            { icon: CreditCard, label: "Visa" },
+          ].map((item) => (
+            <div
+              key={item.label}
+              className="flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900 px-4 py-2 text-sm text-zinc-300"
+            >
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* REDES SOCIAIS */}
+      <div className="px-5 py-6">
+        <div className="mb-6 flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900">
+            <Share2 className="h-4 w-4 text-white" />
+          </div>
+
+          <h2 className="text-[15px] font-semibold text-white">
+            Redes Sociais
+          </h2>
+        </div>
+
+        <div className="flex gap-3">
+          <a
+            href="https://wa.me/5593999999999"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900"
+          >
+            <FaWhatsapp className="text-[26px] text-green-500" />
+          </a>
+
+          <a
+            href="https://instagram.com/seuinstagram"
+            target="_blank"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900 transition hover:border-pink-500 hover:bg-zinc-800"
+          >
+            <Instagram className="h-5 w-5 text-pink-500" />
+          </a>
+
+          <a
+            href="https://facebook.com/suapagina"
+            target="_blank"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-zinc-800 bg-zinc-900 transition hover:border-blue-500 hover:bg-zinc-800"
+          >
+            <Facebook className="h-6 w-6 text-blue-500" />
+          </a>
         </div>
       </div>
     </div>
