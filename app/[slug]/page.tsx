@@ -51,7 +51,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
     { dia: "Quarta-feira", abre: "09:00", fecha: "20:00" },
     { dia: "Quinta-feira", abre: "09:00", fecha: "20:00" },
     { dia: "Sexta-feira", abre: "09:00", fecha: "20:00" },
-    { dia: "Sábado", abre: "10:00", fecha: "20:00" },
+    { dia: "Sábado", abre: "09:00", fecha: "20:00" },
   ]
 
   const agora = new Date()
@@ -85,7 +85,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         <BarbershopCarousel
           name={barbershop.name}
           images={[
-            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWEwqQRa7fGsMhvZBRQPLc0Sqm5JEIgKWkTFV8",
+            "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWuDVzhzEQLMgvh0Z7B53mqFpdkU89RNuaXsCo",
             "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWqpDzANdwUyoZv4s35M6KNmVDp7diLuq8gW1R",
           ]}
         />
