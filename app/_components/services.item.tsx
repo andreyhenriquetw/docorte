@@ -402,7 +402,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                 >
                   {loading ? (
                     <div className="flex items-center justify-center">
-                      <Loader2 className="h-4 w-4 animate-spin text-[#493fff]" />
+                      <Loader2 className="h-4 w-4 animate-spin text-[#291fed]" />
                     </div>
                   ) : (
                     "Reservar"
@@ -445,7 +445,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                                 onClick={() => handleDateSelect(date)}
                                 className={`group flex h-[88px] w-[72px] shrink-0 flex-col items-center justify-center rounded-3xl border transition-all duration-200 ${
                                   isSelected
-                                    ? "border-blue-500 bg-blue-500 text-black shadow-lg shadow-yellow-500/20"
+                                    ? "border-blue-500 bg-blue-500 text-black shadow-lg shadow-blue-500/20"
                                     : "border-zinc-800 bg-zinc-900 text-white hover:border-zinc-600 hover:bg-zinc-800"
                                 }`}
                               >
