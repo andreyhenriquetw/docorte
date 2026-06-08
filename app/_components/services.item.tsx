@@ -402,7 +402,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                 >
                   {loading ? (
                     <div className="flex items-center justify-center">
-                      <Loader2 className="h-4 w-4 animate-spin text-[#291fed]" />
+                      <Loader2 className="h-4 w-4 animate-spin text-[#3072ee]" />
                     </div>
                   ) : (
                     "Reservar"
