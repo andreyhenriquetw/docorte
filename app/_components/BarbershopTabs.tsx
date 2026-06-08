@@ -44,7 +44,7 @@ const BarbershopTabs = ({
               activeTab === "combos" ? "text-white" : "text-zinc-400"
             }`}
           >
-            Combos
+            Assinatura
             {activeTab === "combos" && (
               <div className="absolute -bottom-4 left-0 h-[3px] w-full rounded-full bg-primary" />
             )}
