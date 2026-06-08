@@ -95,7 +95,7 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
 }
 
 const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
-  const { data } = useSession()
+  const { data, update } = useSession()
 
   const router = useRouter()
 
@@ -229,6 +229,21 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
     }
   }, [resetBookingForm])
 
+  useEffect(() => {
+    if (data?.user) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      console.log("PHONE SESSION:", (data.user as any)?.phone)
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hasPhone = (data.user as any)?.phone
+
+      if (!hasPhone) {
+        setName(data.user.name ?? "")
+        setProfileDialogOpen(true)
+      }
+    }
+  }, [data])
+
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedTime) return
 
@@ -319,11 +334,15 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
         phone,
       })
 
+      await update({
+        phone,
+        name,
+      })
+
       toast.success("Perfil atualizado!")
 
       setProfileDialogOpen(false)
 
-      // abre o agendamento depois de salvar
       setBookingSheetIsOpen(true)
     } catch (error) {
       console.error(error)
