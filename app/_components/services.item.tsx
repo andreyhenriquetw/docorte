@@ -837,7 +837,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
               </div>
 
               {/* badge */}
-              <span className="mb-3 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-green-400">
+              <span className="mb-3 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.2em] text-green-400">
                 CONFIRMADO
               </span>
 
@@ -847,7 +847,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
               </h2>
 
               {/* descrição */}
-              <p className="mt-3 max-w-[260px] text-sm font-semibold leading-relaxed text-zinc-400">
+              <p className="mt-3 max-w-[260px] text-sm font-bold leading-relaxed text-zinc-400">
                 Os detalhes do seu agendamento foram enviados para seu WhatsApp.
               </p>
             </div>
