@@ -134,9 +134,6 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   const profileDialogRequestedRef = useRef(false)
   const profileUpdateInProgressRef = useRef(false)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  console.log("PHONE SESSION", (data?.user as any)?.phone)
-
   const resetBookingForm = useCallback(() => {
     setSelectedDay(undefined)
 
@@ -320,7 +317,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
       router.push("/agende-aqui")
 
       // fechar popup automaticamente após 6s
-      setTimeout(() => setConfirmPopupOpen(false), 9000)
+      setTimeout(() => setConfirmPopupOpen(false), 15000)
     } catch (error) {
       console.error(error)
 
