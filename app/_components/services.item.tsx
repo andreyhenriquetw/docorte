@@ -773,8 +773,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
               </h2>
 
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">
-                Precisamos de algumas informações para confirmar seus
-                agendamentos no WhatsApp.
+                Digite seu número de WhatsApp para confirmar seus agendamentos.
               </p>
             </div>
           </div>
