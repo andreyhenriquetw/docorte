@@ -104,7 +104,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
   const [profileDialogOpen, setProfileDialogOpen] = useState(false)
 
-  const [name, setName] = useState(data?.user?.name || "")
+  const [name] = useState(data?.user?.name || "")
 
   const [phone, setPhone] = useState("")
 
@@ -131,6 +131,11 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   const timeSectionRef = useRef<HTMLDivElement | null>(null)
   const confirmSectionRef = useRef<HTMLDivElement | null>(null)
   const paymentSectionRef = useRef<HTMLDivElement | null>(null)
+  const profileDialogRequestedRef = useRef(false)
+  const profileUpdateInProgressRef = useRef(false)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  console.log("PHONE SESSION", (data?.user as any)?.phone)
 
   const resetBookingForm = useCallback(() => {
     setSelectedDay(undefined)
@@ -206,18 +211,6 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   }, [paymentMethod])
 
   useEffect(() => {
-    if (data?.user) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const hasPhone = (data.user as any)?.phone
-
-      if (!hasPhone) {
-        setName(data.user.name ?? "")
-        setProfileDialogOpen(true)
-      }
-    }
-  }, [data])
-
-  useEffect(() => {
     const handlePopState = () => {
       setBookingSheetIsOpen(false)
 
@@ -232,17 +225,22 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   }, [resetBookingForm])
 
   useEffect(() => {
-    if (data?.user) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      console.log("PHONE SESSION:", (data.user as any)?.phone)
+    if (!data?.user) return
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const hasPhone = (data.user as any)?.phone
+    // enquanto estiver atualizando, não abre nada
+    if (profileUpdateInProgressRef.current) return
 
-      if (!hasPhone) {
-        setName(data.user.name ?? "")
-        setProfileDialogOpen(true)
-      }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const hasPhone = (data.user as any)?.phone
+
+    if (hasPhone) {
+      setProfileDialogOpen(false)
+      return
+    }
+
+    if (!profileDialogRequestedRef.current) {
+      setProfileDialogOpen(true)
+      profileDialogRequestedRef.current = true
     }
   }, [data])
 
@@ -322,7 +320,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
       router.push("/agende-aqui")
 
       // fechar popup automaticamente após 6s
-      setTimeout(() => setConfirmPopupOpen(false), 12000)
+      setTimeout(() => setConfirmPopupOpen(false), 9000)
     } catch (error) {
       console.error(error)
 
@@ -334,28 +332,37 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
   const handleUpdateProfile = async () => {
     try {
-      if (!name || !phone) {
-        toast.error("Preencha nome e WhatsApp")
+      if (!phone) {
+        toast.error("Preencha o WhatsApp")
         return
       }
+
+      // FECHA IMEDIATAMENTE
+      setProfileDialogOpen(false)
+
+      // impede reabertura
+      profileDialogRequestedRef.current = true
+      profileUpdateInProgressRef.current = true
 
       await updateUserProfile({
         name,
         phone,
       })
 
-      await update({
-        phone,
-        name,
-      })
-
       toast.success("Perfil atualizado!")
 
-      setProfileDialogOpen(false)
+      // força atualizar sessão
+      await update()
 
+      // libera novamente
+      profileUpdateInProgressRef.current = false
+
+      // abre agendamento
       setBookingSheetIsOpen(true)
     } catch (error) {
       console.error(error)
+
+      profileUpdateInProgressRef.current = false
 
       toast.error("Erro ao salvar perfil")
     }
@@ -811,6 +818,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
       </Dialog>
 
       {/* popup de confirmação premium */}
+      {/* popup de confirmação premium */}
       <div
         aria-live="polite"
         className={`fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 px-4 ${
@@ -833,7 +841,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
               <div className="relative mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-500/10">
                 <div className="absolute inset-0 rounded-2xl bg-green-500/10 blur-md" />
 
-                <FaWhatsappIcon size={20} className="relative text-green-500" />
+                <FaWhatsappIcon size={23} className="relative text-green-500" />
               </div>
 
               {/* badge */}
