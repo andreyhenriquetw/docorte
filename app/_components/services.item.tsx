@@ -18,6 +18,7 @@ import { isPast, set, format } from "date-fns"
 import { createBooking } from "../_actions/create-booking"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
+import { FaWhatsapp as FaWhatsappIcon } from "react-icons/fa"
 import { getBookings } from "../_actions/get-bookings"
 import { Dialog, DialogContent } from "./ui/dialog"
 import SignInDialog from "./sign-in-dialog"
@@ -124,6 +125,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
 
   const [loading, setLoading] = useState(false)
+  const [confirmPopupOpen, setConfirmPopupOpen] = useState(false)
 
   const barberSectionRef = useRef<HTMLDivElement | null>(null)
   const timeSectionRef = useRef<HTMLDivElement | null>(null)
@@ -310,9 +312,17 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
       handleBookingSheetOpenChange()
 
+      // mostrar pop-up animado de confirmação
+      setConfirmPopupOpen(true)
+
+      // also show sonner toast for compatibility
       toast.success("Reserva criada com sucesso!")
 
-      router.push("/")
+      // manter o usuário na página de agendamento
+      router.push("/agende-aqui")
+
+      // fechar popup automaticamente após 6s
+      setTimeout(() => setConfirmPopupOpen(false), 12000)
     } catch (error) {
       console.error(error)
 
@@ -799,6 +809,51 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* popup de confirmação premium */}
+      <div
+        aria-live="polite"
+        className={`fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 px-4 ${
+          !confirmPopupOpen ? "pointer-events-none" : ""
+        }`}
+      >
+        <div
+          className={`overflow-hidden rounded-[32px] border border-zinc-800/80 bg-[#0B0B0D]/95 shadow-[0_25px_80px_rgba(0,0,0,0.75)] backdrop-blur-xl transition-all duration-500 ${
+            confirmPopupOpen
+              ? "scale-100 opacity-100"
+              : "pointer-events-none scale-95 opacity-0"
+          }`}
+        >
+          {/* detalhe superior */}
+          <div className="h-[3px] w-full bg-gradient-to-r from-green-400 via-green-500 to-green-400" />
+
+          <div className="relative p-6">
+            <div className="flex flex-col items-center text-center">
+              {/* ícone whatsapp */}
+              <div className="relative mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-500/10">
+                <div className="absolute inset-0 rounded-2xl bg-green-500/10 blur-md" />
+
+                <FaWhatsappIcon size={20} className="relative text-green-500" />
+              </div>
+
+              {/* badge */}
+              <span className="mb-3 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-green-400">
+                CONFIRMADO
+              </span>
+
+              {/* título */}
+              <h2 className="text-xl font-bold tracking-tight text-white">
+                Agendamento Confirmado
+              </h2>
+
+              {/* descrição */}
+              <p className="mt-3 max-w-[260px] text-sm font-semibold leading-relaxed text-zinc-400">
+                Os detalhes do seu agendamento foram enviados para seu WhatsApp.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
