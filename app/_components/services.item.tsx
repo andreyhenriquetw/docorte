@@ -120,6 +120,8 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
   const [cashAmount, setCashAmount] = useState("")
 
+  const phoneInputRef = useRef<HTMLInputElement>(null)
+
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
 
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
@@ -316,7 +318,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
       // manter o usuário na página de agendamento
       router.push("/agende-aqui")
 
-      // fechar popup automaticamente após 6s
+      // fechar popup automaticamente após 15s
       setTimeout(() => setConfirmPopupOpen(false), 15000)
     } catch (error) {
       console.error(error)
@@ -788,12 +790,19 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                 </span>
 
                 <input
+                  ref={phoneInputRef}
                   type="tel"
                   placeholder="93 99199-9999"
                   value={phone}
-                  onChange={(e) =>
-                    setPhone(e.target.value.replace(/\D/g, "").slice(0, 11))
-                  }
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "").slice(0, 11)
+
+                    setPhone(value)
+
+                    if (value.length === 11) {
+                      phoneInputRef.current?.blur()
+                    }
+                  }}
                   className="h-14 w-full rounded-2xl border border-zinc-800 bg-zinc-900/80 pl-14 pr-4 text-[15px] text-white outline-none transition-all placeholder:text-zinc-500 focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
                 />
               </div>
@@ -813,7 +822,6 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
         </DialogContent>
       </Dialog>
 
-      {/* popup de confirmação premium */}
       {/* popup de confirmação premium */}
       <div
         aria-live="polite"
@@ -846,13 +854,13 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
               </span>
 
               {/* título */}
-              <h2 className="text-xl font-bold tracking-tight text-white">
-                Agendamento Confirmado
+              <h2 className="text-xl font-semibold tracking-tight text-white">
+                AGENDAMENTO CONFIRMADO
               </h2>
 
               {/* descrição */}
               <p className="mt-3 max-w-[260px] text-sm font-bold leading-relaxed text-zinc-400">
-                Os detalhes do seu agendamento foram enviados para seu WhatsApp.
+                Confira os detalhes do seu agendamento em seu WhatsApp.
               </p>
             </div>
           </div>
