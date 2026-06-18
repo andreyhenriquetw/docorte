@@ -42,6 +42,13 @@ async function seedDatabase() {
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWrqmwXI1ulNCWtEmGLOXUwr3MDPQYIv1a8hT0",
       },
       {
+        name: "Sobrancelha + Barba",
+        description: "Combo Sobrancelha e Barba.",
+        price: 25.0,
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWV8LCrPTa08rXoOI3ve6ZLymfqzDCgd7RuBh4",
+      },
+      {
         name: "Barba",
         description: "Modelagem completa para destacar sua masculinidade.",
         price: 20.0,
@@ -68,13 +75,6 @@ async function seedDatabase() {
         price: 50.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWQ6ErCSaxi96fvUBAyEclqVWKoaX4spZ7bNFt",
-      },
-      {
-        name: "Alisamento",
-        description: "Fios alinhados e lisos com resultado natural.",
-        price: 30.0,
-        imageUrl:
-          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWa8uh7tD97wIB042Xx8ZbAGVLMDPUOve6aHEt",
       },
       {
         name: "Pigmentação",
