@@ -61,7 +61,7 @@ export const createBooking = async (params: CreateBookingParams) => {
 
   try {
     await fetch(
-      "https://sold-patient-ecommerce-penguin.trycloudflare.com/webhook/novo-agendamento",
+      "https://softball-doctors-empire-committed.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
