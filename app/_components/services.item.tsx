@@ -104,8 +104,6 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
   const [profileDialogOpen, setProfileDialogOpen] = useState(false)
 
-  const [name] = useState(data?.user?.name || "")
-
   const [phone, setPhone] = useState("")
 
   const [selectedDay, setSelectedDay] = useState<Date>()
@@ -336,34 +334,35 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
         return
       }
 
-      // FECHA IMEDIATAMENTE
-      setProfileDialogOpen(false)
+      const generatedName =
+        data?.user?.name ||
+        data?.user?.email
+          ?.split("@")[0]
+          .split(/[0-9._-]/)[0]
+          .replace(/^./, (c) => c.toUpperCase()) ||
+        "Cliente"
 
-      // impede reabertura
-      profileDialogRequestedRef.current = true
       profileUpdateInProgressRef.current = true
 
+      setProfileDialogOpen(false)
+
       await updateUserProfile({
-        name,
+        name: generatedName,
         phone,
+      })
+
+      await update({
+        phone,
+        name: generatedName,
       })
 
       toast.success("Perfil atualizado!")
 
-      // força atualizar sessão
-      await update()
-
-      // libera novamente
-      profileUpdateInProgressRef.current = false
-
-      // abre agendamento
       setBookingSheetIsOpen(true)
     } catch (error) {
       console.error(error)
-
-      profileUpdateInProgressRef.current = false
-
       toast.error("Erro ao salvar perfil")
+      profileUpdateInProgressRef.current = false
     }
   }
 

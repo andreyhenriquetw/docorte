@@ -37,7 +37,7 @@ async function seedDatabase() {
       {
         name: "Corte + Barba + Sobrancelha",
         description: "Combo completo para um visual impecável.",
-        price: 35.0,
+        price: 39.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWrqmwXI1ulNCWtEmGLOXUwr3MDPQYIv1a8hT0",
       },
@@ -58,7 +58,7 @@ async function seedDatabase() {
       {
         name: "Luzes",
         description: "Pontos de luz que destacam um visual mais vivo.",
-        price: 35.0,
+        price: 60.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWlNpZip9LpetGEKCOf9HThFskV7irPzDI8R6M",
       },
@@ -87,14 +87,14 @@ async function seedDatabase() {
       {
         name: "Luzes + Corte",
         description: "Realce o visual com luzes e corte moderno.",
-        price: 50.0,
+        price: 70.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCW1oyVVktBj0VlykRN7LYMv2S9wqWXKbAap3hF",
       },
       {
         name: "Nevou + Corte",
         description: "Efeito nevado com corte para um visual marcante.",
-        price: 65.0,
+        price: 80.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWkMcOWcVBNEhwAajZgqOu3vci0UCpRHebDfPd",
       },
