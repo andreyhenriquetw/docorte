@@ -14,11 +14,18 @@ async function seedDatabase() {
 
     const services = [
       {
-        name: "Corte de Cabelo",
+        name: "Corte Social",
         description: "Estilo personalizado com as últimas tendências.",
-        price: 25.0,
+        price: 20.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWLnzZk0p9UQfGIRqvtH0Z4B3xeXr618hwn2dD",
+      },
+      {
+        name: "Corte Degradê",
+        description: "Estilo Degradê tendências atual.",
+        price: 25.0,
+        imageUrl:
+          "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWuc8GB7QLMgvh0Z7B53mqFpdkU89RNuaXsCoD",
       },
       {
         name: "Corte + Barba",
@@ -37,14 +44,14 @@ async function seedDatabase() {
       {
         name: "Barba",
         description: "Modelagem completa para destacar sua masculinidade.",
-        price: 5.0,
+        price: 20.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCW1LHdDRBj0VlykRN7LYMv2S9wqWXKbAap3hFg",
       },
       {
         name: "Sobrancelha",
         description: "Expressão acentuada com modelagem precisa.",
-        price: 5.0,
+        price: 10.0,
         imageUrl:
           "https://xd90tgazad.ufs.sh/f/r9YwIz1ulNCWI1WyCI98omUnsYOVxbyz6NA7vLH12FSMDdrW",
       },
