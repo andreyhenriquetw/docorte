@@ -61,7 +61,7 @@ export const createBooking = async (params: CreateBookingParams) => {
 
   try {
     await fetch(
-      "https://emacs-tamil-doug-harvard.trycloudflare.com/webhook/novo-agendamento",
+      "https://morrison-helen-biographies-planet.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
