@@ -8,7 +8,7 @@ interface BookingSummaryProps {
   barbershop: Pick<Barbershop, "name">
   selectedDate: Date
 
-  paymentMethod?: "pix" | "money" | null
+  paymentMethod?: "pix" | "money" | "card" | null
   cashAmount?: string
 }
 
@@ -29,7 +29,9 @@ const BookingSummary = ({
               ? "Pix"
               : paymentMethod === "money"
                 ? "Dinheiro"
-                : "--"}
+                : paymentMethod === "card"
+                  ? "Cartão"
+                  : "--"}
           </p>
         </div>
 

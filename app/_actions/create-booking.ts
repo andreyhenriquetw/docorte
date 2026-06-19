@@ -10,7 +10,7 @@ interface CreateBookingParams {
   serviceId: string
   barberId: string
   date: Date
-  paymentMethod: "pix" | "money"
+  paymentMethod: "pix" | "money" | "card"
   cashAmount?: string
 }
 
@@ -60,58 +60,55 @@ export const createBooking = async (params: CreateBookingParams) => {
   // N8N ENVIAR DADOShttp://localhost:5678/webhook/novo-agendamento
 
   try {
-    await fetch(
-      "https://morrison-helen-biographies-planet.trycloudflare.com/webhook/novo-agendamento",
-      {
-        method: "POST",
+    await fetch("http://localhost:5678/webhook/novo-agendamento", {
+      method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        bookingId: booking.id,
+
+        client: {
+          id: booking.user.id,
+          name: booking.user.name,
+          email: booking.user.email,
+          phone: booking.user.phone,
         },
 
-        body: JSON.stringify({
-          bookingId: booking.id,
+        service: {
+          id: booking.service.id,
+          name: booking.service.name,
+          price: Number(booking.service.price),
+        },
 
-          client: {
-            id: booking.user.id,
-            name: booking.user.name,
-            email: booking.user.email,
-            phone: booking.user.phone,
-          },
+        barber: {
+          id: booking.barber?.id,
+          name: booking.barber?.name,
+        },
 
-          service: {
-            id: booking.service.id,
-            name: booking.service.name,
-            price: Number(booking.service.price),
-          },
+        barbershop: {
+          id: booking.service.barbershop.id,
+          name: booking.service.barbershop.name,
+        },
 
-          barber: {
-            id: booking.barber?.id,
-            name: booking.barber?.name,
-          },
+        payment: {
+          method: params.paymentMethod,
 
-          barbershop: {
-            id: booking.service.barbershop.id,
-            name: booking.service.barbershop.name,
-          },
+          servicePrice: Number(booking.service.price),
 
-          payment: {
-            method: params.paymentMethod,
+          cashAmount: params.cashAmount || null,
 
-            servicePrice: Number(booking.service.price),
+          change:
+            params.paymentMethod === "money" && params.cashAmount
+              ? Number(params.cashAmount) - Number(booking.service.price)
+              : null,
+        },
 
-            cashAmount: params.cashAmount || null,
-
-            change:
-              params.paymentMethod === "money" && params.cashAmount
-                ? Number(params.cashAmount) - Number(booking.service.price)
-                : null,
-          },
-
-          date: booking.date,
-        }),
-      },
-    )
+        date: booking.date,
+      }),
+    })
   } catch (error) {
     console.error("Erro ao enviar para o n8n:", error)
   }

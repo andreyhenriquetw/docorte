@@ -29,6 +29,9 @@ import { updateUserProfile } from "../_actions/update-user-profile"
 import { Loader2 } from "lucide-react"
 import { FaWhatsapp } from "react-icons/fa"
 import { useCallback } from "react"
+import { FaPix } from "react-icons/fa6"
+import { CreditCard } from "lucide-react"
+import { FaMoneyBillWave } from "react-icons/fa"
 interface ServiceItemProps {
   service: BarbershopService
   barbershop: Pick<Barbershop, "name">
@@ -123,9 +126,9 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
 
   const [selectedTime, setSelectedTime] = useState<string>()
 
-  const [paymentMethod, setPaymentMethod] = useState<"pix" | "money" | null>(
-    null,
-  )
+  const [paymentMethod, setPaymentMethod] = useState<
+    "pix" | "money" | "card" | null
+  >(null)
 
   const [cashAmount, setCashAmount] = useState("")
 
@@ -311,7 +314,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
         barberId: selectedBarber,
         date: selectedDate,
 
-        paymentMethod: paymentMethod as "pix" | "money",
+        paymentMethod: paymentMethod as "pix" | "money" | "card",
 
         cashAmount: paymentMethod === "money" ? cashAmount : undefined,
       })
@@ -495,10 +498,8 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                                 }`}
                               >
                                 <span
-                                  className={`text-[12px] uppercase tracking-wide ${
-                                    isSelected
-                                      ? "text-black/100"
-                                      : "text-blue-600"
+                                  className={`text-[12px] font-bold uppercase tracking-wide ${
+                                    isSelected ? "text-black" : "text-blue-600"
                                   }`}
                                 >
                                   {format(date, "EEE", {
@@ -631,7 +632,7 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                           </p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-3 gap-3">
                           <button
                             type="button"
                             onClick={() => setPaymentMethod("pix")}
@@ -642,7 +643,10 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                             }`}
                           >
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <span className="text-3xl">💳</span>
+                              <FaPix
+                                size={36}
+                                className="text-[#32BCAD] drop-shadow-[0_0_8px_rgba(50,188,173,0.45)]"
+                              />
 
                               <span className="font-semibold text-white">
                                 PIX
@@ -660,10 +664,31 @@ const ServiceItem = ({ service, barbershop, barbers }: ServiceItemProps) => {
                             }`}
                           >
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <span className="text-3xl">💵</span>
+                              <FaMoneyBillWave
+                                size={36}
+                                className="text-green-500"
+                              />
 
                               <span className="font-semibold text-white">
                                 Dinheiro
+                              </span>
+                            </div>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setPaymentMethod("card")}
+                            className={`rounded-3xl border p-4 transition-all ${
+                              paymentMethod === "card"
+                                ? "border-blue-500 bg-blue-500/10"
+                                : "border-zinc-800 bg-zinc-900"
+                            }`}
+                          >
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <CreditCard size={34} className="text-blue-500" />
+
+                              <span className="font-semibold text-white">
+                                Cartão
                               </span>
                             </div>
                           </button>
