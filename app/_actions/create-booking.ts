@@ -61,7 +61,7 @@ export const createBooking = async (params: CreateBookingParams) => {
 
   try {
     await fetch(
-      "https://salmon-breaks-home-temporarily.trycloudflare.com/webhook/novo-agendamento",
+      "http://localhost:5678/webhook/webhook/novo-agendamento",
       {
         method: "POST",
 
