@@ -61,7 +61,7 @@ export const createBooking = async (params: CreateBookingParams) => {
 
   try {
     await fetch(
-      "http://localhost:5678/webhook/novo-agendamento",
+      "https://specially-cheapest-generate-kept.trycloudflare.com/webhook/novo-agendamento",
       {
         method: "POST",
 
